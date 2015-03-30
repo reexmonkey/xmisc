@@ -43,6 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="linq.cs" />
+    <Compile Include="datetime.cs" />
+    <Compile Include="exceptions.cs" />
+    <Compile Include="expressions.cs" />
+    <Compile Include="math.cs" />
+    <Compile Include="numerical.cs" />
+    <Compile Include="strings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -50,6 +57,9 @@
       <Project>{0188be5c-bafa-4fac-b068-11dcf7cd918e}</Project>
       <Name>xmisc.foundation.contracts</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

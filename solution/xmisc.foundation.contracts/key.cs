@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace reexjungle.xmisc.foundation.concretes
+namespace reexjungle.foundation.essentials.contracts
 {
+
     /// <summary>
     /// Specifies a contract for identifying a component
     /// </summary>
@@ -12,9 +13,11 @@ namespace reexjungle.xmisc.foundation.concretes
     public interface IContainsKey<TKey>
         where TKey : IEquatable<TKey>
     {
+
         /// <summary>
         /// Gets the identifier-key of the component
         /// </summary>
         TKey Id { get; }
     }
+
 }
