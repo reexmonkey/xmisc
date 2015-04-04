@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>reexjungle.xmisc.foundation.concretes</RootNamespace>
-    <AssemblyName>xmisc.foundation.essentials.concretes</AssemblyName>
+    <AssemblyName>xmisc.foundation.concretes</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>a61af24e</NuGetPackageImportStamp>
@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\xmisc.foundation.essentials.concretes.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\xmisc.foundation.concretes.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>

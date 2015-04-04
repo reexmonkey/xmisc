@@ -6,8 +6,16 @@ using System.Text;
 
 namespace reexjungle.xmisc.foundation.concretes
 {
+    /// <summary>
+    /// Provides extended funtionality to lambda epxressions
+    /// </summary>
     public static class LambdaExpressionExtensions
     {
+        /// <summary>
+        /// Produces the name of a member in a lambda expression
+        /// </summary>
+        /// <param name="expression">The lambda expression containing a membe</param>
+        /// <returns>The name of the member</returns>
         public static string GetMemberName(this LambdaExpression expression)
         {
             Func<Expression, string> selector = null;  //recursive func
@@ -30,10 +38,15 @@ namespace reexjungle.xmisc.foundation.concretes
             return selector(expression.Body);
         }
 
+        /// <summary>
+        /// Produces a sequence of names of mebers found in a lambda expression
+        /// </summary>
+        /// <param name="expression">The lambda expression containing members</param>
+        /// <returns>The sequence of member names</returns>
         public static IEnumerable<string> GetMemberNames(this LambdaExpression expression)
         {
-            Func<Expression, IEnumerable<string>> selector = null;  //recursive func
-            selector = e => //or move the entire thing to a separate recursive method
+            Func<Expression, IEnumerable<string>> selector = null;
+            selector = e =>
             {
                 switch (e.NodeType)
                 {

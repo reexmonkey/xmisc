@@ -6,6 +6,9 @@ using System.Text;
 
 namespace reexjungle.xmisc.foundation.concretes
 {
+    /// <summary>
+    /// Provides extended functionality to mathematcal functions
+    /// </summary>
     public static class MathExtensions
     {
         #region expression arithmetic operations
@@ -219,24 +222,45 @@ namespace reexjungle.xmisc.foundation.concretes
             return func.Compile()(a, b);
         }
 
-        public static bool GreaterThan<T>(this T a, T b)
+        /// <summary>
+        /// Performs a greater-than comparison between two generic IComparable operands.
+        /// </summary>
+        /// <typeparam name="T">The type of operand</typeparam>
+        /// <param name="first">An operand to be tested</param>
+        /// <param name="second">Another operand to be tested</param>
+        /// <returns>True if the first operand is greater than the second</returns>
+        public static bool GreaterThan<T>(this T first, T second)
             where T : struct, IComparable<T>, IComparable, IConvertible, IEquatable<T>
         {
             var x = Expression.Parameter(typeof(T));
             var y = Expression.Parameter(typeof(T));
             var func = Expression.Lambda<Func<T, T, bool>>(Expression.GreaterThan(x, y), x, y);
-            return func.Compile()(a, b);
+            return func.Compile()(first, second);
         }
 
-        public static bool GreaterThanOrEqual<T>(this T a, T b)
+        /// <summary>
+        /// Performs a greater-than-or-equal-to comparison between two generic IComparable operands.
+        /// </summary>
+        /// <typeparam name="T">The type of operand</typeparam>
+        /// <param name="first">An operand to be tested</param>
+        /// <param name="second">Another operand to be tested</param>
+        /// <returns>True if the first operand is greater than or equal to the second</returns>
+        public static bool GreaterThanOrEqual<T>(this T first, T second)
             where T : struct, IComparable<T>, IComparable, IConvertible, IEquatable<T>
         {
             var x = Expression.Parameter(typeof(T));
             var y = Expression.Parameter(typeof(T));
             var func = Expression.Lambda<Func<T, T, bool>>(Expression.GreaterThanOrEqual(x, y), x, y);
-            return func.Compile()(a, b);
+            return func.Compile()(first, second);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static bool LessThan<T>(this T a, T b)
             where T : struct, IComparable<T>, IComparable, IConvertible, IEquatable<T>
         {
@@ -246,6 +270,13 @@ namespace reexjungle.xmisc.foundation.concretes
             return func.Compile()(a, b);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static bool LessThanOrEqual<T>(this T a, T b)
             where T : struct, IComparable<T>, IComparable, IConvertible, IEquatable<T>
         {
@@ -255,6 +286,13 @@ namespace reexjungle.xmisc.foundation.concretes
             return func.Compile()(a, b);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static bool Equal<T>(this T a, T b)
             where T : struct, IComparable<T>, IComparable, IConvertible, IEquatable<T>
         {
@@ -264,12 +302,25 @@ namespace reexjungle.xmisc.foundation.concretes
             return func.Compile()(a, b);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="a"></param>
+        /// <returns></returns>
         public static T Zero<T>(this T a)
     where T : struct, IComparable<T>, IComparable, IConvertible, IEquatable<T>
         {
             return default(T);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static T IntegralDivideBy<T>(this T a, T b)
     where T : struct, IComparable<T>, IComparable, IConvertible, IEquatable<T>
         {
@@ -292,12 +343,24 @@ namespace reexjungle.xmisc.foundation.concretes
             return Expression.Lambda<Func<T, T>>(a.AbsoluteExpression(), Expression.Parameter(typeof(T))).Compile()(a);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="a"></param>
+        /// <returns></returns>
         public static T Negate<T>(this T a)
     where T : struct, IComparable<T>, IComparable, IConvertible, IEquatable<T>
         {
             return Expression.Lambda<Func<T, T>>(Expression.NegateChecked(Expression.Parameter(typeof(T))), Expression.Parameter(typeof(T))).Compile()(a);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="a"></param>
+        /// <returns></returns>
         public static T Truncate<T>(this T a)
     where T : struct, IComparable<T>, IComparable, IConvertible, IEquatable<T>
         {
@@ -305,6 +368,13 @@ namespace reexjungle.xmisc.foundation.concretes
             return Expression.Lambda<Func<T, T>>(a.IntegralExpression(), Expression.Parameter(typeof(T))).Compile()(a);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         private static T NegativeModulo<T>(this T a, T b)
     where T : struct, IComparable<T>, IComparable, IConvertible, IEquatable<T>
         {
@@ -329,6 +399,13 @@ namespace reexjungle.xmisc.foundation.concretes
             return Expression.Lambda<Func<T, T, T>>(Expression.Modulo(arg0, arg1), arg0, arg1).Compile()(a, b);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static T Modulo<T>(this T a, T b)
     where T : struct, IComparable<T>, IComparable, IConvertible, IEquatable<T>
         {
