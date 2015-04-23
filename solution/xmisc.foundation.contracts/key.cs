@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace reexjungle.xmisc.foundation.concretes
+namespace reexjungle.xmisc.foundation.contracts
 {
     /// <summary>
     /// Specifies a contract for identifying a component
     /// </summary>
     /// <typeparam name="TKey">The type of identifier</typeparam>
-    public interface IContainsKey<TKey>
+    public interface IContainsKey<out TKey>
         where TKey : IEquatable<TKey>
     {
         /// <summary>

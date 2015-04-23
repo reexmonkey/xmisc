@@ -1,8 +1,6 @@
-﻿using reexjungle.xmisc.foundation.concretes;
+﻿using reexjungle.xmisc.foundation.contracts;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace reexjungle.xmisc.infrastructure.concretes.operations
 {
