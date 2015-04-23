@@ -5,15 +5,15 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("infrastructure.contracts")]
-[assembly: AssemblyDescription("Reusable domain-specific service interfaces")]
+[assembly: AssemblyTitle("xmisc.infrastructure.contracts")]
+[assembly: AssemblyDescription("Reusable domain-supporting service interface library")]
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
 #else
 [assembly: AssemblyConfiguration("Release")]
 #endif
 [assembly: AssemblyCompany("reexjungle")]
-[assembly: AssemblyProduct("infrastructure.contracts")]
+[assembly: AssemblyProduct("xmisc.infrastructure.contracts")]
 [assembly: AssemblyCopyright("Copyright (c) 2014, reexjungle")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

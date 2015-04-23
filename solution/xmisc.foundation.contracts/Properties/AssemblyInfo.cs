@@ -5,16 +5,16 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("crosscut.essentials.contracts")]
-[assembly: AssemblyDescription("Low-level technical service interfaces")]
+[assembly: AssemblyTitle("xmisc.foundation.contracts")]
+[assembly: AssemblyDescription("Low-level technical service interface library")]
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
 #else
 [assembly: AssemblyConfiguration("Release")]
 #endif
 [assembly: AssemblyCompany("reexjungle")]
-[assembly: AssemblyProduct("crosscut.essentials.contracts")]
-[assembly: AssemblyCopyright("Copyright (c) 2014, reexjungle")]
+[assembly: AssemblyProduct("xmisc.foundation.contracts")]
+[assembly: AssemblyCopyright("Copyright (c) 2015, reexjungle")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

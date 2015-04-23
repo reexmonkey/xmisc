@@ -5,13 +5,19 @@ using System.Linq;
 
 namespace reexjungle.xmisc.foundation.concretes
 {
+    /// <summary>
+    /// Provides useful functional extensions to <see cref = "System.DateTime"/> instances
+    /// </summary>
     public static class DateTimeExtensions
     {
+        /// <summary>
+        /// Counts the number of days in a month for a given year
+        /// </summary>
+        /// <param name="month">The month number of the month in a year (1- 12)</param>
+        /// <param name="year">The given year </param>
+        /// <returns>The number of days in the month of a given year</returns>
         public static uint CountDaysInMonth(this uint month, uint year)
         {
-            //if (month < 1 || month > 12) throw new ArgumentOutOfRangeException("month", "Non-valid value for month");
-            //if (year < 1 || year > 9999) throw new ArgumentOutOfRangeException("year", "Non-valid value for year");
-
             switch (month)
             {
                 case 1: return 31u;
@@ -30,6 +36,13 @@ namespace reexjungle.xmisc.foundation.concretes
             }
         }
 
+        /// <summary>
+        /// Counts the number of days within a month range in a given year
+        /// </summary>
+        /// <param name="startmonth">The month number of the first month in the range (1 - 12)</param>
+        /// <param name="endmonth">The month number of the last month in the range (1-12) </param>
+        /// <param name="year">The given year</param>
+        /// <returns></returns>
         public static uint CountDaysInMonthRange(this uint startmonth, uint endmonth, uint year)
         {
             //if (startmonth > endmonth) throw new ArgumentException("The end month should be bigger or equal to the start month", "startmonth");
@@ -41,36 +54,72 @@ namespace reexjungle.xmisc.foundation.concretes
             return days;
         }
 
+        /// <summary>
+        /// Checks whether a given year is a leap year
+        /// </summary>
+        /// <param name="year">The given year</param>
+        /// <returns>True if the given year is a leao year, otherwise false</returns>
         public static bool IsLeapYear(this uint year)
         {
             return (year % 4 == 0 && year % 100 != 0 && year % 400 == 0);
         }
 
+        /// <summary>
+        /// Counts the number of days in a given year
+        /// </summary>
+        /// <param name="year">The given year</param>
+        /// <returns>The number of days in a given year</returns>
         public static uint CountDaysOfYear(this uint year)
         {
             return (year.IsLeapYear()) ? 366u : 365u;
         }
 
+        /// <summary>
+        /// Counts the number of leap occurrences within a given number of years
+        /// </summary>
+        /// <param name="years">The given number of years</param>
+        /// <returns>The number of leap occurrences</returns>
         public static uint CountLeaps(this uint years)
         {
             return ((years - 1) / 4 - (years - 1) / 100 + (years - 1) / 400);
         }
 
+        /// <summary>
+        /// Counts the number of days in a given number of years
+        /// </summary>
+        /// <param name="years">The given number of years</param>
+        /// <returns></returns>
         public static uint CountDaysOfYears(this uint years)
         {
             return (years - 1) * 365u + years.CountLeaps();
         }
 
+        /// <summary>
+        /// Counts the number of months in a given <see cref = "System.DateTime"/> range
+        /// </summary>
+        /// <param name="start">The start <see cref = "System.DateTime"/> of the range</param>
+        /// <param name="end">The end <see cref = "System.DateTime"/> of the range </param>
+        /// <returns></returns>
         public static int CountMonths(this DateTime start, DateTime end)
         {
             return ((start.Year - end.Year) * 12) + start.Month - end.Month;
         }
 
+        /// <summary>
+        /// Counts the number of years from a given number of days
+        /// </summary>
+        /// <param name="days">The number of days</param>
+        /// <returns></returns>
         public static uint CountYears(this uint days)
         {
             return 1 + (days - (days / 365u).CountLeaps()) / 365u;
         }
 
+        /// <summary>
+        /// Calculates the ordinal position (1-7) in a week from a given <see cref = "System.DayOfWeek"/> instance
+        /// </summary>
+        /// <param name="day">The <see cref = "System.DayOfWeek"/> instance</param>
+        /// <returns>The ordinal position (1-7) of the day in the week </returns>
         public static int OrdinalWeekDay(this DayOfWeek day)
         {
             switch (day)
@@ -86,6 +135,11 @@ namespace reexjungle.xmisc.foundation.concretes
             }
         }
 
+        /// <summary>
+        /// Determines the <see cref = "System.DayOfWeek"/> instance from the ordinal position of a day in the week
+        /// </summary>
+        /// <param name="ordweekday">The ordinal position of a a day in the week</param>
+        /// <returns>The determined <see cref = "System.DayOfWeek"/> instance </returns>
         public static DayOfWeek ToDayofWeeek(this int ordweekday)
         {
             switch (ordweekday)
@@ -102,6 +156,12 @@ namespace reexjungle.xmisc.foundation.concretes
             }
         }
 
+        /// <summary>
+        /// Calculates the ISO-8601 day of the year from a given <see cref = "System.DateTime"/> instance.
+        /// </summary>
+        /// <param name="value">The <see cref = "System.DateTime"/> instance</param>
+        /// <returns>The ISO-8601 day of the year from a <see cref = "System.DateTime"/> instance </returns>
+        /// <see>http://en.wikipedia.org/wiki/ISO_8601</see>
         public static int ISo8601DayOfYear(this DateTime value)
         {
             Func<DateTime, int> lookup = x =>
@@ -151,6 +211,11 @@ namespace reexjungle.xmisc.foundation.concretes
             return value.Day + lookup(value);
         }
 
+        /// <summary>
+        /// Checks if a given <see cref = "System.DateTime"/> instance is in the first week of its year.
+        /// </summary>
+        /// <param name="value">The <see cref = "System.DateTime"/> instance</param>
+        /// <returns>True if the <see cref = "System.DateTime"/> instance is the first week of its year, otherwise false</returns>
         public static bool InFirstWeekOfYear(this DateTime value)
         {
             var first = new DateTime(value.Year, 1, 1, 0, 0, 0, value.Kind);
@@ -158,6 +223,11 @@ namespace reexjungle.xmisc.foundation.concretes
             return fdays.Contains(first.DayOfWeek);
         }
 
+        /// <summary>
+        ///  Checks if a given <see cref = "System.DateTime"/> instance is in the last week of its year.
+        /// </summary>
+        /// <param name="value">The <see cref = "System.DateTime"/> instance</param>
+        /// <returns>True if the <see cref = "System.DateTime"/> instance is the last week of its year, otherwise false</returns>
         public static bool InLastWeekOfYear(this DateTime value)
         {
             var last = new DateTime(value.Year, 12, 31, 0, 0, 0, value.Kind);
@@ -166,12 +236,12 @@ namespace reexjungle.xmisc.foundation.concretes
         }
 
         /// <summary>
-        /// Gets the week number in a year for a given date time.
+        /// Calculates the week number in a year for a given <see cref = "System.DateTime"/> instance.
         /// </summary>
-        /// <param name="value">The date time value</param>
+        /// <param name="value">The <see cref = "System.DateTime"/> instance</param>
         /// <param name="rule">The rule to determine the first day of the week</param>
         /// <param name="first">The day designated as the start of the week</param>
-        /// <returns>The week number in a year of a date time</returns>
+        /// <returns>The week number in a year of a <see cref = "System.DateTime"/> instance</returns>
         /// <see cref="http://stackoverflow.com/questions/11154673/get-the-correct-week-number-of-a-given-date"/>
         public static int WeekOfYear(this DateTime value,
             CalendarWeekRule rule = CalendarWeekRule.FirstFourDayWeek,
@@ -190,12 +260,12 @@ namespace reexjungle.xmisc.foundation.concretes
         }
 
         /// <summary>
-        ///
+        /// Calculates the week number in a month for a given <see cref = "System.DateTime"/> instance.
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="rule"></param>
-        /// <param name="first"></param>
-        /// <returns></returns>
+        /// <param name="value">The <see cref = "System.DateTime"/> instance</param>
+        /// <param name="rule">The rule to determine the first day of the week</param>
+        /// <param name="first">The day designated as the start of the week</param>
+        /// <returns>The week number in a month of the given <see cref = "System.DateTime"/> instance</returns>
         /// <see cref="http://stackoverflow.com/questions/2136487/calculate-week-of-month-in-net/2136549#2136549"/>
         public static int WeekOfMonth(this DateTime value, CalendarWeekRule rule = CalendarWeekRule.FirstFourDayWeek,
             DayOfWeek first = DayOfWeek.Monday)
@@ -204,6 +274,13 @@ namespace reexjungle.xmisc.foundation.concretes
             return value.WeekOfYear() - firstday.WeekOfYear() + 1;
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="weekday"></param>
+        /// <param name="N"></param>
+        /// <returns></returns>
         public static bool IsNthWeekdayOfMonth(this DateTime date, DayOfWeek weekday, int N)
         {
             if (N > 0) return (date.Day - 1) / 7 == N - 1 && date.DayOfWeek == weekday;
@@ -214,6 +291,15 @@ namespace reexjungle.xmisc.foundation.concretes
             }
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="weekday"></param>
+        /// <param name="N"></param>
+        /// <param name="rule"></param>
+        /// <param name="start"></param>
+        /// <returns></returns>
         public static bool IsNthWeekdayOfYear(this DateTime date, DayOfWeek weekday, int N, CalendarWeekRule rule = CalendarWeekRule.FirstFourDayWeek,
             DayOfWeek start = DayOfWeek.Monday)
         {
@@ -223,6 +309,17 @@ namespace reexjungle.xmisc.foundation.concretes
             else return (sylvester.Day - date.Day) / 7 * weeks == (Math.Abs(N) - 1) && date.DayOfWeek == weekday;
         }
 
+        /// <summary>
+        ///  Determines the date of the nth occurrence of a weekday within a given month.
+        /// </summary>
+        /// <param name="weekday">The week day, whose nth occurrence date in a month is being determined</param>
+        /// <param name="N">Specifies the occurence of the week day in the month</param>
+        /// <param name="year">The year of the determined date</param>
+        /// <param name="month">The month containing the occurences of weekdays</param>
+        /// <param name="hour">Optional hour of the determined date</param>
+        /// <param name="minute">Optional minute of the determined date</param>
+        /// <param name="second">Optional second of the determined date</param>
+        /// <returns></returns>
         public static DateTime GetNthDateOfMonth(this DayOfWeek weekday, int N, int year, int month, int hour = 0, int minute = 0, int second = 0)
         {
             if (N > 0)
