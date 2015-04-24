@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace reexjungle.xmisc.infrastructure.contracts
+namespace reexjungle.xmisc.infrastructure.concretes.io
 {
     public enum CodeDomLanguage
     {

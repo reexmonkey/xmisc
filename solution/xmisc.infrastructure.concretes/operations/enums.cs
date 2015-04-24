@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace reexjungle.infrastructure.concretes.operations
+﻿namespace reexjungle.xmisc.infrastructure.concretes.operations
 {
     /// <summary>
     ///

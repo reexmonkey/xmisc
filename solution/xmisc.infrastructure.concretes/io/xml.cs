@@ -5,7 +5,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
-namespace reexjungle.xmisc.infrastructure.contracts
+namespace reexjungle.xmisc.infrastructure.concretes.io
 {
     public static class XmlExtensions
     {

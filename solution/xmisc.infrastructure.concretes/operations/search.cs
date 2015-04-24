@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 
-namespace reexjungle.infrastructure.concretes.operations
+namespace reexjungle.xmisc.infrastructure.concretes.operations
 {
     [Flags]
     public enum DateTimeOption
