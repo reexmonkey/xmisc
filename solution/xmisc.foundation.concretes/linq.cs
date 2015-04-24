@@ -211,8 +211,18 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>A union of the two sequences, where only non-existing elements of the first sequence are selected from the second sequence</returns>
         public static IEnumerable<TValue> Merge<TValue>(this IEnumerable<TValue> first, IEnumerable<TValue> second, IEqualityComparer<TValue> comparer = null)
         {
-            var difference = second.Except(first.Distinct(), comparer);
-            return !difference.NullOrEmpty() ? first.Union(difference) : first;
+            if (second != null) return first.Union(second, comparer);
+            return first;
+
+            //var incoming = second.Except(first.Distinct(), comparer);
+            //return !incoming.NullOrEmpty()
+            //    ? first.Union(incoming) : first.Union(second).Distinct();
+
+            //        var incoming = (comparer != null)
+            //? collection.Except(list.Distinct(), comparer)
+            //: collection.Except(list.Distinct());
+
+            //        if (!incoming.NullOrEmpty()) list.AddRange(incoming);
         }
 
         /// <summary>
