@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 
-namespace reexjungle.infrastructure.concretes.operations
+namespace reexjungle.xmisc.infrastructure.concretes.operations
 {
     /// <summary>
     /// Represents a basic property structure of an object

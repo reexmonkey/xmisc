@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace reexjungle.xmisc.infrastructure.contracts
 {
@@ -10,7 +6,7 @@ namespace reexjungle.xmisc.infrastructure.contracts
     /// Specifies a contract for providing unique keys
     /// </summary>
     /// <typeparam name="Tkey">The type of key</typeparam>
-    public interface IKeyGenerator<Tkey>
+    public interface IKeyGenerator<out Tkey>
         where Tkey : IEquatable<Tkey>
     {
         /// <summary>

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace reexjungle.xmisc.infrastructure.contracts
+namespace reexjungle.xmisc.infrastructure.concretes.io
 {
     /// <summary>
     /// Represents an enumeration of cyptographic hash algorithms

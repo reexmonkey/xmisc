@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace reexjungle.xmisc.infrastructure.contracts
+namespace reexjungle.xmisc.infrastructure.concretes.io
 {
     /// <summary>
     /// Provides extended object copying functionalities

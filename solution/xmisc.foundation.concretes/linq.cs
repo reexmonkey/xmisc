@@ -211,8 +211,23 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>A union of the two sequences, where only non-existing elements of the first sequence are selected from the second sequence</returns>
         public static IEnumerable<TValue> Merge<TValue>(this IEnumerable<TValue> first, IEnumerable<TValue> second, IEqualityComparer<TValue> comparer = null)
         {
-            var difference = second.Except(first.Distinct(), comparer);
-            return !difference.NullOrEmpty() ? first.Union(difference) : first;
+            if (second != null) return first.Union(second, comparer);
+            return first;
+        }
+
+        /// <summary>
+        /// Merges the elements of a sequence to those of a <see cref="System.Collections.Generic.List&lt;TValue&gt;"/>. Only non-existing elements of the list are selected from the given sequence.
+        /// </summary>
+        /// <typeparam name="TValue">The type of the elements of the list and the input sequence</typeparam>
+        /// <param name="list">A list that contains elements</param>
+        /// <param name="values">Another sequence that contains elements</param>
+        /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
+        public static void MergeRange<TValue>(this List<TValue> list, IEnumerable<TValue> values, IEqualityComparer<TValue> comparer = null)
+        {
+            if (values == null) throw new ArgumentNullException("values", "Sequence must be not null");
+
+            var incoming = values.Except(list.Distinct(), comparer);
+            if (!incoming.NullOrEmpty()) list.AddRange(incoming);
         }
 
         /// <summary>

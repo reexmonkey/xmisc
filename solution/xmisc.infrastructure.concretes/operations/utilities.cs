@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace reexjungle.infrastructure.concretes.operations
+namespace reexjungle.xmisc.infrastructure.concretes.operations
 {
     /// <summary>
     /// Specifies a helper class providing common IO functionalities

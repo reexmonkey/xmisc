@@ -3,7 +3,7 @@ using System;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace reexjungle.infrastructure.concretes.operations
+namespace reexjungle.xmisc.infrastructure.concretes.operations
 {
     public class GuidKeyGenerator : IGuidKeyGenerator
     {
