@@ -15,6 +15,9 @@ namespace reexjungle.xmisc.infrastructure.concretes.io
         jscript
     }
 
+    /// <summary>
+    /// Extends CodeDom functionalities
+    /// </summary>
     public static class CodeDomExtensions
     {
         public static CodeDomLanguage ToCodeDomLanguage(this string language)

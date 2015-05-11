@@ -8,7 +8,7 @@ using System.Linq;
 namespace reexjungle.xmisc.infrastructure.concretes.operations
 {
     /// <summary>
-    /// Base dvalidator class for composite validators
+    /// Base validator class for composite validators
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class AbstractCompositeValidator<T> : AbstractValidator<T>
