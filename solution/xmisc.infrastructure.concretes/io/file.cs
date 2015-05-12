@@ -61,7 +61,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.io
             try
             {
                 var dinfo = new DirectoryInfo(path);
-                var files = dinfo.GetFiles().Where(f => f.Extension == filter).Select(f => f);
+                finfos = dinfo.GetFiles().Where(f => f.Extension.Equals(filter, StringComparison.OrdinalIgnoreCase));
             }
             catch (DirectoryNotFoundException ex)
             {
