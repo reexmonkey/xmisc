@@ -1,3 +1,2 @@
 language: csharp
 solution: solution/xmisc.sln
-sudo: required
