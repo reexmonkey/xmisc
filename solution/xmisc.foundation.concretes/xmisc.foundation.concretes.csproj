@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="identifiers.cs" />
     <Compile Include="linq.cs" />
     <Compile Include="datetime.cs" />
     <Compile Include="exceptions.cs" />
