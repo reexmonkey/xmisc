@@ -1,160 +1,243 @@
-﻿using reexjungle.xmisc.infrastructure.contracts;
+﻿using reexjungle.xmisc.foundation.concretes;
+using reexjungle.xmisc.foundation.contracts;
+using reexjungle.xmisc.infrastructure.contracts;
 using System;
-using System.Text;
-using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace reexjungle.xmisc.infrastructure.concretes.operations
 {
-    public class GuidKeyGenerator : IGuidKeyGenerator
+    /// <summary>
+    /// Represents a key generator of Globally Unique Identifiers (GUIDs)
+    /// </summary>
+    public class GuidKeyGenerator : IKeyGenerator<Guid>
     {
-        private string seed = null;
-        private bool compact = false;
+        private readonly Queue<Guid> pool;
 
-        public GuidKeyGenerator(bool compact = true)
+        /// <summary>
+        /// Produces the next key
+        /// </summary>
+        /// <returns>The next available key</returns>
+        public Guid GetNextKey()
         {
+            return pool.Empty() ? pool.Dequeue() : Guid.NewGuid();
+        }
+
+        /// <summary>
+        /// Recapture a key for Reuse purposes
+        /// </summary>
+        /// <param name="key">The key that shall later be reused</param>
+        public void Recapture(Guid key)
+        {
+            if (!pool.Contains(key)) pool.Enqueue(key);
+        }
+
+        /// <summary>
+        /// Reinitializes the key generator.
+        /// </summary>
+        public void Reset()
+        {
+            pool.Clear();
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public GuidKeyGenerator()
+        {
+            pool = new Queue<Guid>();
+        }
+    }
+
+    /// <summary>
+    /// Represents a key generator for producing Globally Unique Identifiers (GUIDs) as strings
+    /// </summary>
+    public class GuidStringKeyGenerator : IKeyGenerator<string>
+    {
+        private readonly IKeyGenerator<Guid> keygen;
+        private readonly bool compact;
+
+        /// <summary>
+        /// Produces the next key
+        /// </summary>
+        /// <returns>The next available key</returns>
+        public string GetNextKey()
+        {
+            var guid = keygen.GetNextKey();
+
+            //get next available non-empty Guid
+            while (guid == Guid.Empty) guid = keygen.GetNextKey();
+            var key = guid.ToString();
+
+            return compact ? key.Replace("-", string.Empty) : key;
+        }
+
+        /// <summary>
+        /// Recaptures a key for re-use purposes
+        /// </summary>
+        /// <param name="key">The key that shall later be reused</param>
+        public void Recapture(string key)
+        {
+            keygen.Recapture(new Guid(key));
+        }
+
+        /// <summary>
+        /// Reinitializes the key generator.
+        /// </summary>
+        public void Reset()
+        {
+            keygen.Reset();
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="compact">Should the blocks of the generated Guid be separated by hyphens?</param>
+        /// <param name="keygen">The Guid generator used for generating the underlying Guids</param>
+        public GuidStringKeyGenerator(bool compact = true, IKeyGenerator<Guid> keygen = null)
+        {
+            this.keygen = keygen ?? new GuidKeyGenerator();
             this.compact = compact;
-            this.seed = string.Empty;
-        }
-
-        public GuidKeyGenerator(string seed, bool compact = true)
-        {
-            var pattern = @"^(\(|\{)?(?<block1>0?[x]?[0-9a-f]{8})[\-]{1}?(?<block2>0?[x]?[0-9a-f]{4})[\-]{1}?(?<block3>0?[x]?[0-9a-f]{4})[\-]{1}?(?<block4>0?[x]?[0-9a-f]{4})[\-]{1}?(?<block5>0?[x]?[0-9a-f]{12})(\)|\})?$";
-            if (Regex.IsMatch(seed, pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture)) this.seed = seed;
-            else throw new FormatException("seed does not match GUID format");
-            this.compact = compact;
-        }
-
-        public string GetNextKey()
-        {
-            var key = string.Empty;
-            try
-            {
-                if (string.IsNullOrEmpty(this.seed))
-                    key = (Guid.NewGuid() == Guid.Empty)
-                        ? GetNextKey()
-                        : Guid.NewGuid().ToString();
-                else key = new Guid(this.seed).ToString();
-
-                return compact
-                   ? key.Replace("-", string.Empty)
-                   : key;
-            }
-            catch (ArgumentNullException) { throw; }
-            catch (FormatException) { throw; }
-            catch (OverflowException) { throw; }
-            catch (Exception) { throw; }
         }
     }
 
-    public class FPIKeyGenerator<T> : IFPIKeyGenerator
-        where T : IEquatable<T>
+    /// <summary>
+    /// Represents a key generator for producing integral keys
+    /// </summary>
+    public class NumericKeyGenerator : IKeyGenerator<int>
     {
-        private IKeyGenerator<T> discriminator;
+        private int counter;
+        private readonly Queue<int> pool;
 
-        public string ISO { get; set; }
-
-        public string Owner { get; set; }
-
-        public string Description { get; set; }
-
-        public string LanguageId { get; set; }
-
-        public Authority Authority { get; set; }
-
-        public FPIKeyGenerator(IKeyGenerator<T> discriminator = null)
-        {
-            if (discriminator != null) this.discriminator = discriminator;
-        }
-
-        public string GetNextKey()
-        {
-            var sb = new StringBuilder();
-            if (Authority == Authority.ISO) sb.Append(this.ISO);
-            else if (Authority == Authority.NonStandard) sb.Append("+");
-            else if (Authority == Authority.None) sb.Append("-");
-            if (!string.IsNullOrEmpty(this.Owner) && this.discriminator != null) sb.AppendFormat("//{0}-{1}", this.Owner, this.discriminator.GetNextKey());
-            else if (!string.IsNullOrEmpty(this.Owner)) sb.AppendFormat("//{0}", this.Owner);
-            if (!string.IsNullOrEmpty(this.Description)) sb.AppendFormat("//{0}", this.Description);
-            if (!string.IsNullOrEmpty(this.LanguageId)) sb.AppendFormat("//{0}", this.LanguageId);
-            return sb.ToString();
-        }
-    }
-
-    public class StringFPIKeyGenerator : IFPIKeyGenerator
-    {
-        public string ISO { get; set; }
-
-        public string Owner { get; set; }
-
-        public string Description { get; set; }
-
-        public string LanguageId { get; set; }
-
-        public Authority Authority { get; set; }
-
-        public string GetNextKey()
-        {
-            var sb = new StringBuilder();
-            if (Authority == Authority.ISO) sb.Append(this.ISO);
-            else if (Authority == Authority.NonStandard) sb.Append("+");
-            else if (Authority == Authority.None) sb.Append("-");
-            if (!string.IsNullOrEmpty(this.Owner)) sb.AppendFormat("//{0}", this.Owner);
-            if (!string.IsNullOrEmpty(this.Description)) sb.AppendFormat("//{0}", this.Description);
-            if (!string.IsNullOrEmpty(this.LanguageId)) sb.AppendFormat("//{0}", this.LanguageId);
-            return sb.ToString();
-        }
-    }
-
-    public class IntegralKeyGenerator : IIntegralKeyGenerator
-    {
-        private int counter = 0;
-
+        /// <summary>
+        /// Produces the next key
+        /// </summary>
+        /// <returns>The next available key</returns>
         public int GetNextKey()
         {
-            return counter++;
+            return (!pool.NullOrEmpty()) ? pool.Dequeue() : ++counter;
         }
 
-        public IntegralKeyGenerator()
+        /// <summary>
+        /// Recapture a key for Reuse purposes
+        /// </summary>
+        /// <param name="key">The key that shall later be reused</param>
+        public void Recapture(int key)
         {
-            this.counter = 0;
+            if (!pool.Contains(key)) pool.Enqueue(key);
         }
 
-        public IntegralKeyGenerator(int seed)
+        /// <summary>
+        /// Reinitializes the key generator.
+        /// </summary>
+        public void Reset()
         {
-            this.counter = seed;
+            counter = 0;
+            pool.Clear();
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public NumericKeyGenerator()
+        {
+            counter = 0;
+            pool = new Queue<int>();
         }
     }
 
-    public class LongKeyGenerator : ILongKeyGenerator
+    /// <summary>
+    ///  Represents a key generator for producing 64-bit integral keys
+    /// </summary>
+    public class LongNumericKeyGenerator : IKeyGenerator<long>
     {
-        private long counter = 0;
+        private long counter;
+        private readonly Queue<long> pool;
 
+        /// <summary>
+        /// Produces the next key
+        /// </summary>
+        /// <returns>The next available key</returns>
         public long GetNextKey()
         {
-            return ++counter;
+            return (!pool.NullOrEmpty()) ? pool.Dequeue() : ++counter;
         }
 
-        public LongKeyGenerator()
+        /// <summary>
+        /// Recapture a key for Reuse purposes
+        /// </summary>
+        /// <param name="key">The key that shall later be reused</param>
+        public void Recapture(long key)
         {
-            this.counter = 0;
+            if (!pool.Contains(key)) pool.Enqueue(key);
         }
 
-        public LongKeyGenerator(long seed)
+        /// <summary>
+        /// Reinitializes the key generator.
+        /// </summary>
+        public void Reset()
         {
-            this.counter = seed;
+            counter = 0;
+            pool.Clear();
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public LongNumericKeyGenerator()
+        {
+            counter = 0;
+            pool = new Queue<long>();
         }
     }
 
-    public static class GeneratorExtensions
+    /// <summary>
+    /// Generates FPI keys
+    /// </summary>
+    public class FpiKeyGenerator : IKeyGenerator<Fpi>
     {
-        public static string ToUrn(this string fpi)
+        private readonly IKeyGenerator<string> keygen;
+        private readonly Queue<Fpi> pool;
+
+        /// <summary>
+        /// Produces the next key
+        /// </summary>
+        /// <returns>The next available key</returns>
+        public Fpi GetNextKey()
         {
-            return string.Format("urn:{0}", fpi.Replace("//", ":"));
+            var tokens = keygen.GetNextKey().Split('-');
+            return !pool.NullOrEmpty() ? pool.Dequeue() :
+                new Fpi(ApprovalStatus.None, tokens.Last(), "PRODUCT", "DESCRIPTION", "EN");
         }
 
-        public static string ToFpi(this string urn)
+        /// <summary>
+        /// Recaptures a key for reuse purposes
+        /// </summary>
+        /// <param name="key">The key that shall later be reused</param>
+        public void Recapture(Fpi key)
         {
-            return string.Format("urn:{0}", urn.Substring(4).Replace(":", "//"));
+            if (!pool.Contains(key)) pool.Enqueue(key);
+        }
+
+        /// <summary>
+        /// Reinitializes the key generator.
+        /// </summary>
+        public void Reset()
+        {
+            keygen.Reset();
+            pool.Clear();
+        }
+
+        /// <summary>
+        ///Constructor
+        /// </summary>
+        /// <param name="authorKeygen">Generator of author names for the FPI generator.
+        /// If none is provided, the default <see cref="GuidStringKeyGenerator"/> is used.
+        ///  </param>
+        public FpiKeyGenerator(IKeyGenerator<string> authorKeygen = null)
+        {
+            keygen = authorKeygen ?? new GuidStringKeyGenerator(false);
+            pool = new Queue<Fpi>();
         }
     }
 }

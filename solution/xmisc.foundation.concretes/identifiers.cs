@@ -1,13 +1,14 @@
 ﻿using reexjungle.xmisc.foundation.contracts;
 using System;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace reexjungle.xmisc.foundation.concretes
 {
     /// <summary>
     /// Represents a Formal Public Identifier class
     /// </summary>
-    public class Fpi : IFpiOwner, IFpiText, IEquatable<Fpi>
+    public class Fpi : IFpiOwner, IFpiText, IFpiUrnConverter, IEquatable<Fpi>
     {
         /// <summary>
         /// Gets or sets the approval status of the FPI
@@ -79,6 +80,44 @@ namespace reexjungle.xmisc.foundation.concretes
         public Fpi(string author, string product, string description, string language, string reference) :
             this(ApprovalStatus.Standard, author, product, description, language, reference)
         {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="value">Serialized string of a Formal Public Identifier (FPI)</param>
+        public Fpi(string value)
+        {
+            const string pattern = @"^(?<prefix>[\+|-]|\p{L}+)//(?<author>(\p{L}+\d*)*)//(?<product>(\p{L}+\d*)*)(?<description>(\s*\p{L}*\d*\s*\d*\p{P}*\d*)*)//(?<language>\p{L}{2})*$";
+            if (!Regex.IsMatch(value, pattern, RegexOptions.ExplicitCapture | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase))
+                throw new FormatException("Invalid FPI format");
+
+            foreach (Match match in Regex.Matches(value, pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture))
+            {
+                if (match.Groups["prefix"].Success)
+                {
+                    switch (match.Groups["prefix"].Value)
+                    {
+                        case "+":
+                            Status = ApprovalStatus.Informal;
+                            break;
+
+                        case "-":
+                            Status = ApprovalStatus.None;
+                            break;
+
+                        default:
+                            Status = ApprovalStatus.Standard;
+                            Reference = match.Groups["prefix"].Value;
+                            break;
+                    }
+                }
+                if (match.Groups["author"].Success) Author = match.Groups["author"].Value;
+                if (match.Groups["product"].Success) Product = match.Groups["product"].Value;
+                if (match.Groups["description"].Success && !string.IsNullOrWhiteSpace(match.Groups["description"].Value))
+                    Description = match.Groups["description"].Value.TrimStart();
+                if (match.Groups["language"].Success) Language = match.Groups["language"].Value;
+            }
         }
 
         public override string ToString()
@@ -154,6 +193,27 @@ namespace reexjungle.xmisc.foundation.concretes
         public static bool operator !=(Fpi left, Fpi right)
         {
             return !Equals(left, right);
+        }
+
+        public string ToUrn()
+        {
+            return string.Format("urn:{0}", ToString().Replace("//", ":"));
+        }
+
+        public void FromUrn(string urn)
+        {
+            try
+            {
+                var fpi = new Fpi(string.Format("urn:{0}", urn.Substring(4).Replace(":", "//")));
+                Status = fpi.Status;
+                Author = fpi.Author;
+                Product = fpi.Product;
+                Description = fpi.Description;
+            }
+            catch (FormatException)
+            {
+                throw;
+            }
         }
     }
 }

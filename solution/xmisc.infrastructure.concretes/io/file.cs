@@ -1,4 +1,5 @@
-﻿using System;
+﻿using reexjungle.xmisc.foundation.concretes;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -178,6 +179,17 @@ namespace reexjungle.xmisc.infrastructure.concretes.io
             }
 
             return BitConverter.ToString(checksum);
+        }
+
+        public static string GetCheckSum(this string path, HashAlgorithm algorithm)
+        {
+            using (var reader = new StreamReader(path))
+            {
+                var checksum = algorithm.ComputeHash(reader.BaseStream);
+                return checksum.NullOrEmpty() ?
+                    BitConverter.ToString(checksum) :
+                    string.Empty;
+            }
         }
 
         public static string ReadTextLinesFromFile(this string path)

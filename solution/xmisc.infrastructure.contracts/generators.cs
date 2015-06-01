@@ -3,35 +3,27 @@
 namespace reexjungle.xmisc.infrastructure.contracts
 {
     /// <summary>
-    /// Specifies a contract for providing unique keys
+    /// Specifies a contract for generating keys
     /// </summary>
-    /// <typeparam name="Tkey">The type of key</typeparam>
-    public interface IKeyGenerator<out Tkey>
-        where Tkey : IEquatable<Tkey>
+    /// <typeparam name="TKey">The given type of key</typeparam>
+    public interface IKeyGenerator<TKey>
+        where TKey : IEquatable<TKey>
     {
         /// <summary>
         /// Produces the next key
         /// </summary>
         /// <returns>The next available key</returns>
-        Tkey GetNextKey();
-    }
+        TKey GetNextKey();
 
-    public interface IIntegralKeyGenerator : IKeyGenerator<int> { }
+        /// <summary>
+        /// Recaptures a key for re-use purposes
+        /// </summary>
+        /// <param name="key">The key that shall later be reused</param>
+        void Recapture(TKey key);
 
-    public interface ILongKeyGenerator : IKeyGenerator<long> { }
-
-    public interface IGuidKeyGenerator : IKeyGenerator<string> { }
-
-    public interface IFPIKeyGenerator : IKeyGenerator<string>
-    {
-        string ISO { get; set; }
-
-        string Owner { get; set; }
-
-        string Description { get; set; }
-
-        string LanguageId { get; set; }
-
-        Authority Authority { get; set; }
+        /// <summary>
+        /// Reinitializes the key generator.
+        /// </summary>
+        void Reset();
     }
 }
