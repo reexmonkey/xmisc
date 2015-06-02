@@ -9,17 +9,8 @@ using System.Text;
 namespace reexjungle.xmisc.infrastructure.concretes.io
 {
     /// <summary>
-    /// Represents an enumeration of cyptographic hash algorithms
+    /// Extensions to File-related operations
     /// </summary>
-    public enum HashAlgorithmMode
-    {
-        SHA1 = 0x0001,
-        SHA256 = 0x0002,
-        SHA384 = 0x0004,
-        SHA512 = 0x0008,
-        MD5 = 0x0010
-    }
-
     public static class FileExtensions
     {
         /// <summary>
@@ -29,23 +20,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.io
         /// <returns>The collection of files from the directory</returns>
         public static IEnumerable<FileInfo> GetFiles(this string path)
         {
-            IEnumerable<FileInfo> finfos = null;
-
-            try
-            {
-                var dinfo = new DirectoryInfo(path);
-                finfos = dinfo.GetFiles();
-            }
-            catch (DirectoryNotFoundException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.ToString());
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.ToString());
-            }
-
-            return finfos;
+            return new DirectoryInfo(path).GetFiles();
         }
 
         /// <summary>
@@ -57,23 +32,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.io
         /// <returns>The collection of files in the specified directory that are filtered by the extension</returns>
         public static IEnumerable<FileInfo> GetFiles(this string path, string filter)
         {
-            IEnumerable<FileInfo> finfos = null;
-
-            try
-            {
-                var dinfo = new DirectoryInfo(path);
-                finfos = dinfo.GetFiles().Where(f => f.Extension.Equals(filter, StringComparison.OrdinalIgnoreCase));
-            }
-            catch (DirectoryNotFoundException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.ToString());
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.ToString());
-            }
-
-            return finfos;
+            return new DirectoryInfo(path).GetFiles().Where(f => f.Extension.Equals(filter, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -85,23 +44,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.io
         /// <returns>The collection of files in the specified directory that have been filtered by the collection of extensions</returns>
         public static IEnumerable<FileInfo> GetFiles(this string path, IEnumerable<string> filters)
         {
-            IEnumerable<FileInfo> finfos = null;
-
-            try
-            {
-                var dinfo = new DirectoryInfo(path);
-                var files = dinfo.GetFiles().Where(f => f.Extension == filters.Select(l => l).FirstOrDefault()).Select(f => f);
-            }
-            catch (DirectoryNotFoundException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.ToString());
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.ToString());
-            }
-
-            return finfos;
+            return new DirectoryInfo(path).GetFiles().Where(f => f.Extension == filters.Select(l => l).FirstOrDefault()).Select(f => f);
         }
 
         /// <summary>
@@ -128,59 +71,17 @@ namespace reexjungle.xmisc.infrastructure.concretes.io
         /// <returns>A new path consisting of the root path and the appendix</returns>
         public static string AppendPath(this string root, string path)
         {
-            StringBuilder sb = new StringBuilder(root);
+            var sb = new StringBuilder(root);
             sb.AppendFormat("\\{0}", path);
             return sb.ToString();
         }
 
         /// <summary>
-        ///
+        /// Gets the checksum of a file that is specified by the given hash algorithm
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="mode"></param>
-        /// <returns></returns>
-        public static string GetCheckSum(this string path, HashAlgorithmMode mode)
-        {
-            byte[] checksum = null;
-            using (var sr = new StreamReader(path))
-            {
-                switch (mode)
-                {
-                    case HashAlgorithmMode.MD5:
-                        var md5h = new MD5CryptoServiceProvider();
-                        checksum = md5h.ComputeHash(sr.BaseStream);
-                        break;
-
-                    case HashAlgorithmMode.SHA1:
-                        var sha1h = new SHA1CryptoServiceProvider();
-                        checksum = sha1h.ComputeHash(sr.BaseStream);
-                        break;
-
-                    case HashAlgorithmMode.SHA256:
-                        var sha2h = new SHA256CryptoServiceProvider();
-                        checksum = sha2h.ComputeHash(sr.BaseStream);
-                        break;
-
-                    case HashAlgorithmMode.SHA384:
-                        var sha3h = new SHA384CryptoServiceProvider();
-                        checksum = sha3h.ComputeHash(sr.BaseStream);
-                        break;
-
-                    case HashAlgorithmMode.SHA512:
-                        var sha5h = new SHA512CryptoServiceProvider();
-                        checksum = sha5h.ComputeHash(sr.BaseStream);
-                        break;
-
-                    default:
-                        var defh = new SHA1CryptoServiceProvider();
-                        checksum = defh.ComputeHash(sr.BaseStream);
-                        break;
-                }
-            }
-
-            return BitConverter.ToString(checksum);
-        }
-
+        /// <param name="path">The full path to the file</param>
+        /// <param name="algorithm">The has algorithm used ti derive the checksum</param>
+        /// <returns>The cheksum of the file if the operation is successful; otherwise an empty string</returns>
         public static string GetCheckSum(this string path, HashAlgorithm algorithm)
         {
             using (var reader = new StreamReader(path))
@@ -192,60 +93,79 @@ namespace reexjungle.xmisc.infrastructure.concretes.io
             }
         }
 
-        public static string ReadTextLinesFromFile(this string path)
+        ///  <summary>
+        /// Reads text from a file, whose path is specified by a <see cref="System.IO.FileInfo"/> instance
+        ///  </summary>
+        /// <param name="finfo">The instance specifying the file path of the file</param>
+        /// <returns>The text read from the file</returns>
+        public static string ReadText(this FileInfo finfo)
         {
             var sb = new StringBuilder();
-            using (var sr = File.OpenText(path))
+            using (var sr = File.OpenText(finfo.Name))
             {
-                var line = string.Empty;
+                string line;
                 while ((line = sr.ReadLine()) != null) sb.Append(line);
             }
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Reads text from a <see cref="System.IO.Stream"/> instance
+        /// </summary>
+        /// <param name="stream">The stream containing textual information </param>
+        /// <returns>The text read from teh stream</returns>
         public static string ReadText(this Stream stream)
         {
             var sb = new StringBuilder();
             using (var sr = new StreamReader(stream))
             {
-                var line = string.Empty;
+                string line;
                 while ((line = sr.ReadLine()) != null) sb.Append(line);
             }
             return sb.ToString();
         }
 
-        public static byte[] ReadBytes(System.IO.Stream stream)
+        /// <summary>
+        /// Reads raw bytes from a <see cref="System.IO.Stream"/> instance
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public static byte[] ReadBytes(Stream stream)
         {
-            byte[] buffer = new byte[16 * 1024];
-            using (var ms = new System.IO.MemoryStream())
+            var buffer = new byte[16 * 1024];
+            using (var ms = new MemoryStream())
             {
-                int read = 0;
+                var read = 0;
                 while ((read = stream.Read(buffer, 0, buffer.Length)) > 0) ms.Write(buffer, 0, read);
                 return ms.ToArray();
             }
         }
 
-        public static IEnumerable<byte[]> SplitToLines(this byte[] bytes, int len)
+        /// <summary>
+        /// Splits an array of bytes to blocks of a specified size
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="blocksize"></param>
+        /// <returns></returns>
+        public static IEnumerable<byte[]> Split(this IEnumerable<byte> bytes, int blocksize)
         {
-            List<byte[]> lines = null;
-            try
+            var offset = 0;
+            var data = bytes.ToArray();
+            var count = data.Length / blocksize;
+            var rem = data.Length % blocksize;
+
+            var blocks = (rem == 0)
+                ? new List<byte[]>(count)
+                : new List<byte[]>(count + 1);
+
+            while (offset < data.Length)
             {
-                int offset = 0;
-                int count = bytes.Length / len;
-                int rem = bytes.Length % len;
-                lines = (rem == 0) ? new List<byte[]>(count) : new List<byte[]>(count + 1);
-                while (offset < bytes.Length)
-                {
-                    var buffer = new byte[len];
-                    Buffer.BlockCopy(bytes, offset, buffer, 0, len);
-                    lines.Add(buffer);
-                    offset += len;
-                }
+                var buffer = new byte[blocksize];
+                Buffer.BlockCopy(data, offset, buffer, 0, blocksize);
+                blocks.Add(buffer);
+                offset += blocksize;
             }
-            catch (ArgumentNullException) { throw; }
-            catch (DivideByZeroException) { throw; }
-            catch (Exception) { throw; }
-            return lines;
+            return blocks;
         }
     }
 }

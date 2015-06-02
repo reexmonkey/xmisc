@@ -18,7 +18,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
         /// Produces the next key
         /// </summary>
         /// <returns>The next available key</returns>
-        public Guid GetNextKey()
+        public Guid GetNext()
         {
             return pool.Empty() ? pool.Dequeue() : Guid.NewGuid();
         }
@@ -61,12 +61,12 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
         /// Produces the next key
         /// </summary>
         /// <returns>The next available key</returns>
-        public string GetNextKey()
+        public string GetNext()
         {
-            var guid = keygen.GetNextKey();
+            var guid = keygen.GetNext();
 
             //get next available non-empty Guid
-            while (guid == Guid.Empty) guid = keygen.GetNextKey();
+            while (guid == Guid.Empty) guid = keygen.GetNext();
             var key = guid.ToString();
 
             return compact ? key.Replace("-", string.Empty) : key;
@@ -93,7 +93,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
         /// Constructor
         /// </summary>
         /// <param name="compact">Should the blocks of the generated Guid be separated by hyphens?</param>
-        /// <param name="keygen">The Guid generator used for generating the underlying Guids</param>
+        /// <param name="keygen">The generator used for generating the underlying Guids</param>
         public GuidStringKeyGenerator(bool compact = true, IKeyGenerator<Guid> keygen = null)
         {
             this.keygen = keygen ?? new GuidKeyGenerator();
@@ -113,7 +113,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
         /// Produces the next key
         /// </summary>
         /// <returns>The next available key</returns>
-        public int GetNextKey()
+        public int GetNext()
         {
             return (!pool.NullOrEmpty()) ? pool.Dequeue() : ++counter;
         }
@@ -158,7 +158,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
         /// Produces the next key
         /// </summary>
         /// <returns>The next available key</returns>
-        public long GetNextKey()
+        public long GetNext()
         {
             return (!pool.NullOrEmpty()) ? pool.Dequeue() : ++counter;
         }
@@ -196,18 +196,26 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
     /// </summary>
     public class FpiKeyGenerator : IKeyGenerator<Fpi>
     {
-        private readonly IKeyGenerator<string> keygen;
+        private readonly IGenerator<ApprovalStatus> statusGenerator;
+        private readonly IGenerator<string> authorGenerator;
+        private readonly IGenerator<string> productGenerator;
+        private readonly IGenerator<string> descriptionGenerator;
+        private readonly IGenerator<string> languageGenerator;
+        private readonly IGenerator<string> referenceGenerator;
         private readonly Queue<Fpi> pool;
 
         /// <summary>
         /// Produces the next key
         /// </summary>
         /// <returns>The next available key</returns>
-        public Fpi GetNextKey()
+        public Fpi GetNext()
         {
-            var tokens = keygen.GetNextKey().Split('-');
             return !pool.NullOrEmpty() ? pool.Dequeue() :
-                new Fpi(ApprovalStatus.None, tokens.Last(), "PRODUCT", "DESCRIPTION", "EN");
+                 new Fpi(statusGenerator.GetNext(), authorGenerator.GetNext(),
+                    productGenerator.GetNext(),
+                    descriptionGenerator.GetNext(),
+                    languageGenerator.GetNext(),
+                    referenceGenerator != null ? referenceGenerator.GetNext() : null);
         }
 
         /// <summary>
@@ -224,20 +232,111 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
         /// </summary>
         public void Reset()
         {
-            keygen.Reset();
+            authorGenerator.Reset();
+            productGenerator.Reset();
+            descriptionGenerator.Reset();
+            languageGenerator.Reset();
+
+            if (referenceGenerator != null) referenceGenerator.Reset();
+
             pool.Clear();
         }
 
-        /// <summary>
-        ///Constructor
-        /// </summary>
-        /// <param name="authorKeygen">Generator of author names for the FPI generator.
-        /// If none is provided, the default <see cref="GuidStringKeyGenerator"/> is used.
-        ///  </param>
-        public FpiKeyGenerator(IKeyGenerator<string> authorKeygen = null)
+        ///  <summary>
+        /// Constructor
+        ///  </summary>
+        /// <param name="statusGenerator">Approval Status generator</param>
+        /// <param name="authorGenerator">Author generator</param>
+        /// <param name="productGenerator">Product class generator</param>
+        /// <param name="descriptionGenerator">Description generator</param>
+        /// <param name="languageGenerator">Lanaguage generator</param>
+        /// <param name="referenceGenerator">Reference generator</param>
+        public FpiKeyGenerator(
+            IGenerator<ApprovalStatus> statusGenerator,
+            IGenerator<string> authorGenerator,
+            IGenerator<string> productGenerator,
+            IGenerator<string> descriptionGenerator,
+            IGenerator<string> languageGenerator,
+            IGenerator<string> referenceGenerator = null)
         {
-            keygen = authorKeygen ?? new GuidStringKeyGenerator(false);
+            statusGenerator.ThrowIfNull("statusGenerator");
+            authorGenerator.ThrowIfNull("statusGenerator");
+            productGenerator.ThrowIfNull("productGenerator");
+            descriptionGenerator.ThrowIfNull("descriptionGenerator");
+            languageGenerator.ThrowIfNull("languageGenerator");
+
+            this.statusGenerator = statusGenerator;
+            this.authorGenerator = authorGenerator;
+            this.productGenerator = productGenerator;
+            this.descriptionGenerator = descriptionGenerator;
+            this.languageGenerator = languageGenerator;
+            this.referenceGenerator = referenceGenerator;
+
             pool = new Queue<Fpi>();
+        }
+    }
+
+    /// <summary>
+    /// Represents a key generator for producing Formal Public Identifiers (FPIs) as strings
+    /// </summary>
+    public class FpiStringKeyGenerator : IKeyGenerator<string>
+    {
+        private readonly IKeyGenerator<Fpi> keygen;
+
+        /// <summary>
+        /// Produces the next key
+        /// </summary>
+        /// <returns>The next available key</returns>
+        public string GetNext()
+        {
+            return keygen.GetNext().ToString();
+        }
+
+        /// <summary>
+        /// Recaptures a key for re-use purposes
+        /// </summary>
+        /// <param name="key">The key that shall later be reused</param>
+        public void Recapture(string key)
+        {
+            keygen.Recapture(new Fpi(key));
+        }
+
+        /// <summary>
+        /// Reinitializes the key generator.
+        /// </summary>
+        public void Reset()
+        {
+            keygen.Reset();
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="keygen">The underlying Formal Public Identifer keygenerator </param>
+        public FpiStringKeyGenerator(IKeyGenerator<Fpi> keygen)
+        {
+            keygen.ThrowIfNull("keygen");
+            this.keygen = keygen;
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="statusGenerator">Approval Status generator</param>
+        /// <param name="authorGenerator">Author generator</param>
+        /// <param name="productGenerator">Product class generator</param>
+        /// <param name="descriptionGenerator">Description generator</param>
+        /// <param name="languageGenerator">Lanaguage generator</param>
+        /// <param name="referenceGenerator">Reference generator</param>
+        public FpiStringKeyGenerator(
+            IGenerator<ApprovalStatus> statusGenerator,
+            IGenerator<string> authorGenerator,
+            IGenerator<string> productGenerator,
+            IGenerator<string> descriptionGenerator,
+            IGenerator<string> languageGenerator,
+            IGenerator<string> referenceGenerator = null)
+        {
+            keygen = new FpiKeyGenerator(statusGenerator, authorGenerator, productGenerator, descriptionGenerator, languageGenerator, referenceGenerator);
         }
     }
 }

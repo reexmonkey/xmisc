@@ -1,14 +1,33 @@
 ﻿namespace reexjungle.xmisc.infrastructure.concretes.operations
 {
     /// <summary>
-    ///
+    /// Represents a data storage type
     /// </summary>
     public enum StorageType
     {
+        /// <summary>
+        /// Relational Database Management System
+        /// </summary>
         rdbms,
+
+        /// <summary>
+        /// No-SQL
+        /// </summary>
         nosql,
+
+        /// <summary>
+        /// In-Memory
+        /// </summary>
         memory,
+
+        /// <summary>
+        ///
+        /// </summary>
         host,
+
+        /// <summary>
+        ///
+        /// </summary>
         unknown
     }
 
