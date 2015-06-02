@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
+using System.Threading;
 
 namespace reexjungle.xmisc.foundation.concretes
 {
@@ -533,6 +535,19 @@ namespace reexjungle.xmisc.foundation.concretes
         public static bool IsDefault(this DateTime value)
         {
             return (value == new DateTime());
+        }
+
+        /// <summary>
+        /// Generates a time stamp from a date time source
+        /// </summary>
+        /// <param name="source">The date time object providing the temporal value for the time stamp</param>
+        /// <param name="format">The format of the generated time stamp</param>
+        /// <param name="provider">The format provider for the formattung</param>
+        /// <returns>A time stamp value</returns>
+        public static string GenerateTimeStamp(this DateTime source, string format = "yyyyMMddHHmmssfff", IFormatProvider provider = null)
+        {
+            var formatter = provider ?? Thread.CurrentThread.CurrentCulture;
+            return source.ToString(format, formatter);
         }
     }
 }
