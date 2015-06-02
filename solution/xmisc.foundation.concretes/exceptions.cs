@@ -31,7 +31,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <param name="source">The source of the exception</param>
         /// <param name="message">The exception message</param>
         /// <param name="inner">The inner exception that caused the current exception, or a null reference</param>
-        public static void ThrowIfNull<TValue>(this TValue source, string message, Exception inner = null)
+        public static void ThrowIfNull<TValue>(this TValue source, string message, Exception inner)
         {
             if (source == null) throw new ArgumentNullException(message, inner);
         }

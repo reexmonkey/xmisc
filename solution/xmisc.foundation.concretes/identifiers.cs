@@ -148,7 +148,12 @@ namespace reexjungle.xmisc.foundation.concretes
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Status == other.Status && string.Equals(Author, other.Author) && string.Equals(Reference, other.Reference) && string.Equals(Product, other.Product) && string.Equals(Description, other.Description) && string.Equals(Language, other.Language);
+            return Status == other.Status &&
+                string.Equals(Author, other.Author) &&
+                string.Equals(Reference, other.Reference) &&
+                string.Equals(Product, other.Product) &&
+                string.Equals(Description, other.Description) &&
+                string.Equals(Language, other.Language);
         }
 
         public override bool Equals(object obj)
