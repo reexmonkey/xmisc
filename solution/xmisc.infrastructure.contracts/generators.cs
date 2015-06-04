@@ -3,44 +3,44 @@
 namespace reexjungle.xmisc.infrastructure.contracts
 {
     /// <summary>
-    /// Specifies a contract for generating content
+    /// Specifies a contract for generating values
     /// </summary>
     /// <typeparam name="TValue"></typeparam>
     public interface IGenerator<out TValue>
     {
         /// <summary>
-        /// Produces the next content
+        /// Generates a value.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The generated value.</returns>
         TValue GetNext();
 
         /// <summary>
-        /// Resets the content generator
+        /// Re-initializes the generator.
         /// </summary>
         void Reset();
     }
 
     /// <summary>
-    /// Specifies a contract for generating unique identifiers
+    /// Specifies a contract for generating unique identifiers.
     /// </summary>
-    /// <typeparam name="TKey">The given type of key</typeparam>
+    /// <typeparam name="TKey">The type of key to generate.</typeparam>
     public interface IKeyGenerator<TKey>
         where TKey : IEquatable<TKey>
     {
         /// <summary>
-        /// Produces the next key
+        /// Generates a key.
         /// </summary>
-        /// <returns>The next available key</returns>
+        /// <returns>The generated key.</returns>
         TKey GetNext();
 
         /// <summary>
-        /// Recaptures a key for re-use purposes
+        /// Recycles a used key for reuse purposes.
         /// </summary>
-        /// <param name="key">The key that shall later be reused</param>
+        /// <param name="key">The key to be recycled.</param>
         void Recapture(TKey key);
 
         /// <summary>
-        /// Reinitializes the key generator.
+        /// Re-initializes the key generator.
         /// </summary>
         void Reset();
     }
