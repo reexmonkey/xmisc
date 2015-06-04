@@ -20,7 +20,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
         /// <returns>The next available key</returns>
         public Guid GetNext()
         {
-            return pool.Empty() ? pool.Dequeue() : Guid.NewGuid();
+            return !pool.Empty() ? pool.Dequeue() : Guid.NewGuid();
         }
 
         /// <summary>
@@ -210,7 +210,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
         /// <returns>The next available key</returns>
         public Fpi GetNext()
         {
-            return !pool.NullOrEmpty() ? pool.Dequeue() :
+            return !pool.Empty() ? pool.Dequeue() :
                  new Fpi(statusGenerator.GetNext(), authorGenerator.GetNext(),
                     productGenerator.GetNext(),
                     descriptionGenerator.GetNext(),
@@ -320,7 +320,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
         }
 
         /// <summary>
-        ///
+        /// Constructor
         /// </summary>
         /// <param name="statusGenerator">Approval Status generator</param>
         /// <param name="authorGenerator">Author generator</param>
