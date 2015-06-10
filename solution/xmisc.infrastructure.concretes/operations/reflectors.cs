@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -275,6 +276,14 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
             return instance;
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="instance"></param>
+        /// <param name="other"></param>
+        /// <param name="ignore"></param>
+        /// <returns></returns>
         public static bool PropertiesEquals<T>(this T instance, T other, params string[] ignore) where T : class
         {
             if (instance != null && other != null)
@@ -293,6 +302,14 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
             return instance == other;
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="instance"></param>
+        /// <param name="other"></param>
+        /// <param name="ignore"></param>
+        /// <returns></returns>
         public static IEnumerable<object> Differences<T>(this T instance, T other, params string[] ignore)
             where T : class, new()
         {
@@ -313,6 +330,14 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
             return new List<object>();
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="instance"></param>
+        /// <param name="other"></param>
+        /// <param name="ignore"></param>
+        /// <returns></returns>
         public static IEnumerable<object> Differences<T>(this T instance, T other, params Expression<Func<T, object>>[] ignore)
             where T : class, new()
         {
@@ -338,6 +363,180 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
             }
 
             return new List<object>();
+        }
+
+        /// <summary>
+        /// Gets the assembly for a specified type
+        /// </summary>
+        /// <param name="type">The specified type, whose assembly is being searched</param>
+        /// <returns></returns>
+        public static Assembly GetAssembly(this Type type)
+        {
+            Assembly assembly = null;
+            try
+            {
+                assembly = Assembly.GetAssembly(type);
+            }
+            catch (System.ArgumentNullException)
+            {
+                throw;
+            }
+
+            return assembly;
+        }
+
+        public static Assembly GetAssembly<TValue>(this TValue value)
+        {
+            Assembly assembly = null;
+            try
+            {
+                assembly = Assembly.GetAssembly(typeof(TValue));
+            }
+            catch (ArgumentNullException) { throw; }
+            catch (Exception) { throw; }
+            return assembly;
+        }
+
+        public static Assembly GetAssembly<TValue>()
+        {
+            Assembly assembly = null;
+            try
+            {
+                assembly = Assembly.GetAssembly(typeof(TValue));
+            }
+            catch (ArgumentNullException) { throw; }
+            catch (Exception) { throw; }
+            return assembly;
+        }
+
+        public static string GetAssemblyPath(this Type type)
+        {
+            string path = null;
+            try
+            {
+                path = Assembly.GetAssembly(type).Location;
+            }
+            catch (ArgumentNullException) { throw; }
+            catch (Exception) { throw; }
+            return path;
+        }
+
+        public static string GetAssemblyPath<TValue>(this TValue value)
+        {
+            string path = string.Empty;
+            try
+            {
+                path = Assembly.GetAssembly(typeof(TValue)).Location;
+            }
+            catch (System.ArgumentNullException)
+            {
+                throw;
+            }
+            return path;
+        }
+
+        public static string GetAssemblyPath<T>()
+        {
+            string path = string.Empty;
+            try
+            {
+                path = Assembly.GetAssembly(typeof(T)).Location;
+            }
+            catch (System.ArgumentNullException)
+            {
+                throw;
+            }
+            return path;
+        }
+
+        public static string[] GetAssembyPaths(this Type[] types)
+        {
+            IEnumerable<string> paths = null;
+            try
+            {
+                paths = types.Select(x => Assembly.GetAssembly(x).Location);
+            }
+            catch (ArgumentNullException) { throw; }
+            catch (Exception) { throw; }
+
+            return paths.ToArray();
+        }
+
+        public static string[] GetAssembyPaths<TValue>(this TValue[] objects)
+        {
+            IEnumerable<string> paths = null;
+            try
+            {
+                paths = objects.Select(x => Assembly.GetAssembly(typeof(TValue)).Location);
+            }
+            catch (ArgumentNullException) { throw; }
+            catch (Exception) { throw; }
+
+            return paths.ToArray();
+        }
+
+        public static string[] GetReferencedAssemblyNames(this Assembly assembly)
+        {
+            string[] references = null;
+            try
+            {
+                references = assembly.GetReferencedAssemblies().Select(x => string.Format("{0}.dll", x.Name)).ToArray();
+            }
+            catch (ArgumentNullException) { throw; }
+            catch (Exception) { throw; }
+            return references;
+        }
+
+        public static string[] GetReferencedAssemblyNamesFromEntryAssembly()
+        {
+            string[] references = null;
+            try
+            {
+                references = Assembly.GetEntryAssembly().GetReferencedAssemblies().Select(x => string.Format("{0}.dll", x.Name)).ToArray();
+            }
+            catch (ArgumentNullException) { throw; }
+            catch (Exception) { throw; }
+            return references;
+        }
+
+        public static string[] GetReferencedAssemblyNamesFromExecutingAssembly()
+        {
+            string[] references = null;
+            try
+            {
+                references = Assembly.GetExecutingAssembly().GetReferencedAssemblies().Select(x => string.Format("{0}.dll", x.Name)).ToArray();
+            }
+            catch (ArgumentNullException) { throw; }
+            catch (Exception) { throw; }
+            return references;
+        }
+
+        public static FileVersionInfo GetFileVersionInfo(this Assembly assembly)
+        {
+            return FileVersionInfo.GetVersionInfo(assembly.Location);
+        }
+
+        public static Version GetVersionInfo(this Assembly assembly)
+        {
+            return assembly.GetName().Version;
+        }
+
+        /// <summary>
+        /// Gets the application path of current executing application
+        /// </summary>
+        /// <returns>The application path</returns>
+        public static string GetExecutingAssemblyApplicationPath()
+        {
+            return Assembly.GetExecutingAssembly().Location;
+        }
+
+        /// <summary>
+        /// Gets the application path of first executable
+        /// </summary>
+        /// <returns>The application path</returns>
+        public static string GetEntryAssemblyApplicationPath()
+        {
+            return Assembly.GetEntryAssembly().Location;
         }
     }
 }

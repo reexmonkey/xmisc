@@ -3,35 +3,45 @@
 namespace reexjungle.xmisc.infrastructure.contracts
 {
     /// <summary>
-    /// Specifies a contract for providing unique keys
+    /// Specifies a contract for generating values
     /// </summary>
-    /// <typeparam name="Tkey">The type of key</typeparam>
-    public interface IKeyGenerator<out Tkey>
-        where Tkey : IEquatable<Tkey>
+    /// <typeparam name="TValue"></typeparam>
+    public interface IGenerator<out TValue>
     {
         /// <summary>
-        /// Produces the next key
+        /// Generates a value.
         /// </summary>
-        /// <returns>The next available key</returns>
-        Tkey GetNextKey();
+        /// <returns>The generated value.</returns>
+        TValue GetNext();
+
+        /// <summary>
+        /// Re-initializes the generator.
+        /// </summary>
+        void Reset();
     }
 
-    public interface IIntegralKeyGenerator : IKeyGenerator<int> { }
-
-    public interface ILongKeyGenerator : IKeyGenerator<long> { }
-
-    public interface IGuidKeyGenerator : IKeyGenerator<string> { }
-
-    public interface IFPIKeyGenerator : IKeyGenerator<string>
+    /// <summary>
+    /// Specifies a contract for generating unique identifiers.
+    /// </summary>
+    /// <typeparam name="TKey">The type of key to generate.</typeparam>
+    public interface IKeyGenerator<TKey>
+        where TKey : IEquatable<TKey>
     {
-        string ISO { get; set; }
+        /// <summary>
+        /// Generates a key.
+        /// </summary>
+        /// <returns>The generated key.</returns>
+        TKey GetNext();
 
-        string Owner { get; set; }
+        /// <summary>
+        /// Recycles a used key for reuse purposes.
+        /// </summary>
+        /// <param name="key">The key to be recycled.</param>
+        void Recapture(TKey key);
 
-        string Description { get; set; }
-
-        string LanguageId { get; set; }
-
-        Authority Authority { get; set; }
+        /// <summary>
+        /// Re-initializes the key generator.
+        /// </summary>
+        void Reset();
     }
 }

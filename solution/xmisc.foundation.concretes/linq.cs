@@ -19,7 +19,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>True if the sequence is empty; otherwise false.</returns>
         public static bool Empty<TSource>(this IEnumerable<TSource> source)
         {
-            return (source.Count() == 0);
+            return (!source.Any());
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>True if the sequence is empty; otherwise false.</returns>
         public static bool SafeEmpty<TValue>(this IEnumerable<TValue> source)
         {
-            return (source != null) ? source.Count() == 0 : false;
+            return (source != null) && !source.Any();
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>True if the sequence is null or empty.</returns>
         public static bool NullOrEmpty<TValue>(this IEnumerable<TValue> source)
         {
-            return (!(source != null && source.Count() != 0));
+            return (!(source != null && source.Any()));
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <param name="second">Another sequence that contains elements to be tested</param>
         /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
         /// <returns>True, if the sequence is a set; otherwise false</returns>
-        public static bool IsEqualOf<TValue>(this IEnumerable<TValue> first, IEnumerable<TValue> second, IEqualityComparer<TValue> comparer = null)
+        public static bool IsEquivalentOf<TValue>(this IEnumerable<TValue> first, IEnumerable<TValue> second, IEqualityComparer<TValue> comparer = null)
         {
             return first.Intersect(second, comparer).Count() == first.Count();
         }
@@ -79,7 +79,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>True, if the sequence is a sequence; otherwise false</returns>
         public static bool IsSuperSequence<TValue>(this IEnumerable<TValue> first, IEnumerable<TValue> second, IEqualityComparer<TValue> comparer = null)
         {
-            return first.Except(second, comparer).Count() > 0;
+            return first.Except(second, comparer).Any();
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>True, if the sequence is a proper super sequence of the other; otherwise false</returns>
         public static bool IsProperSuperSequenceOf<TValue>(this IEnumerable<TValue> first, IEnumerable<TValue> second, IEqualityComparer<TValue> comparer = null)
         {
-            return !first.IsEqualOf(second, comparer) && first.Except(second, comparer).Count() > 0;
+            return !first.IsEquivalentOf(second, comparer) && first.Except(second, comparer).Any();
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>True, if the sequence is a  sub sequence of the other; otherwise false</returns>
         public static bool IsSubSequenceOf<TValue>(this IEnumerable<TValue> first, IEnumerable<TValue> second, IEqualityComparer<TValue> comparer = null)
         {
-            return second.Except(first, comparer).Count() == 0;
+            return !second.Except(first, comparer).Any();
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>True, if the sequence is a proper sub sequence of the other; otherwise false</returns>
         public static bool IsProperSubSequenceOf<TValue>(this IEnumerable<TValue> first, IEnumerable<TValue> second, IEqualityComparer<TValue> comparer = null)
         {
-            return first.IsEqualOf(second, comparer) && second.Except(first, comparer).Count() == 0;
+            return first.IsEquivalentOf(second, comparer) && !second.Except(first, comparer).Any();
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>True, if the sequence does not intersect the other; otherwise false</returns>
         public static bool NonIntersects<TValue>(this IEnumerable<TValue> first, IEnumerable<TValue> second, IEqualityComparer<TValue> comparer = null)
         {
-            return first.Intersect(second, comparer).Count() == 0;
+            return !first.Intersect(second, comparer).Any();
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>True, if the sequence does not intersect the other; otherwise false</returns>
         public static bool Intersects<TValue>(this IEnumerable<TValue> first, IEnumerable<TValue> second, IEqualityComparer<TValue> comparer = null)
         {
-            return first.Intersect(second, comparer).Count() > 0;
+            return first.Intersect(second, comparer).Any();
         }
 
         /// <summary>
@@ -219,15 +219,15 @@ namespace reexjungle.xmisc.foundation.concretes
         /// Merges the elements of a sequence to those of a <see cref="System.Collections.Generic.List&lt;TValue&gt;"/>. Only non-existing elements of the list are selected from the given sequence.
         /// </summary>
         /// <typeparam name="TValue">The type of the elements of the list and the input sequence</typeparam>
-        /// <param name="list">A list that contains elements</param>
+        /// <param name="origin">A list that contains elements</param>
         /// <param name="values">Another sequence that contains elements</param>
         /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
-        public static void MergeRange<TValue>(this List<TValue> list, IEnumerable<TValue> values, IEqualityComparer<TValue> comparer = null)
+        public static void MergeRange<TValue>(this List<TValue> origin, IEnumerable<TValue> values, IEqualityComparer<TValue> comparer = null)
         {
             if (values == null) throw new ArgumentNullException("values", "Sequence must be not null");
 
-            var incoming = values.Except(list.Distinct(), comparer);
-            if (!incoming.NullOrEmpty()) list.AddRange(incoming);
+            var incoming = values.Except(origin.Distinct(), comparer);
+            if (!incoming.NullOrEmpty()) origin.AddRange(incoming);
         }
 
         /// <summary>
