@@ -1,8 +1,11 @@
 ﻿using System;
+
+using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
+using System.Numerics;
 
 namespace reexjungle.xmisc.foundation.concretes
 {
@@ -53,7 +56,7 @@ namespace reexjungle.xmisc.foundation.concretes
                     (
                         new[] { temp },
                         Expression.Assign(temp, Expression.Divide(dividend, divisor)),
-                        Expression.Return(result, Expression.Call(typeof(Math).GetMethod("Truncate"), temp))
+                        Expression.Return(result, Expression.Call(typeof(System.Math).GetMethod("Truncate"), temp))
                     ),
                     Expression.IfThenElse(Expression.TypeIs(dividend, typeof(float)),
                     Expression.Return(result, Expression.Convert(Expression.Divide(dividend, divisor), typeof(int))),
@@ -83,7 +86,7 @@ namespace reexjungle.xmisc.foundation.concretes
             return Expression.Block
                 (
                     Expression.IfThenElse(Expression.Or(Expression.TypeIs(x, typeof(double)), Expression.TypeIs(x, typeof(decimal))),
-                    Expression.Return(result, Expression.Call(typeof(Math).GetMethod("Truncate"), temp)),
+                    Expression.Return(result, Expression.Call(typeof(System.Math).GetMethod("Truncate"), temp)),
                     Expression.IfThenElse(Expression.TypeIs(x, typeof(float)),
                     Expression.Return(result, Expression.Convert(x, typeof(int))),
                     Expression.Return(result, x, typeof(T))))
@@ -414,5 +417,114 @@ namespace reexjungle.xmisc.foundation.concretes
         }
 
         #endregion lambda functions
+
+        #region other functions
+
+        /// <summary>
+        /// Maps a pair of natural numbers to a unique number by use of the Cantor pairing function.
+        /// </summary>
+        /// <param name="x">The first number of the pair.</param>
+        /// <param name="y">The second number of the pair.</param>
+        /// <returns>The unique number resulting from the mapping.</returns>
+        public static uint CantorPairMap(ushort x, ushort y)
+        {
+            return (uint)((((x + y) * (x + y + 1)) / 2) + y);
+        }
+
+        /// <summary>
+        /// Maps a pair of natural numbers to a unique number by use of the Cantor pairing function.
+        /// </summary>
+        /// <param name="x">The first number of the pair.</param>
+        /// <param name="y">The second number of the pair.</param>
+        /// <returns>The unique number resulting from the mapping.</returns>
+        public static ulong CantorPairMap(uint x, uint y)
+        {
+            return (((x + y) * (x + y + 1)) / (2)) + y;
+        }
+
+        /// <summary>
+        /// Maps a pair of natural numbers to a unique number by use of the Cantor pairing function.
+        /// </summary>
+        /// <param name="a">The first number of the pair.</param>
+        /// <param name="b">The second number of the pair.</param>
+        /// <returns>The unique number resulting from the mapping.</returns>
+        public static BigInteger CantorPairMap(ulong a, ulong b)
+        {
+            return (((a + b) * (a + b + 1)) / (2)) + b;
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="z"></param>
+        /// <returns></returns>
+        public static Tuple<BigInteger, BigInteger> InverseCantorPairMap(BigInteger z)
+        {
+            var temp = new BigInteger(8) * z;
+            var root = Math.Exp(BigInteger.Log(temp) * 0.5) + 1;
+            var w = (root - 1) / 2;
+            var x = new BigInteger(((w * w) + w) / 2);
+            var y = (z - x);
+            return Tuple.Create(x, y);
+        }
+
+        public static Tuple<ulong, ulong> InverseCantorPairMap(ulong value)
+        {
+            var root = (ulong)((Math.Sqrt((8 * value) + 1) - 1) / 2);
+            var a = ((root * root) + root) / 2;
+            var c = value - a;
+            var b = root - c;
+            return Tuple.Create(a, b);
+        }
+
+        public static Tuple<uint, uint> InverseCantorPairMap(uint z)
+        {
+            var root = (uint)((Math.Sqrt((8 * z) + 1) - 1) / 2);
+            var w = ((root * root) + root) / 2;
+            var x = z - w;
+            var y = root - x;
+            return Tuple.Create(x, y);
+        }
+
+        /// <summary>
+        /// Maps a pair of natural numbers to a unique number by use of the Elegant pairing function.
+        /// </summary>
+        /// <param name="x">The first number of the pair.</param>
+        /// <param name="y">The second number of the pair.</param>
+        /// <returns>The unique number resulting from the mapping.</returns>
+        public static uint ElegantPairMap(ushort x, ushort y)
+        {
+            return x > y
+                ? (uint)((x * x) + x + y)
+                : (uint)(x + (y * y));
+        }
+
+        /// <summary>
+        /// Maps a pair of natural numbers to a unique number by use of the Elegant pairing function.
+        /// </summary>
+        /// <param name="x">The first number of the pair.</param>
+        /// <param name="y">The second number of the pair.</param>
+        /// <returns>The unique number resulting from the mapping.</returns>
+        public static ulong ElegantPairMap(uint x, uint y)
+        {
+            return x > y
+                ? (x * x) + x + y
+                : x + (y * y);
+        }
+
+        /// <summary>
+        /// Maps a pair of natural numbers to a unique number by use of the Elegant pairing function.
+        /// </summary>
+        /// <param name="x">The first number of the pair.</param>
+        /// <param name="y">The second number of the pair.</param>
+        /// <returns>The unique number resulting from the mapping.</returns>
+        public static BigInteger ElegantPairMap(ulong x, ulong y)
+        {
+            return x > y
+                ? (x * x) + x + y
+                : x + (y * y);
+        }
+
+        #endregion other functions
     }
 }

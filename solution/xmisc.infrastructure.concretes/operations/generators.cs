@@ -4,9 +4,35 @@ using reexjungle.xmisc.infrastructure.contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace reexjungle.xmisc.infrastructure.concretes.operations
 {
+    public class SequentialGuidKeyGenerator : IKeyGenerator<Guid>
+    {
+        private readonly Queue<Guid> pool;
+
+        public Guid GetNext()
+        {
+            return !pool.Empty() ? pool.Dequeue() : SequentialGuid.NewGuid();
+        }
+
+        public void Recapture(Guid key)
+        {
+            if (!pool.Contains(key)) pool.Enqueue(key);
+        }
+
+        public void Reset()
+        {
+            pool.Clear();
+        }
+
+        public SequentialGuidKeyGenerator()
+        {
+            pool = new Queue<Guid>();
+        }
+    }
+
     /// <summary>
     /// Represents a key generator of Globally Unique Identifiers (GUIDs)
     /// </summary>

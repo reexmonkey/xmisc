@@ -289,7 +289,7 @@ namespace reexjungle.xmisc.foundation.concretes
             else
             {
                 var last = new DateTime(date.Year, date.Month, 1).AddMonths(1).AddDays(-1);
-                return (last.Day - date.Day) / 7 == (Math.Abs(N) - 1) && date.DayOfWeek == weekday;
+                return (last.Day - date.Day) / 7 == (System.Math.Abs(N) - 1) && date.DayOfWeek == weekday;
             }
         }
 
@@ -308,7 +308,7 @@ namespace reexjungle.xmisc.foundation.concretes
             var sylvester = new DateTime(date.Year, 12, 31);
             var weeks = sylvester.WeekOfYear(rule, start);
             if (N > 0) return (date.Day - 1) / 7 * weeks == N - 1 && date.DayOfWeek == weekday;
-            else return (sylvester.Day - date.Day) / 7 * weeks == (Math.Abs(N) - 1) && date.DayOfWeek == weekday;
+            else return (sylvester.Day - date.Day) / 7 * weeks == (System.Math.Abs(N) - 1) && date.DayOfWeek == weekday;
         }
 
         /// <summary>
@@ -334,7 +334,7 @@ namespace reexjungle.xmisc.foundation.concretes
             else if (N < 0)
             {
                 var date = new DateTime(year, month, 1, hour, minute, second).AddMonths(1).AddDays(-1); //get last day of month
-                var d = date.Day - (7 * (Math.Abs(N) - 1));
+                var d = date.Day - (7 * (System.Math.Abs(N) - 1));
                 while (date.DayOfWeek > weekday) date = date.AddDays(d--);
                 return date;
             }
@@ -356,7 +356,7 @@ namespace reexjungle.xmisc.foundation.concretes
             else if (N < 0)
             {
                 var date = sylvester;
-                var d = date.Day - (weeks * 7 * (Math.Abs(N) - 1));
+                var d = date.Day - (weeks * 7 * (System.Math.Abs(N) - 1));
                 while (date.DayOfWeek > weekday) date = date.AddDays(d--);
                 return date;
             }
@@ -414,12 +414,12 @@ namespace reexjungle.xmisc.foundation.concretes
 
         public static DateTime NextMinutes(this DateTime value, int offset)
         {
-            return value.AddMinutes(Math.Abs(offset));
+            return value.AddMinutes(System.Math.Abs(offset));
         }
 
         public static DateTime LastMinutes(this DateTime value, int offset)
         {
-            return value.AddMinutes(-Math.Abs(offset));
+            return value.AddMinutes(-System.Math.Abs(offset));
         }
 
         public static DateTime LastSecond(this DateTime value)
@@ -439,7 +439,7 @@ namespace reexjungle.xmisc.foundation.concretes
 
         public static DateTime LastSeconds(this DateTime value, int offset)
         {
-            return value.AddSeconds(-Math.Abs(offset));
+            return value.AddSeconds(-System.Math.Abs(offset));
         }
 
         public static DateTime LastHour(this DateTime value)
@@ -454,12 +454,12 @@ namespace reexjungle.xmisc.foundation.concretes
 
         public static DateTime NextHours(this DateTime value, int offset)
         {
-            return value.AddHours(Math.Abs(offset));
+            return value.AddHours(System.Math.Abs(offset));
         }
 
         public static DateTime LastHours(this DateTime value, int offset)
         {
-            return value.AddHours(-Math.Abs(offset));
+            return value.AddHours(-System.Math.Abs(offset));
         }
 
         public static DateTime Yesterday(this DateTime value)
@@ -474,12 +474,12 @@ namespace reexjungle.xmisc.foundation.concretes
 
         public static DateTime NextDays(this DateTime value, int offset)
         {
-            return value.AddDays(Math.Abs(offset));
+            return value.AddDays(System.Math.Abs(offset));
         }
 
         public static DateTime LastDays(this DateTime value, int offset)
         {
-            return value.AddDays(-Math.Abs(offset));
+            return value.AddDays(-System.Math.Abs(offset));
         }
 
         public static DateTime PreviousWeek(this  DateTime value)
@@ -499,7 +499,7 @@ namespace reexjungle.xmisc.foundation.concretes
 
         public static DateTime PreviousWeeks(this  DateTime value, int offset)
         {
-            return value.AddDays(-7 * Math.Abs(offset));
+            return value.AddDays(-7 * System.Math.Abs(offset));
         }
 
         public static DateTime LastMonth(this DateTime value)
@@ -514,12 +514,12 @@ namespace reexjungle.xmisc.foundation.concretes
 
         public static DateTime NextMonths(this DateTime value, int offset)
         {
-            return value.AddMonths(Math.Abs(offset));
+            return value.AddMonths(System.Math.Abs(offset));
         }
 
         public static DateTime LastMonths(this DateTime value, int offset)
         {
-            return value.AddMonths(-Math.Abs(offset));
+            return value.AddMonths(-System.Math.Abs(offset));
         }
 
         public static DateTime LastYear(this DateTime value)
