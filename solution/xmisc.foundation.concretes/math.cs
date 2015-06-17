@@ -1,9 +1,4 @@
 ﻿using System;
-
-using System;
-
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Numerics;
 
@@ -56,7 +51,7 @@ namespace reexjungle.xmisc.foundation.concretes
                     (
                         new[] { temp },
                         Expression.Assign(temp, Expression.Divide(dividend, divisor)),
-                        Expression.Return(result, Expression.Call(typeof(System.Math).GetMethod("Truncate"), temp))
+                        Expression.Return(result, Expression.Call(typeof(Math).GetMethod("Truncate"), temp))
                     ),
                     Expression.IfThenElse(Expression.TypeIs(dividend, typeof(float)),
                     Expression.Return(result, Expression.Convert(Expression.Divide(dividend, divisor), typeof(int))),
@@ -86,7 +81,7 @@ namespace reexjungle.xmisc.foundation.concretes
             return Expression.Block
                 (
                     Expression.IfThenElse(Expression.Or(Expression.TypeIs(x, typeof(double)), Expression.TypeIs(x, typeof(decimal))),
-                    Expression.Return(result, Expression.Call(typeof(System.Math).GetMethod("Truncate"), temp)),
+                    Expression.Return(result, Expression.Call(typeof(Math).GetMethod("Truncate"), temp)),
                     Expression.IfThenElse(Expression.TypeIs(x, typeof(float)),
                     Expression.Return(result, Expression.Convert(x, typeof(int))),
                     Expression.Return(result, x, typeof(T))))

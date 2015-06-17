@@ -3,30 +3,47 @@ using reexjungle.xmisc.foundation.contracts;
 using reexjungle.xmisc.infrastructure.contracts;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 
 namespace reexjungle.xmisc.infrastructure.concretes.operations
 {
+    /// <summary>
+    /// Represents a key generator of Sequential Globally Unique Identifiers (GUIDs)
+    /// </summary>
     public class SequentialGuidKeyGenerator : IKeyGenerator<Guid>
     {
         private readonly Queue<Guid> pool;
 
+        /// <summary>
+        /// Generates a key.
+        /// </summary>
+        /// <returns>
+        /// The generated key.
+        /// </returns>
         public Guid GetNext()
         {
             return !pool.Empty() ? pool.Dequeue() : SequentialGuid.NewGuid();
         }
 
+        /// <summary>
+        /// Recycles a used key for reuse purposes.
+        /// </summary>
+        /// <param name="key">The key to be recycled.</param>
         public void Recapture(Guid key)
         {
             if (!pool.Contains(key)) pool.Enqueue(key);
         }
 
+        /// <summary>
+        /// Re-initializes the key generator.
+        /// </summary>
         public void Reset()
         {
             pool.Clear();
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public SequentialGuidKeyGenerator()
         {
             pool = new Queue<Guid>();
@@ -362,6 +379,12 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
             IGenerator<string> languageGenerator,
             IGenerator<string> referenceGenerator = null)
         {
+            statusGenerator.ThrowIfNull("statusGenerator");
+            authorGenerator.ThrowIfNull("statusGenerator");
+            productGenerator.ThrowIfNull("productGenerator");
+            descriptionGenerator.ThrowIfNull("descriptionGenerator");
+            languageGenerator.ThrowIfNull("languageGenerator");
+
             keygen = new FpiKeyGenerator(statusGenerator, authorGenerator, productGenerator, descriptionGenerator, languageGenerator, referenceGenerator);
         }
     }
