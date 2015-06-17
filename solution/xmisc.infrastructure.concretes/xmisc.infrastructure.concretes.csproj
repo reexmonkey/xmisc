@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="xmisc.foundation.concretes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\xmisc.foundation.concretes.1.0.29-rc-ec984be\lib\net40\xmisc.foundation.concretes.dll</HintPath>
+      <HintPath>..\packages\xmisc.foundation.concretes.1.0.38-rc-8b5588b\lib\net40\xmisc.foundation.concretes.dll</HintPath>
     </Reference>
     <Reference Include="xmisc.foundation.contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
