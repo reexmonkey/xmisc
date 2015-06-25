@@ -63,7 +63,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
         /// </summary>
         /// <typeparam name="TValue">The type of the instance to be created.</typeparam>
         /// <returns>The created instance if successful; otherwise the default value of TValue.</returns>
-        public TValue Create<TValue>() where TValue : class, IContainsKey<TKey>
+        public TValue Create<TValue>() where TValue : class
         {
             try
             {
@@ -75,7 +75,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
             }
         }
 
-        public TValue Create<TValue>(params object[] otherArgs) where TValue : class, IContainsKey<TKey>
+        public TValue Create<TValue>(params object[] otherArgs) where TValue : class
         {
             try
             {

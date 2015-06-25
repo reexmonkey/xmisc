@@ -35,7 +35,7 @@ namespace reexjungle.xmisc.infrastructure.contracts
         /// </summary>
         /// <typeparam name="TValue">The type of the instance to be created.</typeparam>
         /// <returns>The created instance if successful; otherwise the default value of TValue.</returns>
-        TValue Create<TValue>() where TValue : class, IContainsKey<TKey>;
+        TValue Create<TValue>() where TValue : class;
 
         /// <summary>
         ///
@@ -45,6 +45,6 @@ namespace reexjungle.xmisc.infrastructure.contracts
         /// Note the other constructor arguments should not include the key as argument!
         /// </param>
         /// <returns>The created instance if successful; otherwise the default value of TValue.</returns>
-        TValue Create<TValue>(params object[] otherArgs) where TValue : class, IContainsKey<TKey>;
+        TValue Create<TValue>(params object[] otherArgs) where TValue : class;
     }
 }
