@@ -25,26 +25,24 @@ namespace reexjungle.xmisc.infrastructure.contracts
     }
 
     /// <summary>
-    /// Specifies an interface for a factory creating keyed instances of a given type.
+    /// Specifies a factory for creating instances constrained by a given interface.
     /// </summary>
-    /// <typeparam name="TKey">The type of identifier(key) of the instance</typeparam>
-    public interface IFactory<in TKey> where TKey : IEquatable<TKey>
+    /// <typeparam name="TInterface">The contract by which the created instance is constrained.</typeparam>
+    public interface IFactory<TInterface>
     {
         /// <summary>
-        /// Creates a keyed instance from a given type.
+        /// Creates an instance of a given type that is constrained by an interface.
         /// </summary>
-        /// <typeparam name="TValue">The type of the instance to be created.</typeparam>
-        /// <returns>The created instance if successful; otherwise the default value of TValue.</returns>
-        TValue Create<TValue>() where TValue : class;
+        /// <typeparam name="TValue">The type of instance to create.</typeparam>
+        /// <returns>The contract by which the created type is constrained.</returns>
+        TInterface Create<TValue>() where TValue : class, TInterface, new();
 
         /// <summary>
-        ///
+        /// Creates and initializes an instance of a given type that is constrained by an interface.
         /// </summary>
-        /// <typeparam name="TValue">The type of the instance to be created.</typeparam>
-        /// <param name="otherArgs">Other constructor arguments to initialize the instance during creation.
-        /// Note the other constructor arguments should not include the key as argument!
-        /// </param>
-        /// <returns>The created instance if successful; otherwise the default value of TValue.</returns>
-        TValue Create<TValue>(params object[] otherArgs) where TValue : class;
+        /// <typeparam name="TValue">The type of instance to create.</typeparam>
+        /// <param name="args">The constructor arguments to initialize the created instanced.</param>
+        /// <returns>The contract by which the created type is constrained.</returns>
+        TInterface Create<TValue>(params object[] args) where TValue : class, TInterface, new();
     }
 }

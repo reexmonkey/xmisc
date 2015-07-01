@@ -44,42 +44,29 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
     /// Represents a factory creating keyed instances of a given type.
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
-    public class Factory<TKey> : IFactory<TKey> where TKey : IEquatable<TKey>
+    public class Factory<TInterface> : IFactory<TInterface>
     {
-        private readonly IKeyGenerator<TKey> keyGenerator;
-
         /// <summary>
-        /// Constructor
+        /// Creates an instance of a given type that is constrained by an interface.
         /// </summary>
-        /// <param name="keyGenerator">Key generator to provide keys for the created instances</param>
-        public Factory(IKeyGenerator<TKey> keyGenerator)
+        /// <typeparam name="TValue">The type of instance to create.</typeparam>
+        /// <returns>The contract by which the created type is constrained.</returns>
+        public TInterface Create<TValue>() where TValue : class, TInterface, new()
         {
-            this.keyGenerator.ThrowIfNull();
-            this.keyGenerator = keyGenerator;
+            return Activator.CreateInstance<TValue>();
         }
 
         /// <summary>
-        /// Creates a keyed instance from a given type.
+        /// Creates and initializes an instance of a given type that is constrained by an interface.
         /// </summary>
-        /// <typeparam name="TValue">The type of the instance to be created.</typeparam>
-        /// <returns>The created instance if successful; otherwise the default value of TValue.</returns>
-        public TValue Create<TValue>() where TValue : class
+        /// <typeparam name="TValue">The type of instance to create.</typeparam>
+        /// <param name="args">The constructor arguments to initialize the created instanced.</param>
+        /// <returns>The contract by which the created type is constrained.</returns>
+        public TInterface Create<TValue>(params object[] args) where TValue : class, TInterface, new()
         {
             try
             {
-                return (TValue)Activator.CreateInstance(typeof(TValue), keyGenerator.GetNext());
-            }
-            catch (MissingMethodException)
-            {
-                return default(TValue);
-            }
-        }
-
-        public TValue Create<TValue>(params object[] otherArgs) where TValue : class
-        {
-            try
-            {
-                return (TValue)Activator.CreateInstance(typeof(TValue), keyGenerator.GetNext(), otherArgs);
+                return (TValue)Activator.CreateInstance(typeof(TValue), args);
             }
             catch (MissingMethodException)
             {
