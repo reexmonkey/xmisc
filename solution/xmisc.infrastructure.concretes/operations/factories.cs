@@ -1,6 +1,4 @@
-﻿using reexjungle.xmisc.foundation.concretes;
-using reexjungle.xmisc.foundation.contracts;
-using reexjungle.xmisc.infrastructure.contracts;
+﻿using reexjungle.xmisc.infrastructure.contracts;
 using System;
 
 namespace reexjungle.xmisc.infrastructure.concretes.operations
@@ -27,7 +25,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
             }
         }
 
-        public TValue Create<TValue>(params object[] args) where TValue : class, new()
+        public TValue Create<TValue>(params object[] args) where TValue : class
         {
             try
             {
@@ -41,9 +39,9 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
     }
 
     /// <summary>
-    /// Represents a factory creating keyed instances of a given type.
+    /// Specifies a factory for creating instances constrained by a given interface.
     /// </summary>
-    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TInterface">The contract by which the created instance is constrained.</typeparam>
     public class Factory<TInterface> : IFactory<TInterface>
     {
         /// <summary>
@@ -62,7 +60,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
         /// <typeparam name="TValue">The type of instance to create.</typeparam>
         /// <param name="args">The constructor arguments to initialize the created instanced.</param>
         /// <returns>The contract by which the created type is constrained.</returns>
-        public TInterface Create<TValue>(params object[] args) where TValue : class, TInterface, new()
+        public TInterface Create<TValue>(params object[] args) where TValue : class, TInterface
         {
             try
             {

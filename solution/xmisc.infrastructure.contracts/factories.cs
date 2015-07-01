@@ -21,7 +21,7 @@ namespace reexjungle.xmisc.infrastructure.contracts
         /// <typeparam name="TValue">The type of the instance to be created.</typeparam>
         /// <param name="args">Constructor arguments to initialize the instance during creation.</param>
         /// <returns>The created instance if successful; the default value of TValue.</returns>
-        TValue Create<TValue>(params object[] args) where TValue : class, new();
+        TValue Create<TValue>(params object[] args) where TValue : class;
     }
 
     /// <summary>
@@ -43,6 +43,6 @@ namespace reexjungle.xmisc.infrastructure.contracts
         /// <typeparam name="TValue">The type of instance to create.</typeparam>
         /// <param name="args">The constructor arguments to initialize the created instanced.</param>
         /// <returns>The contract by which the created type is constrained.</returns>
-        TInterface Create<TValue>(params object[] args) where TValue : class, TInterface, new();
+        TInterface Create<TValue>(params object[] args) where TValue : class, TInterface;
     }
 }
