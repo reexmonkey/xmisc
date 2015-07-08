@@ -1,13 +1,7 @@
 ﻿namespace reexjungle.xmisc.infrastructure.contracts
 {
-    public enum FlushMode
-    {
-        soft,
-        hard
-    };
-
     /// <summary>
-    ///
+    /// Describes the
     /// </summary>
     public enum ExpectationMode
     {

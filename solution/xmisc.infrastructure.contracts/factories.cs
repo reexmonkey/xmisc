@@ -1,48 +1,62 @@
-﻿using reexjungle.xmisc.foundation.contracts;
-using System;
+﻿using System;
 
 namespace reexjungle.xmisc.infrastructure.contracts
 {
     /// <summary>
-    /// Specifies an interface for a factory creating instances of a given type
+    /// Specifies a factory contract to create instances of a given type based on the registered constructor of the type.
     /// </summary>
     public interface IFactory
     {
         /// <summary>
-        /// Creates an instance from a  given type.
+        /// Creates an instance of a type based on its registered constructor.
         /// </summary>
-        /// <typeparam name="TValue">The type of the instance to be created.</typeparam>
-        /// <returns>The created instance if successful; the default value of TValue.</returns>
-        TValue Create<TValue>() where TValue : class, new();
+        /// <typeparam name="TValue">The type of instances to be created by the factory.</typeparam>
+        /// <returns>The created instance of the type.</returns>
+        TValue Create<TValue>();
 
         /// <summary>
-        /// Creates an instance from a  given type, whose constructor has initializers.
+        /// Registers the constructor of the type to be created.
+        /// Note: Only a single constructor for a particular type can be registered with this method!
         /// </summary>
-        /// <typeparam name="TValue">The type of the instance to be created.</typeparam>
-        /// <param name="args">Constructor arguments to initialize the instance during creation.</param>
-        /// <returns>The created instance if successful; the default value of TValue.</returns>
-        TValue Create<TValue>(params object[] args) where TValue : class;
+        /// <param name="ctor">The constructor of the type to be created.</param>
+        /// <typeparam name="TValue">The type of instances to be created by the factory.</typeparam>
+        void Register<TValue>(Func<TValue> ctor);
+
+        /// <summary>
+        /// Unregisters a type constructor from the factory.
+        /// </summary>
+        /// <typeparam name="TValue">The type of the constructor, which is to be unregistered.</typeparam>
+        void Unregister<TValue>();
     }
 
     /// <summary>
-    /// Specifies a factory for creating instances constrained by a given interface.
+    /// Specifies a factory contract to create keyed instances of a given type based on the registered constructors of the type.
     /// </summary>
-    /// <typeparam name="TInterface">The contract by which the created instance is constrained.</typeparam>
-    public interface IFactory<TInterface>
+    /// <typeparam name="TKey">The type of the key used to associate constructors to a given type.</typeparam>
+    public interface IKeyedFactory<in TKey>
     {
         /// <summary>
-        /// Creates an instance of a given type that is constrained by an interface.
+        /// Creates an instance of a type based on its registered constructors.
+        /// The specific constructor is resolved through the key.
         /// </summary>
-        /// <typeparam name="TValue">The type of instance to create.</typeparam>
-        /// <returns>The contract by which the created type is constrained.</returns>
-        TInterface Create<TValue>() where TValue : class, TInterface, new();
+        /// <param name="key">The key to find the constructor of the type</param>
+        /// <typeparam name="TValue">The type of instances to be created by the factory.</typeparam
+        /// <returns>The created instance of the type</returns>
+        TValue Create<TValue>(TKey key);
 
         /// <summary>
-        /// Creates and initializes an instance of a given type that is constrained by an interface.
+        /// Registers the constructors of a type.
+        /// Note: Multiple constructors are allowed, as long as the key for each registered constructor is unique
         /// </summary>
-        /// <typeparam name="TValue">The type of instance to create.</typeparam>
-        /// <param name="args">The constructor arguments to initialize the created instanced.</param>
-        /// <returns>The contract by which the created type is constrained.</returns>
-        TInterface Create<TValue>(params object[] args) where TValue : class, TInterface;
+        /// <param name="key">The key to associate to the constructor of the given type.</param>
+        /// <param name="ctor">The constructor of the given type.</param>
+        /// <typeparam name="TValue">The type of instances to be created by the factory.</typeparam>
+        void Register<TValue>(TKey key, Func<TValue> ctor);
+
+        /// <summary>
+        /// Unregisters a keyed type constructor from the factory.
+        /// </summary>
+        /// <param name="key">The key to resolve the type constructor.</param>
+        void Unregister(TKey key);
     }
 }

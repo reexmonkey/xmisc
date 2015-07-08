@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xmisc.infrastructure.concre
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xmisc.infrastructure.contracts", "xmisc.infrastructure.contracts\xmisc.infrastructure.contracts.csproj", "{82ED5F70-E1D9-456E-8686-C59306312726}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xmisc.tests.infrastructure", "xmisc.tests.infrastructure\xmisc.tests.infrastructure.csproj", "{CEB2574D-CFFC-4261-BB99-B77454AE796C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{82ED5F70-E1D9-456E-8686-C59306312726}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82ED5F70-E1D9-456E-8686-C59306312726}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82ED5F70-E1D9-456E-8686-C59306312726}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEB2574D-CFFC-4261-BB99-B77454AE796C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEB2574D-CFFC-4261-BB99-B77454AE796C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEB2574D-CFFC-4261-BB99-B77454AE796C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEB2574D-CFFC-4261-BB99-B77454AE796C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
