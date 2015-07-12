@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace reexjungle.technical.data.contracts
+namespace reexjungle.xmisc.technical.data.contracts
 {
     /// <summary>
     /// Specifies the interface for read-only operations on a repository

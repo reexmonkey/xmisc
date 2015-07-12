@@ -1,7 +1,7 @@
 ﻿using ServiceStack.OrmLite;
 using System.Data;
 
-namespace reexjungle.technical.data.concretes.extensions
+namespace reexjungle.xmisc.technical.data.concretes.orm
 {
     public static class MySqlOrmLiteExtensions
     {

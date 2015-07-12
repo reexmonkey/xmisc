@@ -1,5 +1,6 @@
 ﻿using reexjungle.xmisc.foundation.concretes;
 using reexjungle.xmisc.foundation.contracts;
+using reexjungle.xmisc.technical.data.concretes.common;
 using ServiceStack.Common.Utils;
 using ServiceStack.OrmLite;
 using System;
@@ -10,14 +11,14 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace reexjungle.technical.data.concretes.extensions
+namespace reexjungle.xmisc.technical.data.concretes.orm
 {
     /// <summary>
     /// Represents extended functionalities to ORMLite
     /// </summary>
     public static class OrmLiteExtensions
     {
-        #region From original service stack source implementation
+        #region From original Service Stack V3 3.971 source code
 
         internal static IDataReader ExecReader(this IDbCommand cmd, string sql)
         {
@@ -138,10 +139,15 @@ namespace reexjungle.technical.data.concretes.extensions
             }
         }
 
-        #endregion From original service stack source implementation
+        #endregion From original Service Stack V3 3.971 source code
 
         #region common dml read operations
 
+        /// <summary>
+        /// Gets quoted the name of table according to the dialect of its database management system.
+        /// </summary>
+        /// <typeparam name="TTable">The type of the model represented as a table.</typeparam>
+        /// <returns>The quoted name of the table as specified by the dialect of its database management system.</returns>
         public static string GetQuotedTableName<TTable>()
         {
             var modeldef = ModelDefinition<TTable>.Definition;
@@ -166,7 +172,7 @@ namespace reexjungle.technical.data.concretes.extensions
             return OrmLiteConfig.DialectProvider.GetQuotedColumnName(modeldef.PrimaryKey.FieldName);
         }
 
-        public static string ToQuotedFieldname<TTable>(this string fieldname)
+        public static string ToQuotedFieldname(string fieldname)
         {
             return OrmLiteConfig.DialectProvider.GetQuotedColumnName(fieldname);
         }
@@ -220,44 +226,30 @@ namespace reexjungle.technical.data.concretes.extensions
             }
         }
 
-        public static List<Guid> SelectParam<TModel>(this IDbConnection db,
-    Expression<Func<TModel, Guid>> param,
-    int? skip = null,
-    int? rows = null)
-        {
-            return db.SelectParam<TModel, Guid>(param, skip, rows);
-        }
-
         public static List<TParam> SelectParam<TModel, TParam>(this IDbConnection db,
             Expression<Func<TModel, TParam>> param,
             int? skip = null,
             int? rows = null)
         {
+            if (param == null) throw new ArgumentNullException("param");
+
             var sb = new StringBuilder();
-            var ev = OrmLiteConfig.DialectProvider.ExpressionVisitor<TModel>();
+            var visitor = OrmLiteConfig.DialectProvider.ExpressionVisitor<TModel>();
 
-            var tname = GetQuotedTableName<TModel>();
-            var pname = param.Body != null ? (param.Body as MemberExpression).Member.Name : null;
-            if (string.IsNullOrWhiteSpace(pname)) return new List<TParam>();
+            var tableName = GetQuotedTableName<TModel>();
+            //var pname = param.Body != null ? (param.Body as MemberExpression).Member.Name : null;
+            var parameterName = param.GetMemberName();
+            if (string.IsNullOrWhiteSpace(parameterName)) return new List<TParam>();
 
-            ev.Skip = skip;
-            ev.Rows = rows;
-            sb.AppendFormat("SELECT {0}.{1} FROM {0}", tname, ToQuotedFieldname<TModel>(pname), tname)
-                .AppendFormat(" {0} ", ev.LimitExpression);
+            visitor.Skip = skip;
+            visitor.Rows = rows;
+            sb.AppendFormat("SELECT {0}.{1} FROM {0}", tableName, ToQuotedFieldname(parameterName))
+                .AppendFormat(" {0} ", visitor.LimitExpression);
 
             using (var reader = db.Exec(cmd => cmd.ExecReader(sb.ToString())))
             {
                 return reader.ReadToList<TParam>();
             }
-        }
-
-        public static List<Guid> SelectParam<TModel>(this IDbConnection db,
-            Expression<Func<TModel, Guid>> param,
-            Expression<Func<TModel, bool>> predicate,
-            int? skip = null,
-            int? rows = null)
-        {
-            return db.SelectParam<TModel, Guid>(param, predicate, skip, rows);
         }
 
         public static List<TParam> SelectParam<TModel, TParam>(this IDbConnection db,
@@ -275,7 +267,7 @@ namespace reexjungle.technical.data.concretes.extensions
 
             ev.Skip = skip;
             ev.Rows = rows;
-            sb.AppendFormat("SELECT {0}.{1} FROM {0}", tname, ToQuotedFieldname<TModel>(pname), tname)
+            sb.AppendFormat("SELECT {0}.{1} FROM {0}", tname, ToQuotedFieldname(pname))
                 .AppendFormat(" {0} ", ev.Where(predicate).WhereExpression)
                 .Append(ev.LimitExpression);
 
@@ -297,12 +289,12 @@ namespace reexjungle.technical.data.concretes.extensions
         /// <returns>The list of comined records of the first POCO table.</returns>
         public static List<T1> Select<T1>(this IDbConnection db, int? skip, int? rows)
         {
-            var ev = OrmLiteConfig.DialectProvider.ExpressionVisitor<T1>();
+            var visitor = OrmLiteConfig.DialectProvider.ExpressionVisitor<T1>();
             return db.Exec(cmd =>
             {
-                ev.Skip = skip;
-                ev.Rows = rows;
-                using (var reader = cmd.ExecReader(ev.ToSelectStatement()))
+                visitor.Skip = skip;
+                visitor.Rows = rows;
+                using (var reader = cmd.ExecReader(visitor.ToSelectStatement()))
                     return reader.ConvertToList<T1>();
             });
         }
@@ -318,12 +310,12 @@ namespace reexjungle.technical.data.concretes.extensions
         /// <returns>The list of comined records of the first POCO table.</returns>
         public static List<T1> Select<T1>(this IDbConnection db, Expression<Func<T1, bool>> P1, int? skip, int? rows)
         {
-            var ev = OrmLiteConfig.DialectProvider.ExpressionVisitor<T1>();
+            var visitor = OrmLiteConfig.DialectProvider.ExpressionVisitor<T1>();
             return db.Exec(cmd =>
             {
-                ev.Skip = skip;
-                ev.Rows = rows;
-                using (var reader = cmd.ExecReader(ev.Where(P1).ToSelectStatement()))
+                visitor.Skip = skip;
+                visitor.Rows = rows;
+                using (var reader = cmd.ExecReader(visitor.Where(P1).ToSelectStatement()))
                     return reader.ConvertToList<T1>();
             });
         }
@@ -333,35 +325,6 @@ namespace reexjungle.technical.data.concretes.extensions
         #region Group II: Joining 2 tables
 
         #region Join Scenario: 2 tables (T1, T2), 1 relation (R12) and 1 predicate (P1)
-
-        /// <summary>
-        /// Combines records of a POCO model from 2 tables using 1 relational table, 1 predicate (from first table) and string-based keys.
-        /// </summary>
-        /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
-        /// <typeparam name="T2">The second table in the JOIN relationship.</typeparam>
-        /// <typeparam name="R12">The relation that links the first table and the second POCO table.</typeparam>
-        /// <param name="db">The database connection used for the JOIN operation</param>
-        /// <param name="R12_FK1">The foreign key of the first relational table that refers to the primary key of the first POCO table.</param>
-        /// <param name="P1"> The predicate from the first POCO table.</param>
-        /// <param name="R12_FK2">The foreign key of the first relational table that refers to the primary key of the second POCO table.</param>
-        /// <param name="mode">The type of SQL JOIN used</param>
-        /// <param name="quoted">Should the table and column names be set in quotes?</param>
-        /// <param name="skip">The row offset of records to return.</param>
-        /// <param name="rows">The number of row records to return.</param>
-        /// <returns>The list of comined records of the first POCO table.</returns>
-        public static List<T1> Select<T1, T2, R12>(this IDbConnection db,
-
-            Expression<Func<R12, Guid>> R12_FK1,
-            Expression<Func<T1, bool>> P1,
-            Expression<Func<R12, Guid>> R12_FK2,
-            JoinMode mode = JoinMode.Inner,
-            bool quoted = true,
-            int? skip = null,
-            int? rows = null)
-            where T1 : new()
-        {
-            return db.Select<T1, T2, R12, Guid>(R12_FK1, P1, R12_FK2, mode, quoted, skip, rows);
-        }
 
         /// <summary>
         /// Combines records of a POCO model from 2 tables using 1 relational table, 1 predicate (from second table) and a key type for all tables
@@ -429,11 +392,11 @@ namespace reexjungle.technical.data.concretes.extensions
             var t2 = (quoted) ? GetQuotedTableName<T2>() : GetTableName<T2>();
             var r12 = (quoted) ? GetQuotedTableName<R12>() : GetTableName<R12>();
 
-            var r12_fk1 = (R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
-            var r12_fk2 = (R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
+            var r12_fk1 = R12_FK1.GetMemberName(); //(R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
+            var r12_fk2 = R12_FK2.GetMemberName(); //(R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
 
-            r12_fk1 = (quoted) ? ToQuotedFieldname<R12>(r12_fk1) : r12_fk1;
-            r12_fk2 = (quoted) ? ToQuotedFieldname<R12>(r12_fk2) : r12_fk2;
+            r12_fk1 = (quoted) ? ToQuotedFieldname(r12_fk1) : r12_fk1;
+            r12_fk2 = (quoted) ? ToQuotedFieldname(r12_fk2) : r12_fk2;
 
             var t1_pk = (quoted) ? GetPrimaryKeyName<T1>() : GetQuotedPrimaryKeyName<T1>();
             var t2_pk = (quoted) ? GetPrimaryKeyName<T2>() : GetQuotedPrimaryKeyName<T2>();
@@ -457,34 +420,6 @@ namespace reexjungle.technical.data.concretes.extensions
         #endregion Join Scenario: 2 tables (T1, T2), 1 relation (R12) and 1 predicate (P1)
 
         #region Join Scenario: 2 tables (T1, T2), 1 relation (R12) and 1 predicate (P2)
-
-        /// <summary>
-        /// Combines records of a POCO model from 2 tables using 1 relational table, 1 predicate (from second table) and string-based keys.
-        /// </summary>
-        /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
-        /// <typeparam name="T2">The second table in the JOIN relationship.</typeparam>
-        /// <typeparam name="R12">The relation that links the first table and the second POCO table.</typeparam>
-        /// <param name="db">The database connection used for the JOIN operation</param>
-        /// <param name="R12_FK1">The foreign key of the relational table that refers to the primary key of the first POCO table.</param>
-        /// <param name="R12_FK2">The foreign key of the relational table that refers to the primary key of the second POCO table.</param>
-        /// <param name="P2"> The predicate from the second POCO table.</param>
-        /// <param name="mode">The type of SQL JOIN used</param>
-        /// <param name="quoted">Should the table and column names be set in quotes?</param>
-        /// <param name="skip">The row offset of records to return.</param>
-        /// <param name="rows">The number of row records to return.</param>
-        /// <returns>The list of comined records of the first POCO table.</returns>
-        public static List<T1> Select<T1, T2, R12>(this IDbConnection db,
-            Expression<Func<R12, Guid>> R12_FK1,
-            Expression<Func<R12, Guid>> R12_FK2,
-            Expression<Func<T2, bool>> P2,
-            JoinMode mode = JoinMode.Inner,
-            bool quoted = true,
-            int? skip = null,
-            int? rows = null)
-            where T1 : new()
-        {
-            return db.Select<T1, T2, R12, Guid>(R12_FK1, R12_FK2, P2, mode, quoted, skip, rows);
-        }
 
         /// <summary>
         /// Combines records of a POCO model from 2 tables using 1 relational table, 1 predicate (from second table) and a key type for all tables
@@ -553,11 +488,11 @@ namespace reexjungle.technical.data.concretes.extensions
             var t2 = (quoted) ? GetQuotedTableName<T2>() : GetTableName<T2>();
             var r12 = (quoted) ? GetQuotedTableName<R12>() : GetTableName<R12>();
 
-            var r12_fk1 = (R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
-            var r12_fk2 = (R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
+            var r12_fk1 = R12_FK1.GetMemberName();//(R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
+            var r12_fk2 = R12_FK2.GetMemberName(); //(R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
 
-            r12_fk1 = (quoted) ? ToQuotedFieldname<R12>(r12_fk1) : r12_fk1;
-            r12_fk2 = (quoted) ? ToQuotedFieldname<R12>(r12_fk2) : r12_fk2;
+            r12_fk1 = (quoted) ? ToQuotedFieldname(r12_fk1) : r12_fk1;
+            r12_fk2 = (quoted) ? ToQuotedFieldname(r12_fk2) : r12_fk2;
 
             var t1_pk = (quoted) ? GetPrimaryKeyName<T1>() : GetQuotedPrimaryKeyName<T1>();
             var t2_pk = (quoted) ? GetPrimaryKeyName<T2>() : GetQuotedPrimaryKeyName<T2>();
@@ -581,38 +516,6 @@ namespace reexjungle.technical.data.concretes.extensions
         #endregion Join Scenario: 2 tables (T1, T2), 1 relation (R12) and 1 predicate (P2)
 
         #region Join Scenario: 2 Tables (T1, T2), 1 relation (R12) and 2 predicates (P1, P2)
-
-        /// <summary>
-        /// Combines records of a POCO model from 2 tables using 1 relational table, 2 predicates (from first and second tables) and string-based keys.
-        /// </summary>
-        /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
-        /// <typeparam name="T2">The second table in the JOIN relationship.</typeparam>
-        /// <typeparam name="R12">The relation that links the first table and the second POCO table.</typeparam>
-        /// <param name="db">The database connection used for the JOIN operation</param>
-        /// <param name="R12_FK1">The foreign key of the first relational table that refers to the primary key of the first POCO table.</param>
-        /// <param name="P1"> The predicate from the first POCO table.</param>
-        /// <param name="R12_FK2">The foreign key of the first relational table that refers to the primary key of the second POCO table.</param>
-        /// <param name="P2">The predicate from the second POCO table.</param>
-        /// <param name="C1">The conjunction between the first and the second predicate</param>
-        /// <param name="mode">The type of SQL JOIN used</param>
-        /// <param name="quoted">Should the table and column names be set in quotes?</param>
-        /// <param name="skip">The row offset of records to return.</param>
-        /// <param name="rows">The number of row records to return.</param>
-        /// <returns>The list of comined records of the first POCO table.</returns>
-        public static List<T1> Select<T1, T2, R12>(this IDbConnection db,
-            Expression<Func<R12, Guid>> R12_FK1,
-            Expression<Func<T1, bool>> P1,
-            Expression<Func<R12, Guid>> R12_FK2,
-            Expression<Func<T2, bool>> P2,
-            Conjunctor C1 = Conjunctor.And,
-            JoinMode mode = JoinMode.Inner,
-            bool quoted = true,
-            int? skip = null,
-            int? rows = null)
-            where T1 : new()
-        {
-            return db.Select<T1, T2, R12, Guid>(R12_FK1, P1, R12_FK2, P2, C1, mode, quoted, skip, rows);
-        }
 
         /// <summary>
         /// Combines records of a POCO model from 2 tables using 1 relational table, 2 predicates (from first and second tables) and a key type for all tables
@@ -689,11 +592,11 @@ namespace reexjungle.technical.data.concretes.extensions
             var t2 = (quoted) ? GetQuotedTableName<T2>() : GetTableName<T2>();
             var r12 = (quoted) ? GetQuotedTableName<R12>() : GetTableName<R12>();
 
-            var r12_fk1 = (R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
-            var r12_fk2 = (R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
+            var r12_fk1 = R12_FK1.GetMemberName(); //(R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
+            var r12_fk2 = R12_FK2.GetMemberName(); //(R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
 
-            r12_fk1 = (quoted) ? ToQuotedFieldname<R12>(r12_fk1) : r12_fk1;
-            r12_fk2 = (quoted) ? ToQuotedFieldname<R12>(r12_fk2) : r12_fk2;
+            r12_fk1 = (quoted) ? ToQuotedFieldname(r12_fk1) : r12_fk1;
+            r12_fk2 = (quoted) ? ToQuotedFieldname(r12_fk2) : r12_fk2;
 
             var t1_pk = (quoted) ? GetPrimaryKeyName<T1>() : GetQuotedPrimaryKeyName<T1>();
             var t2_pk = (quoted) ? GetPrimaryKeyName<T2>() : GetQuotedPrimaryKeyName<T2>();
@@ -723,40 +626,6 @@ namespace reexjungle.technical.data.concretes.extensions
         #region Group III: Joining 3 tables (T1, T2, T3)
 
         #region Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 1 predicate (P1)
-
-        /// <summary>
-        /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 1 predicate (from first table) and string-based keys.
-        /// </summary>
-        /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
-        /// <typeparam name="T2">The second table in the JOIN relationship.</typeparam>
-        /// <typeparam name="T3">The third table in the JOIN relationship.</typeparam>
-        /// <typeparam name="R12">The relation that links the first table and the second POCO table.</typeparam>
-        /// <typeparam name="R13">The relation that links the first table and the third POCO table.</typeparam>
-        /// <param name="db">The database connection used for the JOIN operation</param>
-        /// <param name="R12_FK1">The foreign key of the first relational table that refers to the primary key of the first POCO table.</param>
-        /// <param name="P1"> The predicate from the first POCO table.</param>
-        /// <param name="R12_FK2">The foreign key of the first relational table that refers to the primary key of the second POCO table.</param>
-        /// <param name="R13_FK1">The foreign key of the third  relational table that refers to the primary key of the first POCO table.</param>
-        /// <param name="R13_FK3">The foreign key of the third  relational table that refers to the primary key of the third POCO table.</param>
-        /// <param name="mode">The type of SQL JOIN used</param>
-        /// <param name="quoted">Should the table and column names be set in quotes?</param>
-        /// <param name="skip">The row offset of records to return.</param>
-        /// <param name="rows">The number of row records to return.</param>
-        /// <returns>The list of comined records of the first POCO table.</returns>
-        public static List<T1> Select<T1, T2, T3, R12, R13>(this IDbConnection db,
-            Expression<Func<R12, Guid>> R12_FK1,
-            Expression<Func<T1, bool>> P1,
-            Expression<Func<R12, Guid>> R12_FK2,
-            Expression<Func<R13, Guid>> R13_FK1,
-            Expression<Func<R13, Guid>> R13_FK3,
-            JoinMode mode = JoinMode.Inner,
-            bool quoted = true,
-            int? skip = null,
-            int? rows = null)
-            where T1 : new()
-        {
-            return db.Select<T1, T2, T3, R12, R13, Guid>(R12_FK1, P1, R12_FK2, R13_FK1, R13_FK3, mode, quoted, skip, rows);
-        }
 
         /// <summary>
         /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 1 predicate (from first table) and a key type for all tables
@@ -840,15 +709,15 @@ namespace reexjungle.technical.data.concretes.extensions
             var r12 = (quoted) ? GetQuotedTableName<R12>() : GetTableName<R12>();
             var r13 = (quoted) ? GetQuotedTableName<R13>() : GetTableName<R13>();
 
-            var r12_fk1 = (R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
-            var r12_fk2 = (R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
-            var r13_fk1 = (R13_FK1.Body != null) ? (R13_FK1.Body as MemberExpression).Member.Name : null;
-            var r13_fk3 = (R13_FK3.Body != null) ? (R13_FK3.Body as MemberExpression).Member.Name : null;
+            var r12_fk1 = R12_FK1.GetMemberName(); //(R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
+            var r12_fk2 = R12_FK2.GetMemberName();//(R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
+            var r13_fk1 = R13_FK1.GetMemberName(); //(R13_FK1.Body != null) ? (R13_FK1.Body as MemberExpression).Member.Name : null;
+            var r13_fk3 = R13_FK3.GetMemberName();//(R13_FK3.Body != null) ? (R13_FK3.Body as MemberExpression).Member.Name : null;
 
-            r12_fk1 = (quoted) ? ToQuotedFieldname<R12>(r12_fk1) : r12_fk1;
-            r12_fk2 = (quoted) ? ToQuotedFieldname<R12>(r12_fk2) : r12_fk2;
-            r13_fk1 = (quoted) ? ToQuotedFieldname<R13>(r13_fk1) : r13_fk1;
-            r13_fk3 = (quoted) ? ToQuotedFieldname<R13>(r13_fk3) : r13_fk3;
+            r12_fk1 = (quoted) ? ToQuotedFieldname(r12_fk1) : r12_fk1;
+            r12_fk2 = (quoted) ? ToQuotedFieldname(r12_fk2) : r12_fk2;
+            r13_fk1 = (quoted) ? ToQuotedFieldname(r13_fk1) : r13_fk1;
+            r13_fk3 = (quoted) ? ToQuotedFieldname(r13_fk3) : r13_fk3;
 
             var t1_pk = (quoted) ? GetPrimaryKeyName<T1>() : GetQuotedPrimaryKeyName<T1>();
             var t2_pk = (quoted) ? GetPrimaryKeyName<T2>() : GetQuotedPrimaryKeyName<T2>();
@@ -875,41 +744,6 @@ namespace reexjungle.technical.data.concretes.extensions
         #endregion Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 1 predicate (P1)
 
         #region Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 1 predicate (P2)
-
-        /// <summary>
-        /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 1 predicate (from second table) and string-based keys.
-        /// </summary>
-        /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
-        /// <typeparam name="T2">The second table in the JOIN relationship.</typeparam>
-        /// <typeparam name="T3">The third table in the JOIN relationship.</typeparam>
-        /// <typeparam name="R12">The relation that links the first table and the second POCO table.</typeparam>
-        /// <typeparam name="R13">The relation that links the first table and the third POCO table.</typeparam>
-        /// <param name="db">The database connection used for the JOIN operation</param>
-        /// <param name="R12_FK1">The foreign key of the first relational table that refers to the primary key of the first POCO table.</param>
-        /// <param name="R12_FK2">The foreign key of the first relational table that refers to the primary key of the second POCO table.</param>
-        /// <param name="R13_FK1">The foreign key of the third  relational table that refers to the primary key of the first POCO table.</param>
-        /// <param name="R13_FK3">The foreign key of the third  relational table that refers to the primary key of the third POCO table.</param>
-        /// <param name="P2"> The predicate from the second POCO table.</param>
-        /// <param name="C1">The conjunction between the first and the second predicate</param>
-        /// <param name="mode">The type of SQL JOIN used</param>
-        /// <param name="quoted">Should the table and column names be set in quotes?</param>
-        /// <param name="skip">The row offset of records to return.</param>
-        /// <param name="rows">The number of row records to return.</param>
-        /// <returns>The list of comined records of the first POCO table.</returns>
-        public static List<T1> Select<T1, T2, T3, R12, R13>(this IDbConnection db,
-            Expression<Func<R12, Guid>> R12_FK1,
-            Expression<Func<R12, Guid>> R12_FK2,
-            Expression<Func<T2, bool>> P2,
-            Expression<Func<R13, Guid>> R13_FK1,
-            Expression<Func<R13, Guid>> R13_FK3,
-            JoinMode mode = JoinMode.Inner,
-            bool quoted = true,
-            int? skip = null,
-            int? rows = null)
-            where T1 : new()
-        {
-            return db.Select<T1, T2, T3, R12, R13, Guid>(R12_FK1, R12_FK2, P2, R13_FK1, R13_FK3, mode, quoted, skip, rows);
-        }
 
         /// <summary>
         /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 1 predicate (from second table) and a key type for all tables
@@ -995,15 +829,15 @@ namespace reexjungle.technical.data.concretes.extensions
             var r12 = (quoted) ? GetQuotedTableName<R12>() : GetTableName<R12>();
             var r13 = (quoted) ? GetQuotedTableName<R13>() : GetTableName<R13>();
 
-            var r12_fk1 = (R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
-            var r12_fk2 = (R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
-            var r13_fk1 = (R13_FK1.Body != null) ? (R13_FK1.Body as MemberExpression).Member.Name : null;
-            var r13_fk3 = (R13_FK3.Body != null) ? (R13_FK3.Body as MemberExpression).Member.Name : null;
+            var r12_fk1 = R12_FK1.GetMemberName();//(R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
+            var r12_fk2 = R12_FK2.GetMemberName();//(R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
+            var r13_fk1 = R13_FK1.GetMemberName();//(R13_FK1.Body != null) ? (R13_FK1.Body as MemberExpression).Member.Name : null;
+            var r13_fk3 = R13_FK3.GetMemberName();//(R13_FK3.Body != null) ? (R13_FK3.Body as MemberExpression).Member.Name : null;
 
-            r12_fk1 = (quoted) ? ToQuotedFieldname<R12>(r12_fk1) : r12_fk1;
-            r12_fk2 = (quoted) ? ToQuotedFieldname<R12>(r12_fk2) : r12_fk2;
-            r13_fk1 = (quoted) ? ToQuotedFieldname<R13>(r13_fk1) : r13_fk1;
-            r13_fk3 = (quoted) ? ToQuotedFieldname<R13>(r13_fk3) : r13_fk3;
+            r12_fk1 = (quoted) ? ToQuotedFieldname(r12_fk1) : r12_fk1;
+            r12_fk2 = (quoted) ? ToQuotedFieldname(r12_fk2) : r12_fk2;
+            r13_fk1 = (quoted) ? ToQuotedFieldname(r13_fk1) : r13_fk1;
+            r13_fk3 = (quoted) ? ToQuotedFieldname(r13_fk3) : r13_fk3;
 
             var t1_pk = (quoted) ? GetPrimaryKeyName<T1>() : GetQuotedPrimaryKeyName<T1>();
             var t2_pk = (quoted) ? GetPrimaryKeyName<T2>() : GetQuotedPrimaryKeyName<T2>();
@@ -1030,40 +864,6 @@ namespace reexjungle.technical.data.concretes.extensions
         #endregion Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 1 predicate (P2)
 
         #region Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 1 predicate (P3)
-
-        /// <summary>
-        /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 1 predicate (from third table) and string-based keys.
-        /// </summary>
-        /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
-        /// <typeparam name="T2">The second table in the JOIN relationship.</typeparam>
-        /// <typeparam name="T3">The third table in the JOIN relationship.</typeparam>
-        /// <typeparam name="R12">The relation that links the first table and the second POCO table.</typeparam>
-        /// <typeparam name="R13">The relation that links the first table and the third POCO table.</typeparam>
-        /// <param name="db">The database connection used for the JOIN operation</param>
-        /// <param name="R12_FK1">The foreign key of the first relational table that refers to the primary key of the first POCO table.</param>
-        /// <param name="R12_FK2">The foreign key of the first relational table that refers to the primary key of the second POCO table.</param>
-        /// <param name="R13_FK1">The foreign key of the third  relational table that refers to the primary key of the first POCO table.</param>
-        /// <param name="R13_FK3">The foreign key of the third  relational table that refers to the primary key of the third POCO table.</param>
-        /// <param name="P3"> The predicate from the third POCO table.</param>
-        /// <param name="mode">The type of SQL JOIN used</param>
-        /// <param name="quoted">Should the table and column names be set in quotes?</param>
-        /// <param name="skip">The row offset of records to return.</param>
-        /// <param name="rows">The number of row records to return.</param>
-        /// <returns>The list of comined records of the first POCO table.</returns>
-        public static List<T1> Select<T1, T2, T3, R12, R13>(this IDbConnection db,
-            Expression<Func<R12, Guid>> R12_FK1,
-            Expression<Func<R12, Guid>> R12_FK2,
-            Expression<Func<R13, Guid>> R13_FK1,
-            Expression<Func<R13, Guid>> R13_FK3,
-            Expression<Func<T3, bool>> P3,
-            JoinMode mode = JoinMode.Inner,
-            bool quoted = true,
-            int? skip = null,
-            int? rows = null)
-            where T1 : new()
-        {
-            return db.Select<T1, T2, T3, R12, R13, Guid>(R12_FK1, R12_FK2, R13_FK1, R13_FK3, P3, mode, quoted, skip, rows);
-        }
 
         /// <summary>
         /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 1 predicate (from third table) and a key type for all tables
@@ -1149,15 +949,15 @@ namespace reexjungle.technical.data.concretes.extensions
             var r12 = (quoted) ? GetQuotedTableName<R12>() : GetTableName<R12>();
             var r13 = (quoted) ? GetQuotedTableName<R13>() : GetTableName<R13>();
 
-            var r12_fk1 = (R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
-            var r12_fk2 = (R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
-            var r13_fk1 = (R13_FK1.Body != null) ? (R13_FK1.Body as MemberExpression).Member.Name : null;
-            var r13_fk3 = (R13_FK3.Body != null) ? (R13_FK3.Body as MemberExpression).Member.Name : null;
+            var r12_fk1 = R12_FK1.GetMemberName(); //(R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
+            var r12_fk2 = R12_FK2.GetMemberName(); //(R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
+            var r13_fk1 = R13_FK1.GetMemberName(); //(R13_FK1.Body != null) ? (R13_FK1.Body as MemberExpression).Member.Name : null;
+            var r13_fk3 = R13_FK3.GetMemberName(); //(R13_FK3.Body != null) ? (R13_FK3.Body as MemberExpression).Member.Name : null;
 
-            r12_fk1 = (quoted) ? ToQuotedFieldname<R12>(r12_fk1) : r12_fk1;
-            r12_fk2 = (quoted) ? ToQuotedFieldname<R12>(r12_fk2) : r12_fk2;
-            r13_fk1 = (quoted) ? ToQuotedFieldname<R13>(r13_fk1) : r13_fk1;
-            r13_fk3 = (quoted) ? ToQuotedFieldname<R13>(r13_fk3) : r13_fk3;
+            r12_fk1 = (quoted) ? ToQuotedFieldname(r12_fk1) : r12_fk1;
+            r12_fk2 = (quoted) ? ToQuotedFieldname(r12_fk2) : r12_fk2;
+            r13_fk1 = (quoted) ? ToQuotedFieldname(r13_fk1) : r13_fk1;
+            r13_fk3 = (quoted) ? ToQuotedFieldname(r13_fk3) : r13_fk3;
 
             var t1_pk = (quoted) ? GetPrimaryKeyName<T1>() : GetQuotedPrimaryKeyName<T1>();
             var t2_pk = (quoted) ? GetPrimaryKeyName<T2>() : GetQuotedPrimaryKeyName<T2>();
@@ -1184,44 +984,6 @@ namespace reexjungle.technical.data.concretes.extensions
         #endregion Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 1 predicate (P3)
 
         #region Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 2 predicates (P1, P2)
-
-        /// <summary>
-        /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 2 predicates (from first and second tables) and string-based keys.
-        /// </summary>
-        /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
-        /// <typeparam name="T2">The second table in the JOIN relationship.</typeparam>
-        /// <typeparam name="T3">The third table in the JOIN relationship.</typeparam>
-        /// <typeparam name="R12">The relation that links the first table and the second POCO table.</typeparam>
-        /// <typeparam name="R13">The relation that links the first table and the third POCO table.</typeparam>
-        /// <param name="db">The database connection used for the JOIN operation</param>
-        /// <param name="R12_FK1">The foreign key of the first relational table that refers to the primary key of the first POCO table.</param>
-        /// <param name="P1"> The predicate from the first POCO table.</param>
-        /// <param name="R12_FK2">The foreign key of the first relational table that refers to the primary key of the second POCO table.</param>
-        /// <param name="P2">The predicate from the second POCO table.</param>
-        /// <param name="R13_FK1">The foreign key of the third  relational table that refers to the primary key of the first POCO table.</param>
-        /// <param name="R13_FK3">The foreign key of the third  relational table that refers to the primary key of the third POCO table.</param>
-        /// <param name="C1">The conjunction between the first and the second predicate</param>
-        /// <param name="mode">The type of SQL JOIN used</param>
-        /// <param name="quoted">Should the table and column names be set in quotes?</param>
-        /// <param name="skip">The row offset of records to return.</param>
-        /// <param name="rows">The number of row records to return.</param>
-        /// <returns>The list of comined records of the first POCO table.</returns>
-        public static List<T1> Select<T1, T2, T3, R12, R13>(this IDbConnection db,
-            Expression<Func<R12, Guid>> R12_FK1,
-            Expression<Func<T1, bool>> P1,
-            Expression<Func<R12, Guid>> R12_FK2,
-            Expression<Func<T2, bool>> P2,
-            Expression<Func<R13, Guid>> R13_FK1,
-            Expression<Func<R13, Guid>> R13_FK3,
-            Conjunctor C1 = Conjunctor.And,
-            JoinMode mode = JoinMode.Inner,
-            bool quoted = true,
-            int? skip = null,
-            int? rows = null)
-            where T1 : new()
-        {
-            return db.Select<T1, T2, T3, R12, R13, Guid>(R12_FK1, P1, R12_FK2, P2, R13_FK1, R13_FK3, C1, mode, quoted, skip, rows);
-        }
 
         /// <summary>
         /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 2 predicates (from first and second tables) and a key type for all tables
@@ -1314,15 +1076,15 @@ namespace reexjungle.technical.data.concretes.extensions
             var r12 = (quoted) ? GetQuotedTableName<R12>() : GetTableName<R12>();
             var r13 = (quoted) ? GetQuotedTableName<R13>() : GetTableName<R13>();
 
-            var r12_fk1 = (R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
-            var r12_fk2 = (R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
-            var r13_fk1 = (R13_FK1.Body != null) ? (R13_FK1.Body as MemberExpression).Member.Name : null;
-            var r13_fk3 = (R13_FK3.Body != null) ? (R13_FK3.Body as MemberExpression).Member.Name : null;
+            var r12_fk1 = R12_FK1.GetMemberName(); //(R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
+            var r12_fk2 = R12_FK2.GetMemberName(); //(R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
+            var r13_fk1 = R13_FK1.GetMemberName(); //(R13_FK1.Body != null) ? (R13_FK1.Body as MemberExpression).Member.Name : null;
+            var r13_fk3 = R13_FK3.GetMemberName(); //(R13_FK3.Body != null) ? (R13_FK3.Body as MemberExpression).Member.Name : null;
 
-            r12_fk1 = (quoted) ? ToQuotedFieldname<R12>(r12_fk1) : r12_fk1;
-            r12_fk2 = (quoted) ? ToQuotedFieldname<R12>(r12_fk2) : r12_fk2;
-            r13_fk1 = (quoted) ? ToQuotedFieldname<R13>(r13_fk1) : r13_fk1;
-            r13_fk3 = (quoted) ? ToQuotedFieldname<R13>(r13_fk3) : r13_fk3;
+            r12_fk1 = (quoted) ? ToQuotedFieldname(r12_fk1) : r12_fk1;
+            r12_fk2 = (quoted) ? ToQuotedFieldname(r12_fk2) : r12_fk2;
+            r13_fk1 = (quoted) ? ToQuotedFieldname(r13_fk1) : r13_fk1;
+            r13_fk3 = (quoted) ? ToQuotedFieldname(r13_fk3) : r13_fk3;
 
             var t1_pk = (quoted) ? GetPrimaryKeyName<T1>() : GetQuotedPrimaryKeyName<T1>();
             var t2_pk = (quoted) ? GetPrimaryKeyName<T2>() : GetQuotedPrimaryKeyName<T2>();
@@ -1351,44 +1113,6 @@ namespace reexjungle.technical.data.concretes.extensions
         #endregion Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 2 predicates (P1, P2)
 
         #region Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 2 predicates (P2, P3)
-
-        /// <summary>
-        /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 2 predicates (from second and third tables) and string-based keys.
-        /// </summary>
-        /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
-        /// <typeparam name="T2">The second table in the JOIN relationship.</typeparam>
-        /// <typeparam name="T3">The third table in the JOIN relationship.</typeparam>
-        /// <typeparam name="R12">The relation that links the first table and the second POCO table.</typeparam>
-        /// <typeparam name="R13">The relation that links the first table and the third POCO table.</typeparam>
-        /// <param name="db">The database connection used for the JOIN operation</param>
-        /// <param name="R12_FK1">The foreign key of the first relational table that refers to the primary key of the first POCO table.</param>
-        /// <param name="R12_FK2">The foreign key of the first relational table that refers to the primary key of the second POCO table.</param>
-        /// <param name="P2"> The predicate from the second POCO table.</param>
-        /// <param name="R13_FK1">The foreign key of the third  relational table that refers to the primary key of the first POCO table.</param>
-        /// <param name="R13_FK3">The foreign key of the third  relational table that refers to the primary key of the third POCO table.</param>
-        /// <param name="P3">The predicate from the third POCO table.</param>
-        /// <param name="C1">The conjunction between the first and the second predicate</param>
-        /// <param name="mode">The type of SQL JOIN used</param>
-        /// <param name="quoted">Should the table and column names be set in quotes?</param>
-        /// <param name="skip">The row offset of records to return.</param>
-        /// <param name="rows">The number of row records to return.</param>
-        /// <returns>The list of comined records of the first POCO table.</returns>
-        public static List<T1> Select<T1, T2, T3, R12, R13>(this IDbConnection db,
-            Expression<Func<R12, Guid>> R12_FK1,
-            Expression<Func<R12, Guid>> R12_FK2,
-            Expression<Func<T2, bool>> P2,
-            Expression<Func<R13, Guid>> R13_FK1,
-            Expression<Func<R13, Guid>> R13_FK3,
-            Expression<Func<T3, bool>> P3,
-            Conjunctor C1,
-            JoinMode mode = JoinMode.Inner,
-            bool quoted = true,
-            int? skip = null,
-            int? rows = null)
-            where T1 : new()
-        {
-            return db.Select<T1, T2, T3, R12, R13, Guid>(R12_FK1, R12_FK2, P2, R13_FK1, R13_FK3, P3, C1, mode, quoted, skip, rows);
-        }
 
         /// <summary>
         /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 2 predicates (from second and third tables) and a key type for all tables
@@ -1482,15 +1206,15 @@ namespace reexjungle.technical.data.concretes.extensions
             var r12 = (quoted) ? GetQuotedTableName<R12>() : GetTableName<R12>();
             var r13 = (quoted) ? GetQuotedTableName<R13>() : GetTableName<R13>();
 
-            var r12_fk1 = (R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
-            var r12_fk2 = (R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
-            var r13_fk1 = (R13_FK1.Body != null) ? (R13_FK1.Body as MemberExpression).Member.Name : null;
-            var r13_fk3 = (R13_FK3.Body != null) ? (R13_FK3.Body as MemberExpression).Member.Name : null;
+            var r12_fk1 = R12_FK1.GetMemberName(); //(R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
+            var r12_fk2 = R12_FK2.GetMemberName();//(R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
+            var r13_fk1 = R13_FK1.GetMemberName(); //(R13_FK1.Body != null) ? (R13_FK1.Body as MemberExpression).Member.Name : null;
+            var r13_fk3 = R13_FK3.GetMemberName(); //(R13_FK3.Body != null) ? (R13_FK3.Body as MemberExpression).Member.Name : null;
 
-            r12_fk1 = (quoted) ? ToQuotedFieldname<R12>(r12_fk1) : r12_fk1;
-            r12_fk2 = (quoted) ? ToQuotedFieldname<R12>(r12_fk2) : r12_fk2;
-            r13_fk1 = (quoted) ? ToQuotedFieldname<R13>(r13_fk1) : r13_fk1;
-            r13_fk3 = (quoted) ? ToQuotedFieldname<R13>(r13_fk3) : r13_fk3;
+            r12_fk1 = (quoted) ? ToQuotedFieldname(r12_fk1) : r12_fk1;
+            r12_fk2 = (quoted) ? ToQuotedFieldname(r12_fk2) : r12_fk2;
+            r13_fk1 = (quoted) ? ToQuotedFieldname(r13_fk1) : r13_fk1;
+            r13_fk3 = (quoted) ? ToQuotedFieldname(r13_fk3) : r13_fk3;
 
             var t1_pk = (quoted) ? GetPrimaryKeyName<T1>() : GetQuotedPrimaryKeyName<T1>();
             var t2_pk = (quoted) ? GetPrimaryKeyName<T2>() : GetQuotedPrimaryKeyName<T2>();
@@ -1519,44 +1243,6 @@ namespace reexjungle.technical.data.concretes.extensions
         #endregion Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 2 predicates (P2, P3)
 
         #region Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 2 predicates (P1, P3)
-
-        /// <summary>
-        /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 2 predicates (from first and third tables) and string-based keys.
-        /// </summary>
-        /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
-        /// <typeparam name="T2">The second table in the JOIN relationship.</typeparam>
-        /// <typeparam name="T3">The third table in the JOIN relationship.</typeparam>
-        /// <typeparam name="R12">The relation that links the first table and the second POCO table.</typeparam>
-        /// <typeparam name="R13">The relation that links the first table and the third POCO table.</typeparam>
-        /// <param name="db">The database connection used for the JOIN operation</param>
-        /// <param name="R12_FK1">The foreign key of the first relational table that refers to the primary key of the first POCO table.</param>
-        /// <param name="P1"> The predicate from the first POCO table.</param>
-        /// <param name="R12_FK2">The foreign key of the first relational table that refers to the primary key of the second POCO table.</param>
-        /// <param name="R13_FK1">The foreign key of the third  relational table that refers to the primary key of the first POCO table.</param>
-        /// <param name="R13_FK3">The foreign key of the third  relational table that refers to the primary key of the third POCO table.</param>
-        /// <param name="P3">The predicate from the third POCO table.</param>
-        /// <param name="C1">The conjunction between the first and the second predicate</param>
-        /// <param name="mode">The type of SQL JOIN used</param>
-        /// <param name="quoted">Should the table and column names be set in quotes?</param>
-        /// <param name="skip">The row offset of records to return.</param>
-        /// <param name="rows">The number of row records to return.</param>
-        /// <returns>The list of comined records of the first POCO table.</returns>
-        public static List<T1> Select<T1, T2, T3, R12, R13>(this IDbConnection db,
-            Expression<Func<R12, Guid>> R12_FK1,
-            Expression<Func<R12, Guid>> R12_FK2,
-            Expression<Func<R13, Guid>> R13_FK1,
-            Expression<Func<R13, Guid>> R13_FK3,
-            Expression<Func<T1, bool>> P1,
-            Expression<Func<T3, bool>> P3,
-            Conjunctor C1 = Conjunctor.And,
-            JoinMode mode = JoinMode.Inner,
-            bool quoted = true,
-            int? skip = null,
-            int? rows = null)
-            where T1 : new()
-        {
-            return db.Select<T1, T2, T3, R12, R13, Guid>(R12_FK1, P1, R12_FK2, R13_FK1, R13_FK3, P3, C1, mode, quoted, skip, rows);
-        }
 
         /// <summary>
         /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 2 predicates (from first and third tables) and a key type for all tables
@@ -1649,15 +1335,15 @@ namespace reexjungle.technical.data.concretes.extensions
             var r12 = (quoted) ? GetQuotedTableName<R12>() : GetTableName<R12>();
             var r13 = (quoted) ? GetQuotedTableName<R13>() : GetTableName<R13>();
 
-            var r12_fk1 = (R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
-            var r12_fk2 = (R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
-            var r13_fk1 = (R13_FK1.Body != null) ? (R13_FK1.Body as MemberExpression).Member.Name : null;
-            var r13_fk3 = (R13_FK3.Body != null) ? (R13_FK3.Body as MemberExpression).Member.Name : null;
+            var r12_fk1 = R12_FK1.GetMemberName(); //(R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
+            var r12_fk2 = R12_FK2.GetMemberName(); //(R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
+            var r13_fk1 = R13_FK1.GetMemberName(); //(R13_FK1.Body != null) ? (R13_FK1.Body as MemberExpression).Member.Name : null;
+            var r13_fk3 = R13_FK3.GetMemberName(); //(R13_FK3.Body != null) ? (R13_FK3.Body as MemberExpression).Member.Name : null;
 
-            r12_fk1 = (quoted) ? ToQuotedFieldname<R12>(r12_fk1) : r12_fk1;
-            r12_fk2 = (quoted) ? ToQuotedFieldname<R12>(r12_fk2) : r12_fk2;
-            r13_fk1 = (quoted) ? ToQuotedFieldname<R13>(r13_fk1) : r13_fk1;
-            r13_fk3 = (quoted) ? ToQuotedFieldname<R13>(r13_fk3) : r13_fk3;
+            r12_fk1 = (quoted) ? ToQuotedFieldname(r12_fk1) : r12_fk1;
+            r12_fk2 = (quoted) ? ToQuotedFieldname(r12_fk2) : r12_fk2;
+            r13_fk1 = (quoted) ? ToQuotedFieldname(r13_fk1) : r13_fk1;
+            r13_fk3 = (quoted) ? ToQuotedFieldname(r13_fk3) : r13_fk3;
 
             var t1_pk = (quoted) ? GetPrimaryKeyName<T1>() : GetQuotedPrimaryKeyName<T1>();
             var t2_pk = (quoted) ? GetPrimaryKeyName<T2>() : GetQuotedPrimaryKeyName<T2>();
@@ -1686,48 +1372,6 @@ namespace reexjungle.technical.data.concretes.extensions
         #endregion Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 2 predicates (P1, P3)
 
         #region Join Scenario: 3 Tables (T1, T2, T3) and 2 relations (R12, R13), 3 predicates (P1, P2, P3)
-
-        /// <summary>
-        /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 3 predicates (from first, second and third tables) and string-based keys.
-        /// </summary>
-        /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
-        /// <typeparam name="T2">The second table in the JOIN relationship.</typeparam>
-        /// <typeparam name="T3">The third table in the JOIN relationship.</typeparam>
-        /// <typeparam name="R12">The relation that links the first table and the second POCO table.</typeparam>
-        /// <typeparam name="R13">The relation that links the first table and the third POCO table.</typeparam>
-        /// <param name="db">The database connection used for the JOIN operation</param>
-        /// <param name="R12_FK1">The foreign key of the first relational table that refers to the primary key of the first POCO table.</param>
-        /// <param name="P1"> The predicate from the first POCO table.</param>
-        /// <param name="R12_FK2">The foreign key of the first relational table that refers to the primary key of the second POCO table.</param>
-        /// <param name="P2">The predicate from the second POCO table.</param>
-        /// <param name="R13_FK1">The foreign key of the third  relational table that refers to the primary key of the first POCO table.</param>
-        /// <param name="R13_FK3">The foreign key of the third  relational table that refers to the primary key of the third POCO table.</param>
-        /// <param name="P3">The predicate from the third POCO table.</param>
-        /// <param name="C1">The conjunction between the first and the second predicate</param>
-        /// <param name="C2">The conjunction between the second and the third predicate</param>
-        /// <param name="mode">The type of SQL JOIN used</param>
-        /// <param name="quoted">Should the table and column names be set in quotes?</param>
-        /// <param name="skip">The row offset of records to return.</param>
-        /// <param name="rows">The number of row records to return.</param>
-        /// <returns>The list of comined records of the first POCO table.</returns>
-        public static List<T1> Select<T1, T2, T3, R12, R13>(this IDbConnection db,
-            Expression<Func<R12, Guid>> R12_FK1,
-            Expression<Func<T1, bool>> P1,
-            Expression<Func<R12, Guid>> R12_FK2,
-            Expression<Func<T2, bool>> P2,
-            Expression<Func<R13, Guid>> R13_FK1,
-            Expression<Func<R13, Guid>> R13_FK3,
-            Expression<Func<T3, bool>> P3,
-            Conjunctor C1 = Conjunctor.And,
-            Conjunctor C2 = Conjunctor.And,
-            JoinMode mode = JoinMode.Inner,
-            bool quoted = true,
-            int? skip = null,
-            int? rows = null)
-            where T1 : new()
-        {
-            return db.Select<T1, T2, T3, R12, R13, Guid, Guid, Guid>(R12_FK1, P1, R12_FK2, P2, R13_FK1, R13_FK3, P3, C1, C2, mode, quoted, skip, rows);
-        }
 
         /// <summary>
         /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 3 predicates (from first, second and third tables) and a key type for all tables
@@ -1829,15 +1473,15 @@ namespace reexjungle.technical.data.concretes.extensions
             var r12 = (quoted) ? GetQuotedTableName<R12>() : GetTableName<R12>();
             var r13 = (quoted) ? GetQuotedTableName<R13>() : GetTableName<R13>();
 
-            var r12_fk1 = (R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
-            var r12_fk2 = (R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
-            var r13_fk1 = (R13_FK1.Body != null) ? (R13_FK1.Body as MemberExpression).Member.Name : null;
-            var r13_fk3 = (R13_FK3.Body != null) ? (R13_FK3.Body as MemberExpression).Member.Name : null;
+            var r12_fk1 = R12_FK1.GetMemberName(); //(R12_FK1.Body != null) ? (R12_FK1.Body as MemberExpression).Member.Name : null;
+            var r12_fk2 = R12_FK2.GetMemberName(); //(R12_FK2.Body != null) ? (R12_FK2.Body as MemberExpression).Member.Name : null;
+            var r13_fk1 = R13_FK1.GetMemberName(); //(R13_FK1.Body != null) ? (R13_FK1.Body as MemberExpression).Member.Name : null;
+            var r13_fk3 = R13_FK3.GetMemberName(); //(R13_FK3.Body != null) ? (R13_FK3.Body as MemberExpression).Member.Name : null;
 
-            r12_fk1 = (quoted) ? ToQuotedFieldname<R12>(r12_fk1) : r12_fk1;
-            r12_fk2 = (quoted) ? ToQuotedFieldname<R12>(r12_fk2) : r12_fk2;
-            r13_fk1 = (quoted) ? ToQuotedFieldname<R13>(r13_fk1) : r13_fk1;
-            r13_fk3 = (quoted) ? ToQuotedFieldname<R13>(r13_fk3) : r13_fk3;
+            r12_fk1 = (quoted) ? ToQuotedFieldname(r12_fk1) : r12_fk1;
+            r12_fk2 = (quoted) ? ToQuotedFieldname(r12_fk2) : r12_fk2;
+            r13_fk1 = (quoted) ? ToQuotedFieldname(r13_fk1) : r13_fk1;
+            r13_fk3 = (quoted) ? ToQuotedFieldname(r13_fk3) : r13_fk3;
 
             var t1_pk = (quoted) ? GetPrimaryKeyName<T1>() : GetQuotedPrimaryKeyName<T1>();
             var t2_pk = (quoted) ? GetPrimaryKeyName<T2>() : GetQuotedPrimaryKeyName<T2>();
@@ -1873,13 +1517,19 @@ namespace reexjungle.technical.data.concretes.extensions
 
         #region SaveAll operation without implicit transaction commit
 
-        public static void Save<T>(this IDbConnection db, T entity, IDbTransaction transaction)
+        public static void Save<TEntity>(this IDbConnection db, TEntity entity, IDbTransaction transaction)
         {
+            if (entity == null) throw new ArgumentNullException("entity");
+            if (transaction == null) throw new ArgumentNullException("transaction");
+
             db.Exec(cmd => cmd.Save(entity, transaction));
         }
 
         public static void SaveAll<T>(this IDbConnection db, IEnumerable<T> entities, IDbTransaction transaction)
         {
+            if (entities == null) throw new ArgumentNullException("entities");
+            if (transaction == null) throw new ArgumentNullException("transaction");
+
             db.Exec(cmd => cmd.SaveAll(entities, transaction));
         }
 
@@ -1887,63 +1537,61 @@ namespace reexjungle.technical.data.concretes.extensions
 
         #region MergeAll operations
 
-        public static void MergeAll<T, Tkey>(this IDbConnection db, IEnumerable<T> entities, IEnumerable<T> oentities, IDbTransaction transaction)
-            where Tkey : IEquatable<Tkey>, IComparable<Tkey>
-            where T : class, IContainsKey<Tkey>, new()
+        public static void MergeAll<TEntity, TKey>(
+            this IDbConnection db,
+            IEnumerable<TEntity> left,
+            IEnumerable<TEntity> right)
+            where TKey : IEquatable<TKey>, IComparable<TKey>
+            where TEntity : class, IContainsKey<TKey>, new()
         {
-            if (!oentities.NullOrEmpty())
+            if (left == null) throw new ArgumentNullException("left");
+
+            if (!right.SafeEmpty())
             {
-                var incoming = entities.Except(oentities).ToArray();
-                if (!incoming.NullOrEmpty()) db.SaveAll(incoming, transaction);
-                var outgoing = oentities.Except(entities).ToArray();
-                if (!outgoing.NullOrEmpty()) db.DeleteByIds<T>(outgoing.Select(y => y.Id).ToArray());
+                var incoming = left.Except(right).ToArray();
+                if (!incoming.SafeEmpty()) db.SaveAll(incoming);
+
+                var outgoing = right.Except(left).ToArray();
+
+                if (!outgoing.SafeEmpty())
+                    db.DeleteByIds<TEntity>(outgoing.Select(y => y.Id));
             }
-            else db.SaveAll(entities, transaction);
+            else db.SaveAll(left);
         }
 
-        public static void MergeAll<T>(this IDbConnection db, IEnumerable<T> entities, IEnumerable<T> oentities, IDbTransaction transaction)
-    where T : class, IContainsKey<Guid>, new()
+        public static void MergeAll<TEntity, TKey>(
+            this IDbConnection db,
+            IEnumerable<TEntity> left,
+            IEnumerable<TEntity> right,
+            IDbTransaction transaction)
+            where TKey : IEquatable<TKey>, IComparable<TKey>
+            where TEntity : class, IContainsKey<TKey>, new()
         {
-            db.MergeAll<T, Guid>(entities, oentities, transaction);
-        }
+            if (left == null) throw new ArgumentNullException("left");
+            if (transaction == null) throw new ArgumentNullException("transaction");
 
-        public static void MergeAll<T, Tkey>(this IDbConnection db, IEnumerable<T> entities, IEnumerable<T> oentities)
-            where Tkey : IEquatable<Tkey>, IComparable<Tkey>
-            where T : class, IContainsKey<Tkey>, new()
-        {
-            var oentitylist = oentities as T[] ?? oentities.ToArray();
-            if (!oentitylist.NullOrEmpty())
+            if (!right.NullOrEmpty())
             {
-                var entitylist = entities as T[] ?? entities.ToArray();
-                var incoming = entitylist.Except(oentitylist).ToArray();
-                if (!incoming.NullOrEmpty()) db.SaveAll(incoming);
-                var outgoing = oentitylist.Except(entitylist).ToArray();
-                if (!outgoing.NullOrEmpty()) db.DeleteByIds<T>(outgoing.Select(y => y.Id).ToArray());
-            }
-            else db.SaveAll(entities);
-        }
+                var incoming = left.Except(right).ToArray();
+                if (!incoming.NullOrEmpty())
+                    db.SaveAll(incoming, transaction);
 
-        public static void MergeAll<T>(this IDbConnection db, IEnumerable<T> entities, IEnumerable<T> oentities)
-    where T : class, IContainsKey<Guid>, new()
-        {
-            db.MergeAll<T, Guid>(entities, oentities);
+                var outgoing = right.Except(left).ToArray();
+                if (!outgoing.NullOrEmpty()) db.DeleteByIds<TEntity>(outgoing.Select(y => y.Id));
+            }
+            else db.SaveAll(left, transaction);
         }
 
         #endregion MergeAll operations
 
         #region RemoveAll operations
 
-        public static void RemoveAll<T, Tkey>(this IDbConnection db, IEnumerable<T> oentities)
-            where Tkey : IEquatable<Tkey>, IComparable<Tkey>
-            where T : class, IContainsKey<Tkey>, new()
+        public static void RemoveAll<TEntity, TKey>(this IDbConnection db, IEnumerable<TEntity> entities)
+            where TKey : IEquatable<TKey>, IComparable<TKey>
+            where TEntity : class, IContainsKey<TKey>, new()
         {
-            if (!oentities.NullOrEmpty()) db.DeleteByIds<T>(oentities.Select(y => y.Id).ToArray());
-        }
-
-        public static void RemoveAll<T>(this IDbConnection db, IEnumerable<T> oentities)
-    where T : class, IContainsKey<Guid>, new()
-        {
-            db.RemoveAll<T, Guid>(oentities);
+            if (!entities.SafeEmpty())
+                db.DeleteByIds<TEntity>(entities.Select(x => x.Id));
         }
 
         #endregion RemoveAll operations

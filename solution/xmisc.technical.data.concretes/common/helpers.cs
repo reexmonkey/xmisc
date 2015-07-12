@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace reexjungle.technical.data.concretes.extensions
+namespace reexjungle.xmisc.technical.data.concretes.common
 {
     /// <summary>
     /// Represents conjunctions to connect ORMlite queries
