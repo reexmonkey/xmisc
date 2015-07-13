@@ -19,7 +19,7 @@ namespace reexjungle.xmisc.technical.data.concretes.common
     }
 
     /// <summary>
-    /// Represents the type of ORMlite join.
+    /// Represents the type of database join for an Object Relational Mapper (ORM).
     /// </summary>
     [Flags]
     public enum JoinMode

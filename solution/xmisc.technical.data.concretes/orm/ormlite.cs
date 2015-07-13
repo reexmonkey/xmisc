@@ -226,6 +226,14 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             }
         }
 
+        public static List<Guid> SelectParam<TModel>(this IDbConnection db,
+            Expression<Func<TModel, Guid>> param,
+            int? skip = null,
+            int? rows = null)
+        {
+            return db.SelectParam<TModel, Guid>(param, skip, rows);
+        }
+
         public static List<TParam> SelectParam<TModel, TParam>(this IDbConnection db,
             Expression<Func<TModel, TParam>> param,
             int? skip = null,
@@ -325,6 +333,34 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
         #region Group II: Joining 2 tables
 
         #region Join Scenario: 2 tables (T1, T2), 1 relation (R12) and 1 predicate (P1)
+
+        /// <summary>
+        /// Combines records of a POCO model from 2 tables using 1 relational table, 1 predicate (from second table) and a Guid type for all tables
+        /// </summary>
+        /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
+        /// <typeparam name="T2">The second table in the JOIN relationship.</typeparam>
+        /// <typeparam name="R12">The relation that links the first table and the second POCO table.</typeparam>
+        /// <param name="db">The database connection used for the JOIN operation</param>
+        /// <param name="R12_FK1">The foreign key of the first relational table that refers to the primary key of the first POCO table.</param>
+        /// <param name="P1">The  predicate from the first POCO table.</param>
+        /// <param name="R12_FK2">The foreign key of the first relational table that refers to the primary key of the second POCO table.</param>
+        /// <param name="mode">The type of SQL JOIN used</param>
+        /// <param name="quoted">Should the table and column names be set in quotes?</param>
+        /// <param name="skip">The row offset of records to return.</param>
+        /// <param name="rows">The number of row records to return.</param>
+        /// <returns>The list of comined records of the first POCO table.</returns>
+        public static List<T1> Select<T1, T2, R12>(this IDbConnection db,
+            Expression<Func<R12, Guid>> R12_FK1,
+            Expression<Func<T1, bool>> P1,
+            Expression<Func<R12, Guid>> R12_FK2,
+            JoinMode mode = JoinMode.Inner,
+            bool quoted = true,
+            int? skip = null,
+            int? rows = null)
+            where T1 : new()
+        {
+            return db.Select<T1, T2, R12, Guid, Guid>(R12_FK1, P1, R12_FK2, mode, quoted, skip, rows);
+        }
 
         /// <summary>
         /// Combines records of a POCO model from 2 tables using 1 relational table, 1 predicate (from second table) and a key type for all tables
@@ -628,6 +664,40 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
         #region Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 1 predicate (P1)
 
         /// <summary>
+        /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 1 predicate (from first table) and a Guid key for all tables
+        /// </summary>
+        /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
+        /// <typeparam name="T2">The second table in the JOIN relationship.</typeparam>
+        /// <typeparam name="T3">The third table in the JOIN relationship.</typeparam>
+        /// <typeparam name="R12">The relation that links the first table and the second POCO table.</typeparam>
+        /// <typeparam name="R13">The relation that links the first table and the third POCO table.</typeparam>
+        /// <param name="db">The database connection used for the JOIN operation</param>
+        /// <param name="R12_FK1">The foreign key of the first relational table that refers to the primary key of the first POCO table.</param>
+        /// <param name="P1">The predicate from the second POCO table.</param>
+        /// <param name="R12_FK2">The foreign key of the first relational table that refers to the primary key of the second POCO table.</param>
+        /// <param name="R13_FK1">The foreign key of the third  relational table that refers to the primary key of the first POCO table.</param>
+        /// <param name="R13_FK3">The foreign key of the third  relational table that refers to the primary key of the third POCO table.</param>
+        /// <param name="mode">The type of SQL JOIN used</param>
+        /// <param name="quoted">Should the table and column names be set in quotes?</param>
+        /// <param name="skip">The row offset of records to return.</param>
+        /// <param name="rows">The number of row records to return.</param>
+        /// <returns>The list of comined records of the first POCO table.</returns>
+        public static List<T1> Select<T1, T2, T3, R12, R13>(this IDbConnection db,
+            Expression<Func<R12, Guid>> R12_FK1,
+            Expression<Func<T1, bool>> P1,
+            Expression<Func<R12, Guid>> R12_FK2,
+            Expression<Func<R13, Guid>> R13_FK1,
+            Expression<Func<R13, Guid>> R13_FK3,
+            JoinMode mode = JoinMode.Inner,
+            bool quoted = true,
+            int? skip = null,
+            int? rows = null)
+            where T1 : new()
+        {
+            return db.Select<T1, T2, T3, R12, R13, Guid, Guid, Guid>(R12_FK1, P1, R12_FK2, R13_FK1, R13_FK3, mode, quoted, skip, rows);
+        }
+
+        /// <summary>
         /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 1 predicate (from first table) and a key type for all tables
         /// </summary>
         /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
@@ -744,6 +814,40 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
         #endregion Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 1 predicate (P1)
 
         #region Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 1 predicate (P2)
+
+        /// <summary>
+        /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 1 predicate (from second table) and a GUID key for all tables
+        /// </summary>
+        /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
+        /// <typeparam name="T2">The second table in the JOIN relationship.</typeparam>
+        /// <typeparam name="T3">The third table in the JOIN relationship.</typeparam>
+        /// <typeparam name="R12">The relation that links the first table and the second POCO table.</typeparam>
+        /// <typeparam name="R13">The relation that links the first table and the third POCO table.</typeparam>
+        /// <param name="db">The database connection used for the JOIN operation</param>
+        /// <param name="R12_FK1">The foreign key of the first relational table that refers to the primary key of the first POCO table.</param>
+        /// <param name="R12_FK2">The foreign key of the first relational table that refers to the primary key of the second POCO table.</param>
+        /// <param name="P2">The predicate from the second POCO table.</param>
+        /// <param name="R13_FK1">The foreign key of the third  relational table that refers to the primary key of the first POCO table.</param>
+        /// <param name="R13_FK3">The foreign key of the third  relational table that refers to the primary key of the third POCO table.</param>
+        /// <param name="mode">The type of SQL JOIN used</param>
+        /// <param name="quoted">Should the table and column names be set in quotes?</param>
+        /// <param name="skip">The row offset of records to return.</param>
+        /// <param name="rows">The number of row records to return.</param>
+        /// <returns>The list of comined records of the first POCO table.</returns>
+        public static List<T1> Select<T1, T2, T3, R12, R13>(this IDbConnection db,
+            Expression<Func<R12, Guid>> R12_FK1,
+            Expression<Func<R12, Guid>> R12_FK2,
+            Expression<Func<T2, bool>> P2,
+            Expression<Func<R13, Guid>> R13_FK1,
+            Expression<Func<R13, Guid>> R13_FK3,
+            JoinMode mode = JoinMode.Inner,
+            bool quoted = true,
+            int? skip = null,
+            int? rows = null)
+            where T1 : new()
+        {
+            return db.Select<T1, T2, T3, R12, R13, Guid, Guid, Guid>(R12_FK1, R12_FK2, P2, R13_FK1, R13_FK3, mode, quoted, skip, rows);
+        }
 
         /// <summary>
         /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 1 predicate (from second table) and a key type for all tables
@@ -865,6 +969,21 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
 
         #region Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 1 predicate (P3)
 
+        public static List<T1> Select<T1, T2, T3, R12, R13>(this IDbConnection db,
+            Expression<Func<R12, Guid>> R12_FK1,
+            Expression<Func<R12, Guid>> R12_FK2,
+            Expression<Func<R13, Guid>> R13_FK1,
+            Expression<Func<R13, Guid>> R13_FK3,
+            Expression<Func<T3, bool>> P3,
+            JoinMode mode = JoinMode.Inner,
+            bool quoted = true,
+            int? skip = null,
+            int? rows = null)
+            where T1 : new()
+        {
+            return db.Select<T1, T2, T3, R12, R13, Guid, Guid, Guid>(R12_FK1, R12_FK2, R13_FK1, R13_FK3, P3, mode, quoted, skip, rows);
+        }
+
         /// <summary>
         /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 1 predicate (from third table) and a key type for all tables
         /// </summary>
@@ -984,6 +1103,44 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
         #endregion Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 1 predicate (P3)
 
         #region Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 2 predicates (P1, P2)
+
+        /// <summary>
+        /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 2 predicates (from first and second tables) and a Guid key type for all tables
+        /// </summary>
+        /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
+        /// <typeparam name="T2">The second table in the JOIN relationship.</typeparam>
+        /// <typeparam name="T3">The third table in the JOIN relationship.</typeparam>
+        /// <typeparam name="R12">The relation that links the first table and the second POCO table.</typeparam>
+        /// <typeparam name="R13">The relation that links the first table and the third POCO table.</typeparam>
+        /// <param name="db">The database connection used for the JOIN operation</param>
+        /// <param name="R12_FK1">The foreign key of the first relational table that refers to the primary key of the first POCO table.</param>
+        /// <param name="P1"> The predicate from the first POCO table.</param>
+        /// <param name="R12_FK2">The foreign key of the first relational table that refers to the primary key of the second POCO table.</param>
+        /// <param name="P2">The predicate from the second POCO table.</param>
+        /// <param name="R13_FK1">The foreign key of the third  relational table that refers to the primary key of the first POCO table.</param>
+        /// <param name="R13_FK3">The foreign key of the third  relational table that refers to the primary key of the third POCO table.</param>
+        /// <param name="C1">The conjunction between the first and the second predicate</param>
+        /// <param name="mode">The type of SQL JOIN used</param>
+        /// <param name="quoted">Should the table and column names be set in quotes?</param>
+        /// <param name="skip">The row offset of records to return.</param>
+        /// <param name="rows">The number of row records to return.</param>
+        /// <returns>The list of comined records of the first POCO table.</returns>
+        public static List<T1> Select<T1, T2, T3, R12, R13>(this IDbConnection db,
+            Expression<Func<R12, Guid>> R12_FK1,
+            Expression<Func<T1, bool>> P1,
+            Expression<Func<R12, Guid>> R12_FK2,
+            Expression<Func<T2, bool>> P2,
+            Expression<Func<R13, Guid>> R13_FK1,
+            Expression<Func<R13, Guid>> R13_FK3,
+            Conjunctor C1 = Conjunctor.And,
+            JoinMode mode = JoinMode.Inner,
+            bool quoted = true,
+            int? skip = null,
+            int? rows = null)
+            where T1 : new()
+        {
+            return db.Select<T1, T2, T3, R12, R13, Guid, Guid, Guid>(R12_FK1, P1, R12_FK2, P2, R13_FK1, R13_FK3, C1, mode, quoted, skip, rows);
+        }
 
         /// <summary>
         /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 2 predicates (from first and second tables) and a key type for all tables
@@ -1113,6 +1270,44 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
         #endregion Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 2 predicates (P1, P2)
 
         #region Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 2 predicates (P2, P3)
+
+        /// <summary>
+        /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 2 predicates (from second and third tables) and a Guid key type for all tables
+        /// </summary>
+        /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
+        /// <typeparam name="T2">The second table in the JOIN relationship.</typeparam>
+        /// <typeparam name="T3">The third table in the JOIN relationship.</typeparam>
+        /// <typeparam name="R12">The relation that links the first table and the second POCO table.</typeparam>
+        /// <typeparam name="R13">The relation that links the first table and the third POCO table.</typeparam>
+        /// <param name="db">The database connection used for the JOIN operation</param>
+        /// <param name="R12_FK1">The foreign key of the first relational table that refers to the primary key of the first POCO table.</param>
+        /// <param name="R12_FK2">The foreign key of the first relational table that refers to the primary key of the second POCO table.</param>
+        /// <param name="P2"> The predicate from the second POCO table.</param>
+        /// <param name="R13_FK1">The foreign key of the third  relational table that refers to the primary key of the first POCO table.</param>
+        /// <param name="R13_FK3">The foreign key of the third  relational table that refers to the primary key of the third POCO table.</param>
+        /// <param name="P3">The predicate from the third POCO table.</param>
+        /// <param name="C1">The conjunction between the second and third predicate</param>
+        /// <param name="mode">The type of SQL JOIN used</param>
+        /// <param name="quoted">Should the table and column names be set in quotes?</param>
+        /// <param name="skip">The row offset of records to return.</param>
+        /// <param name="rows">The number of row records to return.</param>
+        /// <returns>The list of comined records of the first POCO table.</returns>
+        public static List<T1> Select<T1, T2, T3, R12, R13>(this IDbConnection db,
+            Expression<Func<R12, Guid>> R12_FK1,
+            Expression<Func<R12, Guid>> R12_FK2,
+            Expression<Func<T2, bool>> P2,
+            Expression<Func<R13, Guid>> R13_FK1,
+            Expression<Func<R13, Guid>> R13_FK3,
+            Expression<Func<T3, bool>> P3,
+            Conjunctor C1,
+            JoinMode mode = JoinMode.Inner,
+            bool quoted = true,
+            int? skip = null,
+            int? rows = null)
+            where T1 : new()
+        {
+            return db.Select<T1, T2, T3, R12, R13, Guid, Guid, Guid>(R12_FK1, R12_FK2, P2, R13_FK1, R13_FK3, P3, C1, mode, quoted, skip, rows);
+        }
 
         /// <summary>
         /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 2 predicates (from second and third tables) and a key type for all tables
@@ -1245,6 +1440,44 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
         #region Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 2 predicates (P1, P3)
 
         /// <summary>
+        /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 2 predicates (from first and third tables) and a Guid key type for all tables
+        /// </summary>
+        /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
+        /// <typeparam name="T2">The second table in the JOIN relationship.</typeparam>
+        /// <typeparam name="T3">The third table in the JOIN relationship.</typeparam>
+        /// <typeparam name="R12">The relation that links the first table and the second POCO table.</typeparam>
+        /// <typeparam name="R13">The relation that links the first table and the third POCO table.</typeparam>
+        /// <param name="db">The database connection used for the JOIN operation</param>
+        /// <param name="R12_FK1">The foreign key of the first relational table that refers to the primary key of the first POCO table.</param>
+        /// <param name="P1"> The predicate from the first POCO table.</param>
+        /// <param name="R12_FK2">The foreign key of the first relational table that refers to the primary key of the second POCO table.</param>
+        /// <param name="R13_FK1">The foreign key of the third  relational table that refers to the primary key of the first POCO table.</param>
+        /// <param name="R13_FK3">The foreign key of the third  relational table that refers to the primary key of the third POCO table.</param>
+        /// <param name="P3">The predicate from the third POCO table.</param>
+        /// <param name="C1">The conjunction between the first and the second predicate</param>
+        /// <param name="mode">The type of SQL JOIN used</param>
+        /// <param name="quoted">Should the table and column names be set in quotes?</param>
+        /// <param name="skip">The row offset of records to return.</param>
+        /// <param name="rows">The number of row records to return.</param>
+        /// <returns>The list of comined records of the first POCO table.</returns>
+        public static List<T1> Select<T1, T2, T3, R12, R13, K>(this IDbConnection db,
+    Expression<Func<R12, Guid>> R12_FK1,
+    Expression<Func<T1, bool>> P1,
+    Expression<Func<R12, Guid>> R12_FK2,
+    Expression<Func<R13, Guid>> R13_FK1,
+    Expression<Func<R13, Guid>> R13_FK3,
+    Expression<Func<T3, bool>> P3,
+    Conjunctor C1,
+    JoinMode mode = JoinMode.Inner,
+    bool quoted = true,
+    int? skip = null,
+    int? rows = null)
+            where T1 : new()
+        {
+            return db.Select<T1, T2, T3, R12, R13, Guid, Guid, Guid>(R12_FK1, P1, R12_FK2, R13_FK1, R13_FK3, P3, C1, mode, quoted, skip, rows);
+        }
+
+        /// <summary>
         /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 2 predicates (from first and third tables) and a key type for all tables
         /// </summary>
         /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
@@ -1372,6 +1605,48 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
         #endregion Join Scenario: 3 tables (T1, T2, T3) (T1, T2, T3), 2 relations (R12, R13) and 2 predicates (P1, P3)
 
         #region Join Scenario: 3 Tables (T1, T2, T3) and 2 relations (R12, R13), 3 predicates (P1, P2, P3)
+
+        /// <summary>
+        /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 3 predicates (from first, second and third tables) and a key type for all tables
+        /// </summary>
+        /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
+        /// <typeparam name="T2">The second table in the JOIN relationship.</typeparam>
+        /// <typeparam name="T3">The third table in the JOIN relationship.</typeparam>
+        /// <typeparam name="R12">The relation that links the first table and the second POCO table.</typeparam>
+        /// <typeparam name="R13">The relation that links the first table and the third POCO table.</typeparam>
+        /// <param name="db">The database connection used for the JOIN operation</param>
+        /// <param name="R12_FK1">The foreign key of the first relational table that refers to the primary key of the first POCO table.</param>
+        /// <param name="P1"> The predicate from the first POCO table.</param>
+        /// <param name="R12_FK2">The foreign key of the first relational table that refers to the primary key of the second POCO table.</param>
+        /// <param name="P2">The predicate from the second POCO table.</param>
+        /// <param name="R13_FK1">The foreign key of the third  relational table that refers to the primary key of the first POCO table.</param>
+        /// <param name="R13_FK3">The foreign key of the third  relational table that refers to the primary key of the third POCO table.</param>
+        /// <param name="P3">The predicate from the third POCO table.</param>
+        /// <param name="C1">The conjunction between the first and the second predicate</param>
+        /// <param name="C2">The conjunction between the second and the third predicate</param>
+        /// <param name="mode">The type of SQL JOIN used</param>
+        /// <param name="quoted">Should the table and column names be set in quotes?</param>
+        /// <param name="skip">The row offset of records to return.</param>
+        /// <param name="rows">The number of row records to return.</param>
+        /// <returns>The list of comined records of the first POCO table.</returns>
+        public static List<T1> Select<T1, T2, T3, R12, R13>(this IDbConnection db,
+    Expression<Func<R12, Guid>> R12_FK1,
+    Expression<Func<R12, Guid>> R12_FK2,
+    Expression<Func<R13, Guid>> R13_FK1,
+    Expression<Func<R13, Guid>> R13_FK3,
+    Expression<Func<T1, bool>> P1,
+    Expression<Func<T2, bool>> P2,
+    Expression<Func<T3, bool>> P3,
+    Conjunctor C1 = Conjunctor.And,
+    Conjunctor C2 = Conjunctor.And,
+    JoinMode mode = JoinMode.Inner,
+    bool quoted = true,
+    int? skip = null,
+    int? rows = null)
+            where T1 : new()
+        {
+            return db.Select(R12_FK1, P1, R12_FK2, P2, R13_FK1, R13_FK3, P3, C1, C2, mode, quoted, skip, rows);
+        }
 
         /// <summary>
         /// Combines records from 3 POCO tables (T1, T2, T3) by the relationship (T1, R12, T2) and (T1, R13, T3) using 2 relational tables (R12, R13), 3 predicates (from first, second and third tables) and a key type for all tables
@@ -1525,7 +1800,7 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             db.Exec(cmd => cmd.Save(entity, transaction));
         }
 
-        public static void SaveAll<T>(this IDbConnection db, IEnumerable<T> entities, IDbTransaction transaction)
+        public static void SaveAll<TEntity>(this IDbConnection db, IEnumerable<TEntity> entities, IDbTransaction transaction)
         {
             if (entities == null) throw new ArgumentNullException("entities");
             if (transaction == null) throw new ArgumentNullException("transaction");
@@ -1537,54 +1812,72 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
 
         #region MergeAll operations
 
-        public static void MergeAll<TEntity, TKey>(
-            this IDbConnection db,
-            IEnumerable<TEntity> left,
-            IEnumerable<TEntity> right)
-            where TKey : IEquatable<TKey>, IComparable<TKey>
-            where TEntity : class, IContainsKey<TKey>, new()
+        public static void MergeAll<TEntity>(this IDbConnection db, IEnumerable<TEntity> entities, IEnumerable<TEntity> other)
+            where TEntity : class, IContainsKey<Guid>, new()
         {
-            if (left == null) throw new ArgumentNullException("left");
-
-            if (!right.SafeEmpty())
-            {
-                var incoming = left.Except(right).ToArray();
-                if (!incoming.SafeEmpty()) db.SaveAll(incoming);
-
-                var outgoing = right.Except(left).ToArray();
-
-                if (!outgoing.SafeEmpty())
-                    db.DeleteByIds<TEntity>(outgoing.Select(y => y.Id));
-            }
-            else db.SaveAll(left);
+            db.MergeAll<TEntity, Guid>(entities, other);
         }
 
         public static void MergeAll<TEntity, TKey>(
             this IDbConnection db,
-            IEnumerable<TEntity> left,
-            IEnumerable<TEntity> right,
+            IEnumerable<TEntity> entities,
+            IEnumerable<TEntity> other)
+            where TKey : IEquatable<TKey>, IComparable<TKey>
+            where TEntity : class, IContainsKey<TKey>, new()
+        {
+            if (entities == null) throw new ArgumentNullException("entities");
+
+            if (!other.SafeEmpty())
+            {
+                var incoming = entities.Except(other).ToArray();
+                if (!incoming.SafeEmpty()) db.SaveAll(incoming);
+
+                var outgoing = other.Except(entities).ToArray();
+
+                if (!outgoing.SafeEmpty())
+                    db.DeleteByIds<TEntity>(outgoing.Select(y => y.Id));
+            }
+            else db.SaveAll(entities);
+        }
+
+        public static void MergeAll<TEntity>(this IDbConnection db, IEnumerable<TEntity> entities, IEnumerable<TEntity> other, IDbTransaction transaction)
+            where TEntity : class, IContainsKey<Guid>, new()
+        {
+            db.MergeAll<TEntity, Guid>(entities, other, transaction);
+        }
+
+        public static void MergeAll<TEntity, TKey>(
+            this IDbConnection db,
+            IEnumerable<TEntity> entities,
+            IEnumerable<TEntity> other,
             IDbTransaction transaction)
             where TKey : IEquatable<TKey>, IComparable<TKey>
             where TEntity : class, IContainsKey<TKey>, new()
         {
-            if (left == null) throw new ArgumentNullException("left");
+            if (entities == null) throw new ArgumentNullException("entities");
             if (transaction == null) throw new ArgumentNullException("transaction");
 
-            if (!right.NullOrEmpty())
+            if (!other.NullOrEmpty())
             {
-                var incoming = left.Except(right).ToArray();
+                var incoming = entities.Except(other).ToArray();
                 if (!incoming.NullOrEmpty())
                     db.SaveAll(incoming, transaction);
 
-                var outgoing = right.Except(left).ToArray();
+                var outgoing = other.Except(entities).ToArray();
                 if (!outgoing.NullOrEmpty()) db.DeleteByIds<TEntity>(outgoing.Select(y => y.Id));
             }
-            else db.SaveAll(left, transaction);
+            else db.SaveAll(entities, transaction);
         }
 
         #endregion MergeAll operations
 
         #region RemoveAll operations
+
+        public static void RemoveAll<TEntity>(this IDbConnection db, IEnumerable<TEntity> entities)
+         where TEntity : class, IContainsKey<Guid>, new()
+        {
+            db.RemoveAll<TEntity, Guid>(entities);
+        }
 
         public static void RemoveAll<TEntity, TKey>(this IDbConnection db, IEnumerable<TEntity> entities)
             where TKey : IEquatable<TKey>, IComparable<TKey>
