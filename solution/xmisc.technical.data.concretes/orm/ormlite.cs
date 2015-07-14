@@ -370,7 +370,7 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             int? rows = null)
             where T1 : new()
         {
-            return db.Select<T1, T2, R12, Guid, Guid>(R12_FK1, P1, R12_FK2, mode, quoted, skip, rows);
+            return db.Select<T1, T2, R12, Guid>(R12_FK1, P1, R12_FK2, mode, quoted, skip, rows);
         }
 
         /// <summary>
@@ -468,6 +468,19 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
 
         #region Join Scenario: 2 tables (T1, T2), 1 relation (R12) and 1 predicate (P2)
 
+        public static List<T1> Select<T1, T2, R12>(this IDbConnection db,
+            Expression<Func<R12, Guid>> R12_FK1,
+            Expression<Func<R12, Guid>> R12_FK2,
+            Expression<Func<T2, bool>> P2,
+            JoinMode mode = JoinMode.Inner,
+            bool quoted = true,
+            int? skip = null,
+            int? rows = null)
+            where T1 : new()
+        {
+            return db.Select<T1, T2, R12, Guid>(R12_FK1, R12_FK2, P2, mode, quoted, skip, rows);
+        }
+
         /// <summary>
         /// Combines records of a POCO model from 2 tables using 1 relational table, 1 predicate (from second table) and a key type for all tables
         /// </summary>
@@ -563,6 +576,38 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
         #endregion Join Scenario: 2 tables (T1, T2), 1 relation (R12) and 1 predicate (P2)
 
         #region Join Scenario: 2 Tables (T1, T2), 1 relation (R12) and 2 predicates (P1, P2)
+
+        /// <summary>
+        /// Combines records of a POCO model from 2 tables using 1 relational table, 2 predicates (from first and second tables) and a key type for all tables
+        /// </summary>
+        /// <typeparam name="T1">The first table in the JOIN relationship. It is also the POCO base for the combined records</typeparam>
+        /// <typeparam name="T2">The second table in the JOIN relationship.</typeparam>
+        /// <typeparam name="R12">The relation that links the first table and the second POCO table.</typeparam>
+        /// <param name="db">The database connection used for the JOIN operation</param>
+        /// <param name="R12_FK1">The foreign key of the first relational table that refers to the primary key of the first POCO table.</param>
+        /// <param name="P1"> The predicate from the first POCO table.</param>
+        /// <param name="R12_FK2">The foreign key of the first relational table that refers to the primary key of the second POCO table.</param>
+        /// <param name="P2">The predicate from the second POCO table.</param>
+        /// <param name="C1">The conjunction between the first and the second predicate</param>
+        /// <param name="mode">The type of SQL JOIN used</param>
+        /// <param name="quoted">Should the table and column names be set in quotes?</param>
+        /// <param name="skip">The row offset of records to return.</param>
+        /// <param name="rows">The number of row records to return.</param>
+        /// <returns>The list of comined records of the first POCO table.</returns>
+        public static List<T1> Select<T1, T2, R12>(this IDbConnection db,
+            Expression<Func<R12, Guid>> R12_FK1,
+            Expression<Func<T1, bool>> P1,
+            Expression<Func<R12, Guid>> R12_FK2,
+            Expression<Func<T2, bool>> P2,
+            Conjunctor C1 = Conjunctor.And,
+            JoinMode mode = JoinMode.Inner,
+            bool quoted = true,
+            int? skip = null,
+            int? rows = null)
+            where T1 : new()
+        {
+            return db.Select<T1, T2, R12, Guid>(R12_FK1, P1, R12_FK2, P2, C1, mode, quoted, skip, rows);
+        }
 
         /// <summary>
         /// Combines records of a POCO model from 2 tables using 1 relational table, 2 predicates (from first and second tables) and a key type for all tables
@@ -705,7 +750,7 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             int? rows = null)
             where T1 : new()
         {
-            return db.Select<T1, T2, T3, R12, R13, Guid, Guid, Guid>(R12_FK1, P1, R12_FK2, R13_FK1, R13_FK3, mode, quoted, skip, rows);
+            return db.Select<T1, T2, T3, R12, R13, Guid>(R12_FK1, P1, R12_FK2, R13_FK1, R13_FK3, mode, quoted, skip, rows);
         }
 
         /// <summary>
@@ -857,7 +902,7 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             int? rows = null)
             where T1 : new()
         {
-            return db.Select<T1, T2, T3, R12, R13, Guid, Guid, Guid>(R12_FK1, R12_FK2, P2, R13_FK1, R13_FK3, mode, quoted, skip, rows);
+            return db.Select<T1, T2, T3, R12, R13, Guid>(R12_FK1, R12_FK2, P2, R13_FK1, R13_FK3, mode, quoted, skip, rows);
         }
 
         /// <summary>
@@ -992,7 +1037,7 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             int? rows = null)
             where T1 : new()
         {
-            return db.Select<T1, T2, T3, R12, R13, Guid, Guid, Guid>(R12_FK1, R12_FK2, R13_FK1, R13_FK3, P3, mode, quoted, skip, rows);
+            return db.Select<T1, T2, T3, R12, R13, Guid>(R12_FK1, R12_FK2, R13_FK1, R13_FK3, P3, mode, quoted, skip, rows);
         }
 
         /// <summary>
@@ -1150,7 +1195,7 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             int? rows = null)
             where T1 : new()
         {
-            return db.Select<T1, T2, T3, R12, R13, Guid, Guid, Guid>(R12_FK1, P1, R12_FK2, P2, R13_FK1, R13_FK3, C1, mode, quoted, skip, rows);
+            return db.Select<T1, T2, T3, R12, R13, Guid>(R12_FK1, P1, R12_FK2, P2, R13_FK1, R13_FK3, C1, mode, quoted, skip, rows);
         }
 
         /// <summary>
@@ -1317,7 +1362,7 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             int? rows = null)
             where T1 : new()
         {
-            return db.Select<T1, T2, T3, R12, R13, Guid, Guid, Guid>(R12_FK1, R12_FK2, P2, R13_FK1, R13_FK3, P3, C1, mode, quoted, skip, rows);
+            return db.Select<T1, T2, T3, R12, R13, Guid>(R12_FK1, R12_FK2, P2, R13_FK1, R13_FK3, P3, C1, mode, quoted, skip, rows);
         }
 
         /// <summary>
@@ -1471,21 +1516,21 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
         /// <param name="skip">The row offset of records to return.</param>
         /// <param name="rows">The number of row records to return.</param>
         /// <returns>The list of comined records of the first POCO table.</returns>
-        public static List<T1> Select<T1, T2, T3, R12, R13, K>(this IDbConnection db,
-    Expression<Func<R12, Guid>> R12_FK1,
-    Expression<Func<T1, bool>> P1,
-    Expression<Func<R12, Guid>> R12_FK2,
-    Expression<Func<R13, Guid>> R13_FK1,
-    Expression<Func<R13, Guid>> R13_FK3,
-    Expression<Func<T3, bool>> P3,
-    Conjunctor C1,
-    JoinMode mode = JoinMode.Inner,
-    bool quoted = true,
-    int? skip = null,
-    int? rows = null)
+        public static List<T1> Select<T1, T2, T3, R12, R13>(this IDbConnection db,
+            Expression<Func<R12, Guid>> R12_FK1,
+            Expression<Func<T1, bool>> P1,
+            Expression<Func<R12, Guid>> R12_FK2,
+            Expression<Func<R13, Guid>> R13_FK1,
+            Expression<Func<R13, Guid>> R13_FK3,
+            Expression<Func<T3, bool>> P3,
+            Conjunctor C1,
+            JoinMode mode = JoinMode.Inner,
+            bool quoted = true,
+            int? skip = null,
+            int? rows = null)
             where T1 : new()
         {
-            return db.Select<T1, T2, T3, R12, R13, Guid, Guid, Guid>(R12_FK1, P1, R12_FK2, R13_FK1, R13_FK3, P3, C1, mode, quoted, skip, rows);
+            return db.Select<T1, T2, T3, R12, R13, Guid>(R12_FK1, P1, R12_FK2, R13_FK1, R13_FK3, P3, C1, mode, quoted, skip, rows);
         }
 
         /// <summary>
