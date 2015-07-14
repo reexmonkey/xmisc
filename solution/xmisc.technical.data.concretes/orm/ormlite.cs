@@ -260,18 +260,29 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             }
         }
 
+        public static List<Guid> SelectParam<TModel>(this IDbConnection db,
+            Expression<Func<TModel, Guid>> param,
+            Expression<Func<TModel, bool>> predicate,
+            int? skip = null,
+            int? rows = null)
+        {
+            return db.SelectParam<TModel, Guid>(param, predicate, skip, rows);
+        }
+
         public static List<TParam> SelectParam<TModel, TParam>(this IDbConnection db,
             Expression<Func<TModel, TParam>> param,
             Expression<Func<TModel, bool>> predicate,
             int? skip = null,
             int? rows = null)
         {
+            if (param == null) throw new ArgumentNullException("param");
+            if (predicate == null) throw new ArgumentNullException("predicate");
+
             var sb = new StringBuilder();
             var ev = OrmLiteConfig.DialectProvider.ExpressionVisitor<TModel>();
 
             var tname = GetQuotedTableName<TModel>();
-            var pname = (param.Body != null) ? (param.Body as MemberExpression).Member.Name : null;
-            if (pname == null) return new List<TParam>();
+            var pname = param.GetMemberName();
 
             ev.Skip = skip;
             ev.Rows = rows;
