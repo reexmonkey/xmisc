@@ -8,16 +8,13 @@ namespace reexjungle.xmisc.infrastructure.contracts
     /// <typeparam name="TValue"></typeparam>
     public interface IGenerator<out TValue>
     {
-        /// <summary>
-        /// Generates a value.
-        /// </summary>
-        /// <returns>The generated value.</returns>
-        TValue GetNext();
 
         /// <summary>
-        /// Re-initializes the generator.
+        /// Generates a value and returns it.
         /// </summary>
-        void Reset();
+        /// <returns>The next generated value.</returns>
+        TValue GetNext();
+
     }
 
     /// <summary>

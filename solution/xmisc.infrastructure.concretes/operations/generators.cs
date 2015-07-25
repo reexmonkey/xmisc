@@ -275,12 +275,6 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
         /// </summary>
         public void Reset()
         {
-            authorGenerator.Reset();
-            productGenerator.Reset();
-            descriptionGenerator.Reset();
-            languageGenerator.Reset();
-
-            if (referenceGenerator != null) referenceGenerator.Reset();
 
             pool.Clear();
         }
@@ -320,72 +314,32 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
     }
 
     /// <summary>
-    /// Represents a key generator for producing Formal Public Identifiers (FPIs) as strings
+    /// Represents a content generator
     /// </summary>
-    public class FpiStringKeyGenerator : IKeyGenerator<string>
+    /// <typeparam name="TValue">The type of content to generate</typeparam>
+    public class ContentGenerator<TValue> : IGenerator<TValue>
     {
-        private readonly IKeyGenerator<Fpi> keygen;
+        private readonly Func<TValue> rule;
 
         /// <summary>
-        /// Produces the next key
+        /// Initializes a new instance of the <see cref="ContentGenerator&lt;Tvalue&gt;"/> class.
         /// </summary>
-        /// <returns>The next available key</returns>
-        public string GetNext()
+        /// <param name="rule"></param>
+        public ContentGenerator(Func<TValue> rule)
         {
-            return keygen.GetNext().ToString();
+            if (rule == null) throw new ArgumentNullException("rule");
+            this.rule = rule;
         }
 
         /// <summary>
-        /// Recaptures a key for re-use purposes
+        /// Generates a value and returns it.
         /// </summary>
-        /// <param name="key">The key that shall later be reused</param>
-        public void Recapture(string key)
+        /// <returns>The next generated value.</returns>
+        public TValue GetNext()
         {
-            keygen.Recapture(new Fpi(key));
-        }
-
-        /// <summary>
-        /// Reinitializes the key generator.
-        /// </summary>
-        public void Reset()
-        {
-            keygen.Reset();
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="keygen">The underlying Formal Public Identifer keygenerator </param>
-        public FpiStringKeyGenerator(IKeyGenerator<Fpi> keygen)
-        {
-            keygen.ThrowIfNull("keygen");
-            this.keygen = keygen;
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="statusGenerator">Approval Status generator</param>
-        /// <param name="authorGenerator">Author generator</param>
-        /// <param name="productGenerator">Product class generator</param>
-        /// <param name="descriptionGenerator">Description generator</param>
-        /// <param name="languageGenerator">Lanaguage generator</param>
-        /// <param name="referenceGenerator">Reference generator</param>
-        public FpiStringKeyGenerator(
-            IGenerator<ApprovalStatus> statusGenerator,
-            IGenerator<string> authorGenerator,
-            IGenerator<string> productGenerator,
-            IGenerator<string> descriptionGenerator,
-            IGenerator<string> languageGenerator,
-            IGenerator<string> referenceGenerator = null)
-        {
-            statusGenerator.ThrowIfNull("statusGenerator");
-            authorGenerator.ThrowIfNull("statusGenerator");
-            productGenerator.ThrowIfNull("productGenerator");
-            descriptionGenerator.ThrowIfNull("descriptionGenerator");
-            languageGenerator.ThrowIfNull("languageGenerator");
-
-            keygen = new FpiKeyGenerator(statusGenerator, authorGenerator, productGenerator, descriptionGenerator, languageGenerator, referenceGenerator);
+            return (rule != null) 
+                ? rule()
+                : default(TValue);
         }
     }
 }
