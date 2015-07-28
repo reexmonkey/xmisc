@@ -51,11 +51,12 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <param name="reference">The standard authority that formally approved the FPI</param>
         public Fpi(ApprovalStatus status, string author, string product, string description, string language, string reference = null)
         {
-            if (status == ApprovalStatus.Standard)
-                reference.ThrowIfNullOrEmpty("reference");
-            Reference = reference;
 
             Status = status;
+            Reference = reference;
+
+            if (status == ApprovalStatus.Standard)
+                reference.ThrowIfNullOrEmpty("A reference (e.g. ISO) must be provided for the Standard approval status");
 
             Author = author;
             author.ThrowIfNullOrEmpty("author");
@@ -207,18 +208,12 @@ namespace reexjungle.xmisc.foundation.concretes
 
         public void FromUrn(string urn)
         {
-            try
-            {
-                var fpi = new Fpi(string.Format("urn:{0}", urn.Substring(4).Replace(":", "//")));
-                Status = fpi.Status;
-                Author = fpi.Author;
-                Product = fpi.Product;
-                Description = fpi.Description;
-            }
-            catch (FormatException)
-            {
-                throw;
-            }
+            if (urn == null) throw new ArgumentNullException("urn");
+            var fpi = new Fpi(string.Format("urn:{0}", urn.Substring(4).Replace(":", "//")));
+            Status = fpi.Status;
+            Author = fpi.Author;
+            Product = fpi.Product;
+            Description = fpi.Description;
         }
     }
 }

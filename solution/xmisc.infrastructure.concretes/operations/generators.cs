@@ -253,12 +253,21 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
         /// <returns>The next available key</returns>
         public Fpi GetNext()
         {
+            var status = statusGenerator.GetNext();
+            var author = authorGenerator.GetNext();
+            var product = productGenerator.GetNext();
+            var description = descriptionGenerator.GetNext();
+            var language = languageGenerator.GetNext();
+            var reference = referenceGenerator != null ? referenceGenerator.GetNext() : null;
+
             return !pool.Empty() ? pool.Dequeue() :
-                 new Fpi(statusGenerator.GetNext(), authorGenerator.GetNext(),
-                    productGenerator.GetNext(),
-                    descriptionGenerator.GetNext(),
-                    languageGenerator.GetNext(),
-                    referenceGenerator != null ? referenceGenerator.GetNext() : null);
+                 new Fpi(
+                     status, 
+                     author,
+                     product,
+                     description,
+                     language,
+                     reference);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using reexjungle.xmisc.foundation.concretes;
 
 namespace xmisc.tests.infrastructure
 {
@@ -26,6 +27,8 @@ namespace xmisc.tests.infrastructure
         public Person()
         {
         }
+
+        public Fpi Code { get; set; }
 
         public string Name { get; set; }
 

@@ -3,11 +3,11 @@ using Xunit;
 
 namespace xmisc.tests.infrastructure
 {
-    public class FactoriesTest
+    public class FactoryTests
     {
         private readonly Factory factory;
 
-        public FactoriesTest()
+        public FactoryTests()
         {
             factory = new Factory();
         }
