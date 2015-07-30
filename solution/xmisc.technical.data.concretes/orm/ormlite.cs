@@ -65,22 +65,19 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
 
         internal static T GetByIdOrDefault<T>(this IDbCommand cmd, object idValue)
         {
-            return FirstOrDefault<T>(cmd, OrmLiteConfig.DialectProvider.GetQuotedColumnName(ModelDefinition<T>.PrimaryKeyName) + " = {0}".SqlFormat(idValue));
+            return FirstOrDefault<T>(cmd, 
+                OrmLiteConfig.DialectProvider.GetQuotedColumnName(ModelDefinition<T>.PrimaryKeyName) + " = {0}".SqlFormat(idValue));
         }
 
-        internal static List<TParam> ReadToList<TParam>(this IDataReader dataReader)
+        private static List<TParam> ReadToList<TParam>(this IDataReader dataReader)
         {
-            var to = new List<TParam>();
-            using (dataReader)
+            var @params = new List<TParam>();
+            while (dataReader.Read())
             {
-                while (dataReader.Read())
-                {
-                    if (dataReader.FieldCount > 1) break;
-
-                    to.Add((TParam)dataReader[0]);
-                }
+                if (dataReader.FieldCount > 1) break;
+                @params.Add((TParam)dataReader[0]);
             }
-            return to;
+            return @params;
         }
 
         internal static int ExecuteSql(this IDbCommand cmd, string sql)
