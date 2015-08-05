@@ -77,7 +77,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <param name="second">Another sequence that contains elements to be tested</param>
         /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
         /// <returns>True, if the sequence is a sequence; otherwise false</returns>
-        public static bool IsSuperSequence<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null)
+        public static bool IsSuperSequenceOf<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null)
         {
             return first.Except(second, comparer).Any();
         }

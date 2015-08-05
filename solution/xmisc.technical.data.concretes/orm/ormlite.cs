@@ -18,15 +18,15 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
     /// </summary>
     public static class OrmLiteExtensions
     {
-        #region From original Service Stack V3 3.971 source code
+        #region Common write operations - Adapted from original Service Stack V3 3.971 source code
 
-        internal static IDataReader ExecReader(this IDbCommand cmd, string sql)
+        private static IDataReader ExecReader(this IDbCommand cmd, string sql)
         {
             cmd.CommandText = sql;
             return cmd.ExecuteReader();
         }
 
-        internal static List<T> Select<T>(this IDbCommand cmd, string sqlFilter, params object[] filterParams)
+        private static List<T> Select<T>(this IDbCommand cmd, string sqlFilter, params object[] filterParams)
         {
             using (var reader = cmd.ExecReader(
                 OrmLiteConfig.DialectProvider.ToSelectStatement(typeof(T), sqlFilter, filterParams)))
@@ -35,7 +35,7 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             }
         }
 
-        internal static string GetIdsInSql(this IEnumerable idValues)
+        private static string GetIdsInSql(this IEnumerable idValues)
         {
             var sql = new StringBuilder();
             foreach (var idValue in idValues)
@@ -46,7 +46,7 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             return sql.Length == 0 ? null : sql.ToString();
         }
 
-        internal static List<T> GetByIds<T>(this IDbCommand cmd, IEnumerable idValues)
+        private static List<T> GetByIds<T>(this IDbCommand cmd, IEnumerable idValues)
         {
             var sql = idValues.GetIdsInSql();
             return sql == null
@@ -54,7 +54,7 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
                 : Select<T>(cmd, OrmLiteConfig.DialectProvider.GetQuotedColumnName(ModelDefinition<T>.PrimaryKeyName) + " IN (" + sql + ")");
         }
 
-        internal static T FirstOrDefault<T>(this IDbCommand cmd, string filter)
+        private static T FirstOrDefault<T>(this IDbCommand cmd, string filter)
         {
             using (var dbReader = cmd.ExecReader(
                 OrmLiteConfig.DialectProvider.ToSelectStatement(typeof(T), filter)))
@@ -63,7 +63,7 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             }
         }
 
-        internal static T GetByIdOrDefault<T>(this IDbCommand cmd, object idValue)
+        private static T GetByIdOrDefault<T>(this IDbCommand cmd, object idValue)
         {
             return FirstOrDefault<T>(cmd, 
                 OrmLiteConfig.DialectProvider.GetQuotedColumnName(ModelDefinition<T>.PrimaryKeyName) + " = {0}".SqlFormat(idValue));
@@ -80,13 +80,13 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             return @params;
         }
 
-        internal static int ExecuteSql(this IDbCommand cmd, string sql)
+        private static int ExecuteSql(this IDbCommand cmd, string sql)
         {
             cmd.CommandText = sql;
             return cmd.ExecuteNonQuery();
         }
 
-        internal static void Update<T>(this IDbCommand cmd, params T[] entities)
+        private static void Update<T>(this IDbCommand cmd, params T[] entities)
         {
             foreach (var entity in entities)
             {
@@ -94,7 +94,7 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             }
         }
 
-        internal static void Insert<T>(this IDbCommand cmd, params T[] entities)
+        private static void Insert<T>(this IDbCommand cmd, params T[] entities)
         {
             foreach (var entity in entities)
             {
@@ -102,7 +102,7 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             }
         }
 
-        internal static void Save<T>(this IDbCommand cmd, T entity, IDbTransaction transaction)
+        private static void Save<T>(this IDbCommand cmd, T entity, IDbTransaction transaction)
         {
             var id = entity.GetId();
             if (transaction != null) cmd.Transaction = transaction;
@@ -111,7 +111,7 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             else cmd.Update(entity);
         }
 
-        internal static void SaveAll<T>(this IDbCommand cmd, IEnumerable<T> entities, IDbTransaction transaction)
+        private static void SaveAll<T>(this IDbCommand cmd, IEnumerable<T> entities, IDbTransaction transaction)
         {
             var rows = entities.ToList();
             var first = rows.FirstOrDefault();
@@ -128,7 +128,7 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
 
             foreach (var row in rows)
             {
-                var id = IdUtils.GetId(row);
+                var id = row.GetId();
                 if (id != defkeyvalue && existing.ContainsKey(id))
                     cmd.Update(row);
                 else
@@ -136,9 +136,104 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             }
         }
 
+        private static void Delete<T>(this IDbCommand cmd, params T[] objs)
+        {
+            foreach (var obj in objs)
+            {
+                cmd.ExecuteSql(OrmLiteConfig.DialectProvider.ToDeleteRowStatement(obj));
+            }
+        }
+
+        private static void Delete<T>(this IDbCommand cmd, IDbTransaction transaction, params T[] objs)
+            where T : new()
+        {
+            if (transaction != null) cmd.Transaction = transaction;
+            cmd.Delete(objs);
+        }
+
+        private static void DeleteAll<T>(this IDbCommand cmd, IEnumerable<T> objs, IDbTransaction transaction)
+            where T : new()
+        {
+            if (transaction != null) cmd.Transaction = transaction;
+            foreach (var obj in objs)
+            {
+                cmd.ExecuteSql(OrmLiteConfig.DialectProvider.ToDeleteRowStatement(obj));
+            }
+        }
+
+        private static void DeleteById<T>(this IDbCommand cmd, object id, IDbTransaction transaction)
+        {
+            var modelDef = ModelDefinition<T>.Definition;
+
+            var sql = string.Format("DELETE FROM {0} WHERE {1} = {2}",
+                OrmLiteConfig.DialectProvider.GetQuotedTableName(modelDef),
+                OrmLiteConfig.DialectProvider.GetQuotedColumnName(modelDef.PrimaryKey.FieldName),
+                OrmLiteConfig.DialectProvider.GetQuotedValue(id, id.GetType()));
+
+            if (transaction != null) cmd.Transaction = transaction;
+            cmd.ExecuteSql(sql);
+        }
+       
+        private static void DeleteByIds<T>(this IDbCommand cmd, IEnumerable idValues, IDbTransaction transaction)
+        {
+            var sqlIn = idValues.GetIdsInSql();
+            if (sqlIn == null) return;
+
+            var modelDef = ModelDefinition<T>.Definition;
+
+            var sql = string.Format("DELETE FROM {0} WHERE {1} IN ({2})",
+                OrmLiteConfig.DialectProvider.GetQuotedTableName(modelDef),
+                OrmLiteConfig.DialectProvider.GetQuotedColumnName(modelDef.PrimaryKey.FieldName),
+                sqlIn);
+
+            if (transaction != null) cmd.Transaction = transaction;
+            cmd.ExecuteSql(sql);
+        }
+
+        private static void DeleteByIdParam<T>(this IDbCommand cmd, object id, IDbTransaction transaction)
+        {
+            var modelDef = ModelDefinition<T>.Definition;
+            var idParamString = OrmLiteConfig.DialectProvider.ParamString + "0";
+
+            var sql = string.Format("DELETE FROM {0} WHERE {1} = {2}",
+                OrmLiteConfig.DialectProvider.GetQuotedTableName(modelDef),
+                OrmLiteConfig.DialectProvider.GetQuotedColumnName(modelDef.PrimaryKey.FieldName),
+                idParamString);
+
+            var idParam = cmd.CreateParameter();
+            idParam.ParameterName = idParamString;
+            idParam.Value = id;
+            cmd.Parameters.Add(idParam);
+
+            if (transaction != null) cmd.Transaction = transaction;
+            cmd.ExecuteSql(sql);
+        }
+
+        private static void DeleteAll<T>(this IDbCommand cmd, IDbTransaction transaction)
+        {
+            DeleteAll(cmd, typeof(T), transaction);
+        }
+
+        private static void DeleteAll(this IDbCommand cmd, Type tableType, IDbTransaction transaction)
+        {
+            if (transaction != null) cmd.Transaction = transaction;
+            cmd.ExecuteSql(OrmLiteConfig.DialectProvider.ToDeleteStatement(tableType, null));
+        }
+
+        private static void Delete<T>(this IDbCommand cmd, string sqlFilter, IDbTransaction transaction, params object[] filterParams)
+        {
+            Delete(cmd, typeof(T), sqlFilter, transaction, filterParams);
+        }
+
+        private static void Delete(this IDbCommand cmd, Type tableType, string sqlFilter, IDbTransaction transaction, params object[] filterParams)
+        {
+            if (transaction != null) cmd.Transaction = transaction;
+            cmd.ExecuteSql(OrmLiteConfig.DialectProvider.ToDeleteStatement(tableType, sqlFilter, filterParams));
+        }
+
         #endregion From original Service Stack V3 3.971 source code
 
-        #region common dml read operations
+        #region common read operations - Adapted from original Service Stack V3 3.971 source code
 
         /// <summary>
         /// Gets quoted the name of table according to the dialect of its database management system.
@@ -1845,6 +1940,13 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
 
         #region SaveAll operation without implicit transaction commit
 
+        /// <summary>
+        /// Persists an entity by transaction to the database.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of entity to persist.</typeparam>
+        /// <param name="db">The database connection used to persist the entity.</param>
+        /// <param name="entity">The entity to be persisted.</param>
+        /// <param name="transaction">The persistence transaction to be performed at the database.</param>
         public static void Save<TEntity>(this IDbConnection db, TEntity entity, IDbTransaction transaction)
         {
             if (entity == null) throw new ArgumentNullException("entity");
@@ -1853,6 +1955,13 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             db.Exec(cmd => cmd.Save(entity, transaction));
         }
 
+        /// <summary>
+        /// Persists all entities by transaction to the database.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of entities to persist.</typeparam>
+        /// <param name="db">The database connection used to persist the entities.</param>
+        /// <param name="entities">The entities to be persisted.</param>
+        /// <param name="transaction">The persistence transaction to be performed at the database</param>
         public static void SaveAll<TEntity>(this IDbConnection db, IEnumerable<TEntity> entities, IDbTransaction transaction)
         {
             if (entities == null) throw new ArgumentNullException("entities");
@@ -1863,8 +1972,59 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
 
         #endregion SaveAll operation without implicit transaction commit
 
+        #region Delete operations without implicit transaction commit
+
+        public static void DeleteById<T>(this IDbConnection db, object id, IDbTransaction transaction)
+            where T : new()
+        {
+            db.Exec(cmd => cmd.DeleteById<T>(id, transaction));
+        }
+
+        public static void DeleteByIds<T>(this IDbConnection db, IEnumerable idValues, IDbTransaction transaction)
+            where T : new()
+        {
+            db.Exec(cmd => cmd.DeleteByIds<T>(idValues, transaction));
+        }
+
+        public static void DeleteAll<T>(this IDbConnection db, IEnumerable<T> objs, IDbTransaction transaction)
+            where T : new()
+        {
+            db.Exec(cmd => cmd.DeleteAll(objs, transaction));
+        }
+
+        public static void DeleteAll<T>(this IDbConnection db, IDbTransaction transaction)
+            where T : new()
+        {
+            db.Exec(cmd => cmd.DeleteAll<T>(transaction));
+        }
+
+        public static void DeleteAll(this IDbConnection db, Type tableType, IDbTransaction transaction)
+        {
+            db.Exec(cmd => cmd.DeleteAll(tableType, transaction));
+        }
+
+        public static void Delete<T>(this IDbConnection db, string sqlFilter, IDbTransaction transaction, params object[] filterParams)
+            where T : new()
+        {
+            db.Exec(cmd => cmd.Delete<T>(sqlFilter, transaction, filterParams));
+        }
+
+        public static void Delete(this IDbConnection db, Type tableType, string sqlFilter, IDbTransaction transaction, params object[] filterParams)
+        {
+            db.Exec(cmd => cmd.Delete(tableType, sqlFilter, transaction, filterParams));
+        }
+
+        #endregion
+
         #region MergeAll operations
 
+        /// <summary>
+        /// Merges changes between to entity set and persists the resulting merged set by transaction to the database.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of entities.</typeparam>
+        /// <param name="db">The database connection used to persist the merge set.</param>
+        /// <param name="entities">Thi set of entities to merge.</param>
+        /// <param name="other">The other set of entities to merge.</param>
         public static void MergeAll<TEntity>(this IDbConnection db, IEnumerable<TEntity> entities, IEnumerable<TEntity> other)
             where TEntity : class, IContainsKey<Guid>, new()
         {
@@ -1938,6 +2098,20 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
         {
             if (!entities.SafeEmpty())
                 db.DeleteByIds<TEntity>(entities.Select(x => x.Id));
+        }
+
+        public static void RemoveAll<TEntity>(this IDbConnection db, IEnumerable<TEntity> entities, IDbTransaction transaction)
+            where TEntity : class, IContainsKey<Guid>, new()
+        {
+            db.RemoveAll<TEntity, Guid>(entities, transaction);
+        }
+
+        public static void RemoveAll<TEntity, TKey>(this IDbConnection db, IEnumerable<TEntity> entities, IDbTransaction transaction)
+            where TKey : IEquatable<TKey>, IComparable<TKey>
+            where TEntity : class, IContainsKey<TKey>, new()
+        {
+            if (!entities.SafeEmpty())
+                db.DeleteByIds<TEntity>(entities.Select(x => x.Id), transaction);
         }
 
         #endregion RemoveAll operations
