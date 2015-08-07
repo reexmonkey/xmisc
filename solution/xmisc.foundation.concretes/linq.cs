@@ -231,6 +231,46 @@ namespace reexjungle.xmisc.foundation.concretes
         }
 
         /// <summary>
+        /// Gets the value for a given key if the key exists, otherwise the key and value are automatically added to the dictionary.
+        /// </summary>
+        /// <typeparam name="TKey">The type of key used for the retrieval or adding of the value.</typeparam>
+        /// <typeparam name="TValue">The type of value to retrieve or add.</typeparam>
+        /// <param name="source">The current <see cref="IDictionary{Key, TValue}"/> instance.</param>
+        /// <param name="key">The key used to either retrieve or add a value to the dictionary.</param>
+        /// <param name="value">The retrieved or added value of the dictionary.</param>
+        /// <returns>The retrieved or added value for the key in the dictionary.</returns>
+        /// <seealso cref="http://www.codeducky.org/10-utilities-c-developers-should-know-part-two/"/>
+        public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> source,  TKey key, TValue value)
+        {
+            TValue val;
+            if (!source.TryGetValue(key, out val))
+            {
+               source.Add(key, val = value); 
+            }
+            return val;
+        }
+
+        /// <summary>
+        /// Gets the computed value for a given key if the key exists, otherwise the key and value are automatically added to the dictionary.The type of value to retrieve or add.
+        /// </summary>
+        /// <typeparam name="TKey">The type of key used for the retrieval or adding of the value.</typeparam>
+        /// <typeparam name="TValue">The type of value to retrieve or add.</typeparam>
+        /// <param name="source">The current <see cref="IDictionary{TKey, TValue}"/> instance.</param>
+        /// <param name="key">The key used to either retrieve or add a value to the dictionary.</param>
+        /// <param name="func">The function used to compute the value, that is to be retrieved or added.</param>
+        /// <returns>The retrieved or added value for the key in the dictionary.</returns>
+        /// <seealso cref="http://www.codeducky.org/10-utilities-c-developers-should-know-part-two/"/>
+        public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, Func<TKey, TValue> func)
+        {
+            TValue value;
+            if (!source.TryGetValue(key, out value))
+            {
+                source.Add(key, value = func(key));
+            }
+            return value;
+        }
+
+        /// <summary>
         /// Produces a union of a sequence and a singleton based on a precondition.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of the source sequence</typeparam>
