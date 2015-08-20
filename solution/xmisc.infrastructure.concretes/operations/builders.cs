@@ -113,17 +113,12 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
             {
                 return convertible.ToString(CultureInfo.InvariantCulture);
             }
-            var guid = value as Guid?;
-            if (guid.HasValue)
-            {
-                return guid.Value.ToString();
-            }
 
-            var datetime = value as DateTime?;
-            if (datetime.HasValue)
-            {
-                return string.Format("{0}", datetime.Value.Ticks);
-            }
+            if (value is Guid) 
+                return ((Guid) value).ToString();
+
+            if (value is DateTime)
+                return string.Format("{0}", ((DateTime) value).Ticks);
 
             var builder = value as ICacheKeyBuilder<string>;
             if (builder != null)
@@ -210,11 +205,12 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
                 return new Guid(bytes.Hash(new MD5CryptoServiceProvider()));
             }
 
-            var datetime = value as DateTime?;
-            if (datetime.HasValue)
+            if (value is Guid) return (Guid) value;
+
+            if (value is DateTime)
             {
-                var dtvalue = datetime.Value.Ticks;
-                var bytes = BitConverter.GetBytes(dtvalue);
+                var datetime = ((DateTime)value).Ticks;
+                var bytes = BitConverter.GetBytes(datetime);
                 return new Guid(bytes.Hash(new MD5CryptoServiceProvider()));
             }
 
