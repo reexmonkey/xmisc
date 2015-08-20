@@ -41,7 +41,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="xmisc.infrastructure.contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\xmisc.infrastructure.contracts.1.0.61-rc-3d8266e\lib\net40\xmisc.infrastructure.contracts.dll</HintPath>
+      <HintPath>..\packages\xmisc.infrastructure.contracts.1.0.68-rc-558ed3e\lib\net40\xmisc.infrastructure.contracts.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
