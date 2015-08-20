@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="builders.cs" />
     <Compile Include="enums.cs" />
     <Compile Include="factories.cs" />
     <Compile Include="generators.cs" />

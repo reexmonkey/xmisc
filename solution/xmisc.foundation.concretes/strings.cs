@@ -155,16 +155,11 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>The string, in which specified substrings are replaced</returns>
         public static string Replace(this string value, IEnumerable<Tuple<string, string>> pairs)
         {
-            try
+            foreach (var pair in pairs)
             {
-                foreach (var pair in pairs)
-                {
-                    if (!string.IsNullOrEmpty(value)) value = value.Replace(pair.Item1, pair.Item2);
-                }
-                return value;
+                if (!string.IsNullOrEmpty(value)) value = value.Replace(pair.Item1, pair.Item2);
             }
-            catch (ArgumentNullException) { throw; }
-            catch (ArgumentException) { throw; }
+            return value;
         }
 
         /// <summary>

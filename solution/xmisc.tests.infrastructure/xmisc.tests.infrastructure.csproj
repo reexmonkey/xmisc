@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="builder.tests.cs" />
     <Compile Include="dummies.cs" />
     <Compile Include="factory.tests.cs" />
     <Compile Include="generator.tests.cs" />

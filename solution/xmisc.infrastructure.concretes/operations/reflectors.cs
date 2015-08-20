@@ -71,7 +71,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
     /// <summary>
     /// Represents a basic property structure of a generic instance
     /// </summary>
-    public class PropertyElement<TValue>
+    public class PropertyElement<TInstance>
     {
         /// <summary>
         /// Gets or sets the name of the property
@@ -81,7 +81,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
         /// <summary>
         /// Gets or sets the values of the property in case the property is indexed, otherwise the first element is the value
         /// </summary>
-        public IEnumerable<TValue> Values { get; set; }
+        public IEnumerable<TInstance> Values { get; set; }
 
         /// <summary>
         /// Checks if the property has indexed values
@@ -97,7 +97,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
         public PropertyElement()
         {
             Name = string.Empty;
-            Values = new List<TValue>();
+            Values = new List<TInstance>();
         }
 
         /// <summary>
@@ -105,19 +105,19 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
         /// </summary>
         /// <param name="name">The name of the property</param>
         /// <param name="values">The values of the property in case the property is indexed, otherwise the first element is the value</param>
-        public PropertyElement(string name, IEnumerable<TValue> values)
+        public PropertyElement(string name, IEnumerable<TInstance> values)
         {
             Name = name;
-            Values = new List<TValue>(values);
+            Values = new List<TInstance>(values);
         }
 
         /// <summary>
         /// Clones this instance
         /// </summary>
         /// <returns>A clone of this instance</returns>
-        public PropertyElement<TValue> Clone()
+        public PropertyElement<TInstance> Clone()
         {
-            return new PropertyElement<TValue>(this.Name, this.Values);
+            return new PropertyElement<TInstance>(this.Name, this.Values);
         }
     }
 
@@ -385,24 +385,24 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
             return assembly;
         }
 
-        public static Assembly GetAssembly<TValue>(this TValue value)
+        public static Assembly GetAssembly<TInstance>(this TInstance value)
         {
             Assembly assembly = null;
             try
             {
-                assembly = Assembly.GetAssembly(typeof(TValue));
+                assembly = Assembly.GetAssembly(typeof(TInstance));
             }
             catch (ArgumentNullException) { throw; }
             catch (Exception) { throw; }
             return assembly;
         }
 
-        public static Assembly GetAssembly<TValue>()
+        public static Assembly GetAssembly<TInstance>()
         {
             Assembly assembly = null;
             try
             {
-                assembly = Assembly.GetAssembly(typeof(TValue));
+                assembly = Assembly.GetAssembly(typeof(TInstance));
             }
             catch (ArgumentNullException) { throw; }
             catch (Exception) { throw; }
@@ -421,12 +421,12 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
             return path;
         }
 
-        public static string GetAssemblyPath<TValue>(this TValue value)
+        public static string GetAssemblyPath<TInstance>(this TInstance value)
         {
             string path = string.Empty;
             try
             {
-                path = Assembly.GetAssembly(typeof(TValue)).Location;
+                path = Assembly.GetAssembly(typeof(TInstance)).Location;
             }
             catch (System.ArgumentNullException)
             {
@@ -462,12 +462,12 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
             return paths.ToArray();
         }
 
-        public static string[] GetAssembyPaths<TValue>(this TValue[] objects)
+        public static string[] GetAssembyPaths<TInstance>(this TInstance[] objects)
         {
             IEnumerable<string> paths = null;
             try
             {
-                paths = objects.Select(x => Assembly.GetAssembly(typeof(TValue)).Location);
+                paths = objects.Select(x => Assembly.GetAssembly(typeof(TInstance)).Location);
             }
             catch (ArgumentNullException) { throw; }
             catch (Exception) { throw; }

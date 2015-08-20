@@ -5,7 +5,7 @@ namespace reexjungle.xmisc.infrastructure.contracts
     /// <summary>
     /// Specifies a factory contract to create instances of a given type based on the registered constructor of the type.
     /// </summary>
-    public interface IFactory
+    public interface ISimpleFactory
     {
         /// <summary>
         /// Creates an instance of a type based on its registered constructor.

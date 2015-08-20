@@ -8,7 +8,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
     /// Provides a facory for creating instances of given type.
     /// </summary>
     public class Factory :
-        IFactory,
+        ISimpleFactory,
         IKeyedFactory<string>,
         IKeyedFactory<Guid>,
         IKeyedFactory<int>,
@@ -65,6 +65,10 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
             }
         }
 
+        /// <summary>
+        /// Unregisters a type constructor from the factory.
+        /// </summary>
+        /// <typeparam name="TValue">The type of the constructor, which is to be unregistered.</typeparam>
         public void Unregister<TValue>()
         {
             var key = typeof(TValue);
@@ -162,7 +166,7 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
         /// The specific constructor is resolved through the key.
         /// </summary>
         /// <param name="key">The key to find the constructor of the type</param>
-        /// <typeparam name="TValue">The type of instances to be created by the factory.</typeparam
+        /// <typeparam name="TValue">The type of instances to be created by the factory.</typeparam>
         /// <returns>The created instance of the type</returns>
         public TValue Create<TValue>(int key)
         {
@@ -188,6 +192,10 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
             }
         }
 
+        /// <summary>
+        /// Unregisters a keyed type constructor from the factory.
+        /// </summary>
+        /// <param name="key">The key to resolve the type constructor.</param>
         public void Unregister(int key)
         {
             if (imap.ContainsKey(key))

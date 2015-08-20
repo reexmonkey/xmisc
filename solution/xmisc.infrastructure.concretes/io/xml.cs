@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Runtime.Serialization;
+﻿using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -11,71 +9,37 @@ namespace reexjungle.xmisc.infrastructure.concretes.io
     {
         #region xml serialization
 
-        private static void SerializeToXml<TValue>(this TValue value, XmlWriter xw, XmlSerializer xs, bool warning, bool flush)
+        private static void SerializeToXml<TInstance>(this TInstance value, XmlWriter xw, XmlSerializer xs, bool warning, bool flush)
         {
             if (warning) xw.WriteComment("warning");
             xs.Serialize(xw, value);
             if (flush) xw.Flush();
         }
 
-        public static Stream WriteToXml<TValue>(this TValue value, Stream stream)
+        public static Stream WriteToXml<TInstance>(this TInstance value, Stream stream)
         {
-            var type = typeof(TValue);
-            try
-            {
-                var xs = new XmlSerializer(type);
-                var settings = new XmlWriterSettings { Indent = true, IndentChars = "    " };
-                var xw = XmlWriter.Create(stream, settings);
-                value.SerializeToXml(xw, xs, true, true);
-            }
-            catch (SerializationException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-            }
-
+            var type = typeof(TInstance);
+            var xs = new XmlSerializer(type);
+            var settings = new XmlWriterSettings { Indent = true, IndentChars = "    " };
+            var xw = XmlWriter.Create(stream, settings);
+            value.SerializeToXml(xw, xs, true, true);
             return stream;
         }
 
-        public static TextWriter WriteToXml<TValue>(this TValue value, TextWriter writer)
+        public static TextWriter WriteToXml<TInstance>(this TInstance value, TextWriter writer)
         {
-            var type = typeof(TValue);
-            try
-            {
-                var xs = new XmlSerializer(type);
-                var settings = new XmlWriterSettings { Indent = true, IndentChars = "    " };
-                var xw = XmlWriter.Create(writer, settings);
-                value.SerializeToXml(xw, xs, true, true);
-            }
-            catch (SerializationException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-            }
-
+            var type = typeof(TInstance);
+            var xs = new XmlSerializer(type);
+            var settings = new XmlWriterSettings { Indent = true, IndentChars = "    " };
+            var xw = XmlWriter.Create(writer, settings);
+            value.SerializeToXml(xw, xs, true, true);
             return writer;
         }
 
-        public static void WriteToXml<TValue>(this TValue value, string path)
+        public static void WriteToXml<TInstance>(this TInstance value, string path)
         {
-            try
-            {
-                using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write)) value.WriteToXml(fs);
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.ToString());
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.ToString());
-            }
+            using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write)) 
+                value.WriteToXml(fs);
         }
 
         #endregion xml serialization

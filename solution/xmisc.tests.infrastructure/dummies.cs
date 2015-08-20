@@ -28,6 +28,8 @@ namespace xmisc.tests.infrastructure
         {
         }
 
+        public Guid LicenseKey { get; set; }
+
         public Fpi Code { get; set; }
 
         public string Name { get; set; }

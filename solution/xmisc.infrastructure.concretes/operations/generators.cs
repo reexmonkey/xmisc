@@ -325,16 +325,16 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
     /// <summary>
     /// Represents a content generator
     /// </summary>
-    /// <typeparam name="TValue">The type of content to generate</typeparam>
-    public class ContentGenerator<TValue> : IGenerator<TValue>
+    /// <typeparam name="TInstance">The type of content to generate</typeparam>
+    public class ContentGenerator<TInstance> : IGenerator<TInstance>
     {
-        private readonly Func<TValue> rule;
+        private readonly Func<TInstance> rule;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ContentGenerator&lt;Tvalue&gt;"/> class.
         /// </summary>
         /// <param name="rule"></param>
-        public ContentGenerator(Func<TValue> rule)
+        public ContentGenerator(Func<TInstance> rule)
         {
             if (rule == null) throw new ArgumentNullException("rule");
             this.rule = rule;
@@ -344,11 +344,11 @@ namespace reexjungle.xmisc.infrastructure.concretes.operations
         /// Generates a value and returns it.
         /// </summary>
         /// <returns>The next generated value.</returns>
-        public TValue GetNext()
+        public TInstance GetNext()
         {
             return (rule != null) 
                 ? rule()
-                : default(TValue);
+                : default(TInstance);
         }
     }
 }
