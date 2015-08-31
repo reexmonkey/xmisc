@@ -76,7 +76,7 @@ namespace reexjungle.xmisc.technical.data.contracts
     /// </summary>
     /// <typeparam name="TEntity">Type of entity to write to repository</typeparam>
     /// <typeparam name="TKey">Type of unique identifier for writing entities</typeparam>
-    public interface IWriteRepository<TEntity, in TKey>
+    public interface IWriteRepository<in TEntity, in TKey>
        where TKey : IEquatable<TKey>, IComparable<TKey>
     {
         /// <summary>
@@ -91,7 +91,7 @@ namespace reexjungle.xmisc.technical.data.contracts
         /// <param name="source">The source containing patch details</param>
         /// <param name="fields">Specfies which fields are used for the patching. The fields are specified in an anonymous variable</param>
         /// <param name="keys">Filters the entities to patch by keys. No filter implies all entities are patched</param>
-        void Patch(TEntity source, Expression<Func<TEntity, object>> fields, IEnumerable<TKey> keys = null);
+        void Patch(TEntity source, IEnumerable<string> fields, IEnumerable<TKey> keys = null);
 
         /// <summary>
         /// Erases an entity from the repository based on a unique identifier
