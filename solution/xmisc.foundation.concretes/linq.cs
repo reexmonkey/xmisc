@@ -30,7 +30,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>True if the sequence is null or empty.</returns>
         public static bool NullOrEmpty<TSource>(this IEnumerable<TSource> source)
         {
-            return (source != null) && !source.Any();
+            return !(source != null && source.Any());
         }
 
         /// <summary>
