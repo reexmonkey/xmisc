@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentValidation, Version=5.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.5.6.2.0\lib\portable-net40+sl50+wp80+win8+wpa81\FluentValidation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="extensions\fluentvalidation.cs" />
     <Compile Include="io\codedom.cs" />
     <Compile Include="netfx\System\SequentialGuid.cs" />
     <Compile Include="operations\builders.cs" />
@@ -54,6 +59,7 @@
     <Compile Include="operations\enums.cs" />
     <Compile Include="operations\factories.cs" />
     <Compile Include="operations\generators.cs" />
+    <Compile Include="operations\validation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="operations\reflectors.cs" />
     <Compile Include="io\xml.cs" />
@@ -75,6 +81,7 @@
       <Name>xmisc.infrastructure.contracts</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

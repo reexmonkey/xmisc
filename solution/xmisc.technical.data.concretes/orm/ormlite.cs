@@ -2040,14 +2040,14 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
         {
             if (entities == null) throw new ArgumentNullException("entities");
 
-            if (!other.SafeEmpty())
+            if (!other.NullOrEmpty())
             {
                 var incoming = entities.Except(other).ToArray();
-                if (!incoming.SafeEmpty()) db.SaveAll(incoming);
+                if (!incoming.NullOrEmpty()) db.SaveAll(incoming);
 
                 var outgoing = other.Except(entities).ToArray();
 
-                if (!outgoing.SafeEmpty())
+                if (!outgoing.NullOrEmpty())
                     db.DeleteByIds<TEntity>(outgoing.Select(y => y.Id));
             }
             else db.SaveAll(entities);
@@ -2096,7 +2096,7 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             where TKey : IEquatable<TKey>, IComparable<TKey>
             where TEntity : class, IContainsKey<TKey>, new()
         {
-            if (!entities.SafeEmpty())
+            if (!entities.NullOrEmpty())
                 db.DeleteByIds<TEntity>(entities.Select(x => x.Id));
         }
 
@@ -2110,7 +2110,7 @@ namespace reexjungle.xmisc.technical.data.concretes.orm
             where TKey : IEquatable<TKey>, IComparable<TKey>
             where TEntity : class, IContainsKey<TKey>, new()
         {
-            if (!entities.SafeEmpty())
+            if (!entities.NullOrEmpty())
                 db.DeleteByIds<TEntity>(entities.Select(x => x.Id), transaction);
         }
 

@@ -49,13 +49,13 @@ namespace reexjungle.xmisc.technical.data.concretes.nosql
             where TKey : IEquatable<TKey>, IComparable<TKey>
             where TEntity : class, IContainsKey<TKey>, new()
         {
-            if (!other.SafeEmpty())
+            if (!other.NullOrEmpty())
             {
                 var incoming = entities.Except(other).ToList();
-                if (!incoming.SafeEmpty()) transaction.QueueCommand(x => x.StoreAll(incoming));
+                if (!incoming.NullOrEmpty()) transaction.QueueCommand(x => x.StoreAll(incoming));
 
                 var outgoing = other.Except(entities).ToList();
-                if (!outgoing.SafeEmpty())
+                if (!outgoing.NullOrEmpty())
                     transaction.QueueCommand(x => x.As<TEntity>().DeleteByIds(outgoing.Select(y => y.Id)));
             }
             else transaction.QueueCommand(x => x.StoreAll(entities));
@@ -86,7 +86,7 @@ namespace reexjungle.xmisc.technical.data.concretes.nosql
             where TKey : IEquatable<TKey>, IComparable<TKey>
             where TEntities : class, IContainsKey<TKey>, new()
         {
-            if (!entities.SafeEmpty())
+            if (!entities.NullOrEmpty())
             {
                 transaction.QueueCommand(x => x.As<TEntities>().DeleteByIds(entities.Select(y => y.Id)));
             }

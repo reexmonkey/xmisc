@@ -19,18 +19,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>True if the sequence is empty; otherwise false.</returns>
         public static bool Empty<TSource>(this IEnumerable<TSource> source)
         {
-            return (!source.Any());
-        }
-
-        /// <summary>
-        /// Checks whether a sequence is empty after its nullness has been tested.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements of the input sequence</typeparam>
-        /// <param name="source">A sequence that contains elements to be tested and counted</param>
-        /// <returns>True if the sequence is empty; otherwise false.</returns>
-        public static bool SafeEmpty<TSource>(this IEnumerable<TSource> source)
-        {
-            return (source != null) && !source.Any();
+            return !source.Any();
         }
 
         /// <summary>
@@ -41,7 +30,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>True if the sequence is null or empty.</returns>
         public static bool NullOrEmpty<TSource>(this IEnumerable<TSource> source)
         {
-            return (!(source != null && source.Any()));
+            return (source != null) && !source.Any();
         }
 
         /// <summary>
@@ -130,7 +119,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <param name="second">Another sequence that contains elements to be tested</param>
         /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
         /// <returns>True, if the sequence does not intersect the other; otherwise false</returns>
-        public static bool NonIntersects<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null)
+        public static bool IsDisjointOf<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null)
         {
             return !first.Intersect(second, comparer).Any();
         }
@@ -185,7 +174,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>The union of the two sequences after filtration of the second sequence</returns>
         public static IEnumerable<TSource> Union<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, Func<TSource, bool> predicate, IEqualityComparer<TSource> comparer = null)
         {
-            return !second.NullOrEmpty() ? first.Union(second.Where(x => predicate(x)), comparer) : first;
+            return !second.NullOrEmpty() ? first.Union(second.Where(predicate), comparer) : first;
         }
 
         /// <summary>
@@ -198,7 +187,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>The union of the two sequences after filtration of the second sequence</returns>
         public static IEnumerable<TSource> Concat<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, Func<TSource, bool> predicate)
         {
-            return first.Concat(second).Where(x => predicate(x));
+            return first.Concat(second).Where(predicate);
         }
 
         /// <summary>
@@ -211,8 +200,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>A union of the two sequences, where only non-existing elements of the first sequence are selected from the second sequence</returns>
         public static IEnumerable<TSource> Merge<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null)
         {
-            if (second != null) return first.Union(second, comparer);
-            return first;
+            return second != null ? first.Union(second, comparer) : first;
         }
 
         /// <summary>
@@ -224,8 +212,6 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
         public static void MergeRange<TSource>(this List<TSource> origin, IEnumerable<TSource> values, IEqualityComparer<TSource> comparer = null)
         {
-            if (values == null) throw new ArgumentNullException("values", "Sequence must be not null");
-
             var incoming = values.Except(origin.Distinct(), comparer);
             if (!incoming.NullOrEmpty()) origin.AddRange(incoming);
         }
@@ -276,11 +262,11 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <typeparam name="TSource">The type of the elements of the source sequence</typeparam>
         /// <param name="source">A sequence of elements</param>
         /// <param name="value">The element to be added</param>
-        /// <param name="precondition">The filter to determine whether the element is added to the sequence</param>
+        /// <param name="predicate">The filter to determine whether the element is added to the sequence</param>
         /// <returns></returns>
-        public static IEnumerable<TSource> Union<TSource>(this IEnumerable<TSource> source, TSource value, bool precondition)
+        public static IEnumerable<TSource> Union<TSource>(this IEnumerable<TSource> source, TSource value, Func<bool> predicate)
         {
-            return precondition ? source.Union(value.ToSingleton()) : source;
+            return predicate() ? source.Union(value.ToSingleton()) : source;
         }
 
         /// <summary>
@@ -291,7 +277,7 @@ namespace reexjungle.xmisc.foundation.concretes
         /// <returns>A singleton</returns>
         public static IEnumerable<TSource> ToSingleton<TSource>(this TSource value)
         {
-            return new TSource[] { value };
+            return Enumerable.Repeat(value, 1);
         }
     }
 }

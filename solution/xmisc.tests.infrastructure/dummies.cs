@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using reexjungle.xmisc.foundation.concretes;
 
 namespace xmisc.tests.infrastructure
@@ -72,6 +73,54 @@ namespace xmisc.tests.infrastructure
         public static bool operator !=(Person left, Person right)
         {
             return !Equals(left, right);
+        }
+    }
+
+    public class Teacher : Person
+    {
+        public string School { get; set; }
+
+        public List<Course> Courses { get; set; }
+
+        public Teacher()
+        {
+            Salary = 1000;
+            Courses = new List<Course>();
+        }
+    }
+
+    public class Student : Person
+    {
+        public string School { get; set; }
+
+        public string MatriculationId { get; set; }
+
+        public double Gpa { get; set; }
+
+        public List<Course> Courses;
+
+        public Student()
+        {
+            Salary = 0;
+            Courses = new List<Course>();
+        }
+
+    }
+
+    public class Course
+    {
+        public string Code { get; set; }
+
+        public string Title { get; set; }
+    }
+
+    public class University
+    {
+        public List<Person> Members { get; set; }
+
+        public University()
+        {
+            Members =new List<Person>();
         }
     }
 }
