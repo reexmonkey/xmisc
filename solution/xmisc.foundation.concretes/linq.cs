@@ -237,7 +237,7 @@ namespace reexjungle.xmisc.foundation.concretes
         }
 
         /// <summary>
-        /// Gets the computed value for a given key if the key exists, otherwise the key and value are automatically added to the dictionary.The type of value to retrieve or add.
+        /// Gets the value for a given key if the key exists, otherwise the key and value are automatically added to the dictionary.The type of value to retrieve or add.
         /// </summary>
         /// <typeparam name="TKey">The type of key used for the retrieval or adding of the value.</typeparam>
         /// <typeparam name="TValue">The type of value to retrieve or add.</typeparam>
@@ -254,6 +254,40 @@ namespace reexjungle.xmisc.foundation.concretes
                 source.Add(key, value = func(key));
             }
             return value;
+        }
+
+        /// <summary>
+        /// Gets the value for a given key if the key exists, otherwise the default value is retrieved.The type of value to retrieve or add..
+        /// </summary>
+        /// <typeparam name="TKey">The type of key used for the retrieval.</typeparam>
+        /// <typeparam name="TValue">The type of value to retrieve.</typeparam>
+        /// <param name="source">The current <see cref="IDictionary{TKey, TValue}"/> instance.</param>
+        /// <param name="key">The key used to either retrieve the value from the dictionary.</param>
+        /// <returns>The retrieved value in the dictionary if it exists; otherwise the default value of <typeparamref name="TValue"/> is retrieved.</returns>
+        public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key)
+        {
+            TValue value;
+            return !(source.TryGetValue(key, out value))
+                ? value
+                : default(TValue);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="key"></param>
+        /// <param name="selector"></param>
+        /// <returns></returns>
+        public static TResult GetResultOrDefault<TKey, TValue, TResult>(this IDictionary<TKey, TValue> source, TKey key, Func<TValue, TResult> selector)
+        {
+            TValue value;
+            return source.TryGetValue(key, out value)
+                ? selector(value)
+                : default(TResult);
         }
 
         /// <summary>

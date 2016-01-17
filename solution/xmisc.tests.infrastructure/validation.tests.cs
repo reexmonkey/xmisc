@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using FluentValidation;
 using reexjungle.xmisc.foundation.concretes;
 using reexjungle.xmisc.infrastructure.concretes.extensions;
@@ -13,9 +9,9 @@ namespace xmisc.tests.infrastructure
 
     public class CourseValidator : AbstractValidator<Course>
     {
-        public CourseValidator()
+        public CourseValidator(CascadeMode mode = CascadeMode.StopOnFirstFailure)
         {
-            CascadeMode mode = CascadeMode.StopOnFirstFailure;
+            CascadeMode = mode;
             RuleFor(x => x.Code).Length(3, 7).When(x => !string.IsNullOrEmpty(x.Code));
             RuleFor(x => x.Title).Length(10, 20).When(x => !string.IsNullOrEmpty(x.Title));
         }
@@ -23,8 +19,9 @@ namespace xmisc.tests.infrastructure
 
     public class StudentValidatorA : AbstractValidator<Student>
     {
-        public StudentValidatorA()
+        public StudentValidatorA(CascadeMode mode = CascadeMode.StopOnFirstFailure)
         {
+            CascadeMode = mode;
             RuleFor(x => x.Salary).Equal(0);
             RuleFor(x => x.Courses).SetCollectionValidator(new CourseValidator()).Unless(x => x.Courses.NullOrEmpty());
         }
@@ -32,8 +29,9 @@ namespace xmisc.tests.infrastructure
 
     public class StudentValidatorB : AbstractValidator<Student>
     {
-        public StudentValidatorB()
+        public StudentValidatorB(CascadeMode mode = CascadeMode.StopOnFirstFailure)
         {
+            CascadeMode = mode;
             RuleFor(x => x.MatriculationId).Length(7, 12).Unless(x => string.IsNullOrEmpty(x.MatriculationId));
             RuleFor(x => x.Courses).SetCollectionValidator(new CourseValidator()).Unless(x => x.Courses.NullOrEmpty());
         }
@@ -42,8 +40,9 @@ namespace xmisc.tests.infrastructure
 
     public class TeacherValidator : AbstractValidator<Teacher>
     {
-        public TeacherValidator()
+        public TeacherValidator(CascadeMode mode = CascadeMode.StopOnFirstFailure)
         {
+            CascadeMode = mode;
             RuleFor(x => x.Salary).Equal(1000);
             RuleFor(x => x.Courses).SetCollectionValidator(new CourseValidator()).Unless(x => x.Courses.NullOrEmpty());
         }
@@ -51,8 +50,9 @@ namespace xmisc.tests.infrastructure
 
     public class UniversityValidator : AbstractValidator<University>
     {
-        public UniversityValidator()
+        public UniversityValidator(CascadeMode mode = CascadeMode.StopOnFirstFailure)
         {
+            CascadeMode = mode;
             RuleFor(x => x.Members).SetCollectionValidators(
                 new StudentValidatorA(), 
                 new StudentValidatorA(),
@@ -64,8 +64,9 @@ namespace xmisc.tests.infrastructure
     public class ValidationTests
     {
         [Fact]
-        public void TestUniversityValidation()
+        public void TestUniversityValidation(CascadeMode mode = CascadeMode.StopOnFirstFailure)
         {
+
             var university = new University
             {
                 Members = new List<Person>
