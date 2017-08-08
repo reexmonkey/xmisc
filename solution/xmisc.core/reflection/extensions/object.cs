@@ -10,13 +10,22 @@ using reexmonkey.xmisc.core.reflection.infrastructure;
 
 namespace reexmonkey.xmisc.core.reflection.extensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class ObjectExtensions
     {
-
+        /// <summary>
+        /// Gets the property.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source.</typeparam>
+        /// <param name="name">The name.</param>
+        /// <param name="flags">The flags.</param>
+        /// <returns></returns>
         public static Func<TSource, object> GetProperty<TSource>(string name, BindingFlags flags = BindingFlags.Public)
         {
             var type = typeof(TSource);
-            var pi = type.GetProperty(name, flags);
+            var pi = type.GetTypeInfo().GetProperty(name, flags);
             if (pi == null || !pi.CanRead) return null;
             var gettermi = pi.GetGetMethod();
             var entity = Expression.Parameter(type);
@@ -29,7 +38,7 @@ namespace reexmonkey.xmisc.core.reflection.extensions
         public static IEnumerable<Func<TSource, object>> GetProperties<TSource>(BindingFlags flags = BindingFlags.Public)
         {
             var type = typeof(TSource);
-            var properties = type.GetProperties(flags).Where(x => x.CanRead);
+            var properties = type.GetTypeInfo().GetProperties(flags).Where(x => x.CanRead);
             foreach (var pi in properties)
             {
                 var gettermi = pi.GetGetMethod();
@@ -49,7 +58,7 @@ namespace reexmonkey.xmisc.core.reflection.extensions
         public static Dictionary<string, Property> GetProperties(this object source)
         {
             var properties = new Dictionary<string, Property>();
-            foreach (var property in source.GetType().GetProperties())
+            foreach (var property in source.GetType().GetTypeInfo().GetProperties())
             {
                 var parameters = property.GetIndexParameters();
                 var values = new List<object>(parameters.Length);
@@ -80,7 +89,7 @@ namespace reexmonkey.xmisc.core.reflection.extensions
             foreach (var pair in map)
             {
                 if (pair.Value.Values.Count == 0) continue;
-                var pi = type.GetProperty(pair.Key);
+                var pi = type.GetTypeInfo().GetProperty(pair.Key);
                 if (pi == null) continue;
                 if (pair.Value.IsIndexed)
                 {
@@ -104,7 +113,7 @@ namespace reexmonkey.xmisc.core.reflection.extensions
             foreach (var tuple in tupleList)
             {
                 if (tuple.property.Values.Count == 0) continue;
-                var pi = type.GetProperty(tuple.name);
+                var pi = type.GetTypeInfo().GetProperty(tuple.name);
                 if (pi == null) continue;
                 if (tuple.property.IsIndexed)
                 {
@@ -127,7 +136,7 @@ namespace reexmonkey.xmisc.core.reflection.extensions
         {
             var stype = source.GetType();
             var ttype = target.GetType();
-            foreach (var properties in stype.GetProperties())
+            foreach (var properties in stype.GetTypeInfo().GetProperties())
             {
                 var indexparams = properties.GetIndexParameters();
                 if (indexparams.Length != 0)
@@ -136,13 +145,13 @@ namespace reexmonkey.xmisc.core.reflection.extensions
                     {
                         var pindex = new object[] { index };
                         if (target is string) target = properties.GetValue(source, pindex);
-                        else ttype.GetProperty(properties.Name)?.SetValue(target, properties.GetValue(source, pindex), pindex);
+                        else ttype.GetTypeInfo().GetProperty(properties.Name)?.SetValue(target, properties.GetValue(source, pindex), pindex);
                     }
                 }
                 else
                 {
                     if (target is string) target = properties.GetValue(source, null);
-                    else target.GetType().GetProperty(properties.Name)?.SetValue(target, properties.GetValue(source, null), null);
+                    else target.GetType().GetTypeInfo().GetProperty(properties.Name)?.SetValue(target, properties.GetValue(source, null), null);
                 }
             }
 
@@ -156,10 +165,10 @@ namespace reexmonkey.xmisc.core.reflection.extensions
             {
                 var type = typeof(T);
                 var diff =
-                    from pi in type.GetProperties(flags)
+                    from pi in type.GetTypeInfo().GetProperties(flags)
                     where !ignore.Contains(pi.Name)
-                    let self = type.GetProperty(pi.Name)?.GetValue(instance, null)
-                    let foreign = type.GetProperty(pi.Name)?.GetValue(other, null)
+                    let self = type.GetTypeInfo().GetProperty(pi.Name)?.GetValue(instance, null)
+                    let foreign = type.GetTypeInfo().GetProperty(pi.Name)?.GetValue(other, null)
                     where self != foreign && (self == null || !self.Equals(foreign))
                     select self;
                 return !diff.Any();
@@ -176,10 +185,10 @@ namespace reexmonkey.xmisc.core.reflection.extensions
                 var type = typeof(T);
                 var ignoreList = new List<string>(ignore);
                 var diff =
-                    from pi in type.GetProperties(flags)
+                    from pi in type.GetTypeInfo().GetProperties(flags)
                     where !ignoreList.Contains(pi.Name)
-                    let self = type.GetProperty(pi.Name)?.GetValue(instance, null)
-                    let foreign = type.GetProperty(pi.Name)?.GetValue(other, null)
+                    let self = type.GetTypeInfo().GetProperty(pi.Name)?.GetValue(instance, null)
+                    let foreign = type.GetTypeInfo().GetProperty(pi.Name)?.GetValue(other, null)
                     where self != foreign && (self == null || !self.Equals(foreign))
                     select self;
                 return diff;

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using reexmonkey.xmisc.core.linq.extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using reexmonkey.xmisc.core.linq.extensions;
 
 namespace reexmonkey.xmisc.core.linq.expressions
 {
@@ -23,16 +23,16 @@ namespace reexmonkey.xmisc.core.linq.expressions
                 switch (e.NodeType)
                 {
                     case ExpressionType.Parameter:
-                        return ((ParameterExpression) e).Name;
+                        return ((ParameterExpression)e).Name;
                     case ExpressionType.MemberAccess:
-                        return ((MemberExpression) e).Member.Name;
+                        return ((MemberExpression)e).Member.Name;
                     case ExpressionType.Call:
-                        return ((MethodCallExpression) e).Method.Name;
+                        return ((MethodCallExpression)e).Method.Name;
                     case ExpressionType.Convert:
                     case ExpressionType.ConvertChecked:
-                        return Selector(((UnaryExpression) e).Operand);
+                        return Selector(((UnaryExpression)e).Operand);
                     case ExpressionType.Invoke:
-                        return Selector(((InvocationExpression) e).Expression);
+                        return Selector(((InvocationExpression)e).Expression);
                     case ExpressionType.ArrayLength:
                         return "Length";
                     default:
@@ -55,20 +55,20 @@ namespace reexmonkey.xmisc.core.linq.expressions
                 switch (e.NodeType)
                 {
                     case ExpressionType.Parameter:
-                        return ((ParameterExpression) e).Name.ToSingleton();
+                        return ((ParameterExpression)e).Name.AsSingleton();
                     case ExpressionType.MemberAccess:
-                        return ((MemberExpression) e).Member.Name.ToSingleton();
+                        return ((MemberExpression)e).Member.Name.AsSingleton();
                     case ExpressionType.New:
-                        return ((NewExpression) e).Members.Select(x => x.Name);
+                        return ((NewExpression)e).Members.Select(x => x.Name);
                     case ExpressionType.Call:
-                        return ((MethodCallExpression) e).Method.Name.ToSingleton();
+                        return ((MethodCallExpression)e).Method.Name.AsSingleton();
                     case ExpressionType.Convert:
                     case ExpressionType.ConvertChecked:
-                        return Selector(((UnaryExpression) e).Operand);
+                        return Selector(((UnaryExpression)e).Operand);
                     case ExpressionType.Invoke:
-                        return Selector(((InvocationExpression) e).Expression);
+                        return Selector(((InvocationExpression)e).Expression);
                     case ExpressionType.ArrayLength:
-                        return "Length".ToSingleton();
+                        return "Length".AsSingleton();
                     default:
                         throw new Exception("not a proper member selector");
                 }

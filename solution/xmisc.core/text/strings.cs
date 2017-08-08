@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -34,7 +34,7 @@ namespace reexmonkey.xmisc.core.text
         /// <param name="replacement">The string to replaces each found substring in the string.</param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static string RegexReplace(this string text, string pattern, string replacement, RegexOptions options) 
+        public static string RegexReplace(this string text, string pattern, string replacement, RegexOptions options)
             => Regex.Replace(text, pattern, replacement, options);
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace reexmonkey.xmisc.core.text
         public static string FoldLines(this string text, int max, Encoding encoding, string newline = "\r\n")
         {
             var lines = text.Split(new[] { newline }, StringSplitOptions.RemoveEmptyEntries);
-            using (var stream = new System.IO.MemoryStream(text.Length))
+            using (var stream = new MemoryStream(text.Length))
             {
                 var crlf = encoding.GetBytes(newline); //CRLF
                 var crlfs = encoding.GetBytes($"{newline} "); //CRLF and SPACE
@@ -171,7 +171,7 @@ namespace reexmonkey.xmisc.core.text
             foreach (var target in targets)
             {
                 if (string.IsNullOrEmpty(text)) continue;
-                text = text.Replace(target, escapeString+target);
+                text = text.Replace(target, escapeString + target);
             }
             return text;
         }

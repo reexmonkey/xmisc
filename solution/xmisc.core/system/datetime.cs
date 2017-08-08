@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 
 namespace reexmonkey.xmisc.core.system
 {
@@ -51,7 +50,7 @@ namespace reexmonkey.xmisc.core.system
             //if (endmonth < 1 || endmonth > 12) throw new ArgumentOutOfRangeException("endmonth", "Non-valid value for end month");
             //if (year < 1 || year > 9999) throw new ArgumentOutOfRangeException("year", "Non-valid value for year");
             var days = 0u;
-            for (var month = startmonth; month < endmonth; month++) days += CountDaysInMonth(month,year);
+            for (var month = startmonth; month < endmonth; month++) days += CountDaysInMonth(month, year);
             return days;
         }
 
@@ -419,13 +418,13 @@ namespace reexmonkey.xmisc.core.system
 
         public static DateTime LastDays(this DateTime value, int offset) => value.AddDays(-Math.Abs(offset));
 
-        public static DateTime PreviousWeek(this  DateTime value) => value.AddDays(-7);
+        public static DateTime PreviousWeek(this DateTime value) => value.AddDays(-7);
 
         public static DateTime NextWeek(this DateTime value) => value.AddDays(7);
 
-        public static DateTime NextWeeks(this  DateTime value, int offset) => value.AddDays(7 * Math.Abs(offset));
+        public static DateTime NextWeeks(this DateTime value, int offset) => value.AddDays(7 * Math.Abs(offset));
 
-        public static DateTime PreviousWeeks(this  DateTime value, int offset) => value.AddDays(-7 * Math.Abs(offset));
+        public static DateTime PreviousWeeks(this DateTime value, int offset) => value.AddDays(-7 * Math.Abs(offset));
 
         public static DateTime LastMonth(this DateTime value) => value.AddMonths(-1);
 
@@ -447,10 +446,10 @@ namespace reexmonkey.xmisc.core.system
         /// <param name="format">The format of the generated time stamp</param>
         /// <param name="provider">The format provider for the formattung</param>
         /// <returns>A time stamp value</returns>
-        public static string GenerateTimeStamp(this DateTime source, string format = "yyyyMMddHHmmssfff", IFormatProvider provider = null)
+        public static string GenerateTimeStamp(this DateTime source, IFormatProvider provider, string format = "yyyyMMddHHmmssfff")
         {
-            var formatter = provider ?? Thread.CurrentThread.CurrentCulture;
-            return source.ToString(format, formatter);
+            if (provider == null) throw new ArgumentNullException(nameof(provider));
+            return source.ToString(format, provider);
         }
     }
 }

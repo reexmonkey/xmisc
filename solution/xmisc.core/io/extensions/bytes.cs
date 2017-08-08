@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace reexmonkey.xmisc.core.io.extensions
 {
+    /// <summary>
+    /// Provides extensions to an arraay of <see cref="byte"/>s.
+    /// </summary>
     public static class ByteExtensions
     {
         /// <summary>
@@ -31,7 +32,7 @@ namespace reexmonkey.xmisc.core.io.extensions
         /// </summary>
         /// <param name="arrays">The byte matrix, whose length is to be computed.</param>
         /// <returns>The total number of elements in the byte matrix.</returns>
-        public static long GetLongLength(this byte[][] arrays) => arrays.Where(x => x != null).Sum(array => array.LongLength);
+        public static long GetLongLength(this byte[][] arrays) => arrays.Where(x => x != null).Sum(array => array.LongCount());
 
         /// <summary>
         /// Merges the given array of byte arrays to this byte array into a new byte array.

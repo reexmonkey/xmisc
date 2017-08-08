@@ -18,6 +18,14 @@ namespace reexmonkey.xmisc.core.linq.extensions
         public static bool Empty<TSource>(this IEnumerable<TSource> source) => !source.Any();
 
         /// <summary>
+        /// Safely checks if the sequence of elements is empty.
+        /// </summary>
+        /// <typeparam name="TSource">The type of elements.</typeparam>
+        /// <param name="source">The sequence of elements.</param>
+        /// <returns>True if the sequence is neither null nor empty; otherwise false.</returns>
+        public static bool SafeEmpty<TSource>(this IEnumerable<TSource> source) => source != null && !source.Any();
+
+        /// <summary>
         /// Checks whether a sequence is null or empty.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of the input sequence</typeparam>
@@ -120,15 +128,15 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
         /// <returns>The symmetric difference of the two sequences</returns>
         public static IEnumerable<TSource> SymmetricExcept<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null)
-            => first.Union(second).Except(first.Intersect(second));
+            => first.Union(second, comparer).Except(first.Intersect(second, comparer), comparer);
 
         /// <summary>
-        /// Produces the set intersection of two sequences by using the specified IEqualityComparer<T> to compare values.
+        /// Produces the set intersection of two sequences by using the specified IEqualityComparer{T} to compare values.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of the input sequences</typeparam>
-        /// <param name="first">An IEnumerable<T> whose distinct elements do not appear in second.</param>
-        /// <param name="second">An IEnumerable<T> whose distinct elements do not appear in first</param>
-        /// <param name="comparer">An System.Collections.Generic.IEqualityComparer<T> to compare values</param>
+        /// <param name="first">An IEnumerable{T} whose distinct elements do not appear in second.</param>
+        /// <param name="second">An IEnumerable{T} whose distinct elements do not appear in first</param>
+        /// <param name="comparer">An System.Collections.Generic.IEqualityComparer{T} to compare values</param>
         /// <returns>A sequence that contains the elements that form the set intersection of two sequences</returns>
         public static IEnumerable<TSource> NonIntersect<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null)
             => second
@@ -190,11 +198,9 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <param name="key">The key used to either retrieve or add a value to the dictionary.</param>
         /// <param name="value">The retrieved or added value of the dictionary.</param>
         /// <returns>The retrieved or added value for the key in the dictionary.</returns>
-        /// <seealso cref="http://www.codeducky.org/10-utilities-c-developers-should-know-part-two/"/>
         public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, TValue value)
         {
-            TValue val;
-            if (!source.TryGetValue(key, out val))
+            if (!source.TryGetValue(key, out TValue val))
             {
                 source.Add(key, val = value);
             }
@@ -210,11 +216,9 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <param name="key">The key used to either retrieve or add a value to the dictionary.</param>
         /// <param name="func">The function used to compute the value, that is to be retrieved or added.</param>
         /// <returns>The retrieved or added value for the key in the dictionary.</returns>
-        /// <seealso cref="http://www.codeducky.org/10-utilities-c-developers-should-know-part-two/"/>
         public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, Func<TKey, TValue> func)
         {
-            TValue value;
-            if (!source.TryGetValue(key, out value))
+            if (!source.TryGetValue(key, out TValue value))
             {
                 source.Add(key, value = func(key));
             }
@@ -231,26 +235,32 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <returns>The retrieved value in the dictionary if it exists; otherwise the default value of <typeparamref name="TValue"/> is retrieved.</returns>
         public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key)
         {
-            TValue value;
-            return !source.TryGetValue(key, out value)
-                ? value
-                : default(TValue);
+            return !source.TryGetValue(key, out TValue value)
+    ? value
+    : default(TValue);
         }
 
-
+        /// <summary>
+        /// Produces a concatenation of a sequence and a singleton based on a precondition.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of the source sequence.</typeparam>
+        /// <param name="source">A sequence of elements.</param>
+        /// <param name="value">The element to be concatenated.</param>
+        /// <param name="predicate">The condition that determines whether the element is concatenated to the sequence.</param>
+        /// <returns>A non-distinct sequence of elements that contains the concatenated <paramref name="value"/>.</returns>
         public static IEnumerable<TSource> ConcatOnCondition<TSource>(this IEnumerable<TSource> source, TSource value, Func<bool> predicate)
-            => predicate() ? source.Concat(value.ToSingleton()) : source;
+            => predicate() ? source.Concat(value.AsSingleton()) : source;
 
         /// <summary>
-        /// Produces a union of a sequence and a singleton based on a precondition.
+        /// Produces a distinct union of a sequence and a singleton based on a precondition.
         /// </summary>
-        /// <typeparam name="TSource">The type of the elements of the source sequence</typeparam>
-        /// <param name="source">A sequence of elements</param>
-        /// <param name="value">The element to be added</param>
-        /// <param name="predicate">The filter to determine whether the element is added to the sequence</param>
-        /// <returns></returns>
+        /// <typeparam name="TSource">The type of the elements of the source sequence.</typeparam>
+        /// <param name="source">A sequence of elements.</param>
+        /// <param name="value">The element to be added.</param>
+        /// <param name="predicate">The condition that determines whether the element is added to the sequence.</param>
+        /// <returns>A distinct sequence of elements that contains the added <paramref name="value"/>.</returns>
         public static IEnumerable<TSource> UnionOnCondition<TSource>(this IEnumerable<TSource> source, TSource value, Func<bool> predicate)
-            => predicate() ? source.Union(value.ToSingleton()) : source;
+            => predicate() ? source.Union(value.AsSingleton()) : source;
 
         /// <summary>
         /// Produces a singleton from an element
@@ -258,7 +268,7 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <typeparam name="TSource">The type of the element</typeparam>
         /// <param name="source">The element to be converted to a singleton</param>
         /// <returns>A singleton</returns>
-        public static IEnumerable<TSource> ToSingleton<TSource>(this TSource source) => Enumerable.Repeat(source, 1);
+        public static IEnumerable<TSource> AsSingleton<TSource>(this TSource source) => Enumerable.Repeat(source, 1);
 
         /// <summary>
         /// Produces a singleton from an element
@@ -269,6 +279,6 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <para/> The faster variant internally converts the <paramref name="source"/> to an array; meanwhile the slower variant uses the <see cref="Enumerable"/> class.
         /// </param>
         /// <returns>A singleton</returns>
-        public static IEnumerable<TSource> ToSingleton<TSource>(this TSource source, bool fast) => fast? new []{source}: source.ToSingleton();
+        public static IEnumerable<TSource> AsSingleton<TSource>(this TSource source, bool fast) => fast ? new[] { source } : source.AsSingleton();
     }
 }
