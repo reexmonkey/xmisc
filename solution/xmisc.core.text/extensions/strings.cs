@@ -1,0 +1,254 @@
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+
+namespace reexmonkey.xmisc.core.text.extensions
+{
+    /// <summary>
+    /// Extends the standard text-related features of the <see cref="string"/> class.
+    /// </summary>
+    public static class StringExtensions
+    {
+        /// <summary>
+        /// Extracts hexadecimal digits from a string
+        /// </summary>
+        /// <param name="source">The hexadecimal string from which the digits are extracted</param>
+        /// <returns>An array of extracted hexadecimal digits</returns>
+        public static char[] ExtractHexDigits(this string source)
+        {
+            var regex = new Regex("[abcdefABECDEF\\d]+", RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
+            var extracted = from hex in source
+                            where regex.IsMatch(hex.ToString())
+                            select hex;
+
+            return extracted.ToArray();
+        }
+
+        /// <summary>
+        /// Replaces substrings in a string using a regular expresion pattern.
+        /// </summary>
+        /// <param name="text">The string, whose substrings are identified through pattern-recognition.</param>
+        /// <param name="pattern">The regular expression pattern used in recognizing the substring in the string.</param>
+        /// <param name="replacement">The string to replaces each found substring in the string.</param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public static string RegexReplace(this string text, string pattern, string replacement, RegexOptions options)
+            => Regex.Replace(text, pattern, replacement, options);
+
+        /// <summary>
+        /// Checks if a string matches the specified pattern.
+        /// </summary>
+        /// <param name="text">The string to be checked.</param>
+        /// <param name="pattern">The regular expression pattern used in recognizing the substring in the string.</param>
+        /// <param name="options">Regular expression options to be used in the check.</param>
+        /// <returns></returns>
+        public static bool Match(this string text, string pattern, RegexOptions options) => Regex.IsMatch(text, pattern, options);
+
+        /// <summary>
+        /// Finds substrings in a string based on a pattern and appends a prefix to each found substring.
+        /// </summary>
+        /// <param name="text">The string to be searched</param>
+        /// <param name="prefix">The string to be added at the beginning of each found substring</param>
+        /// <param name="pattern">The regular expression pattern used in recognizing the substrings in the string.</param>
+        /// <param name="options"></param>
+        /// <returns>The original string with </returns>
+        public static string FindAndPrepend(this string text, string prefix, string pattern, RegexOptions options)
+        {
+            var builder = new StringBuilder(text);
+            var matches = Regex.Matches(text, pattern, options);
+            for (var i = 0; i < matches.Count; i++)
+            {
+                var match = matches[i];
+                if (string.IsNullOrEmpty(match.Value)) continue;
+                builder.Replace(match.Value, $"{prefix}{match.Value}");
+            }
+            return builder.ToString();
+        }
+
+        /// <summary>
+        /// Finds and substrings in a string based on a pattern and appends a suffix to each found substring.
+        /// </summary>
+        /// <param name="text">The string to be searched</param>
+        /// <param name="suffix">The string to be added at the beginning of each found substring</param>
+        /// <param name="pattern">The regular expression pattern used in recognizing the substrings in the string.</param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public static string FindAndAppend(this string text, string suffix, string pattern, RegexOptions options)
+        {
+            var builder = new StringBuilder(text);
+            var matches = Regex.Matches(text, pattern);
+            for (var i = 0; i < matches.Count; i++)
+            {
+                var match = matches[i];
+                if (string.IsNullOrEmpty(match.Value)) continue;
+                builder.Replace(match.Value, $"{match.Value}{suffix}");
+            }
+            return builder.ToString();
+        }
+
+        /// <summary>
+        /// Delimits the lines of a string, when they are longer than the allowed maximum length.
+        /// </summary>
+        /// <param name="text">The string, whose lines are folded.</param>
+        /// <param name="max">The maximum limit allowed for each line of the string</param>
+        /// <param name="encoding"></param>
+        /// <param name="newline">The newline characters to delimit the line of the string.</param>
+        /// <returns>The string, whose lines are folded</returns>
+        public static string FoldLines(this string text, int max, Encoding encoding, string newline = "\r\n")
+        {
+            var lines = text.Split(new[] { newline }, StringSplitOptions.RemoveEmptyEntries);
+            using (var stream = new MemoryStream(text.Length))
+            {
+                var crlf = encoding.GetBytes(newline); //CRLF
+                var crlfs = encoding.GetBytes($"{newline} "); //CRLF and SPACE
+                for (var index = 0; index < lines.Length; index++)
+                {
+                    var line = lines[index];
+                    var bytes = encoding.GetBytes(line);
+                    var len = bytes.Length;
+                    if (len <= max)
+                    {
+                        stream.Write(bytes, 0, len);
+                        stream.Write(crlf, 0, crlf.Length);
+                    }
+                    else
+                    {
+                        var blen = len / max; //calculate block length
+                        var rlen = len % max; //calculate remaining length
+                        var b = 0;
+                        while (b < blen)
+                        {
+                            stream.Write(bytes, (b++) * max, max);
+                            stream.Write(crlfs, 0, crlfs.Length);
+                        }
+                        if (rlen > 0)
+                        {
+                            stream.Write(bytes, blen * max, rlen);
+                            stream.Write(crlf, 0, crlf.Length);
+                        }
+                    }
+                }
+
+                return encoding.GetString(stream.ToArray());
+            }
+        }
+
+        /// <summary>
+        /// Unfolds the lines of a string, which have been delimited to a specified length.
+        /// </summary>
+        /// <param name="text">The string, whose lines are unfolded.</param>
+        /// <param name="newline">The newline characters, which were used to delimit the string to lines.</param>
+        /// <returns>The string, whose lines are unfolded.</returns>
+        public static string UnfoldLines(this string text, string newline = "\r\n") => text.Replace($"{newline} ", string.Empty);
+
+        /// <summary>
+        /// Replaces the occurences of a first item of each tuple of strings in the current string instance with the second item of the tuple.
+        /// </summary>
+        /// <param name="text">The current string instance.</param>
+        /// <param name="pairs">A enumerable collection of string tuples.</param>
+        /// <returns>The string, in which specified substrings are replaced</returns>
+        public static string Replace(this string text, params (string first, string second)[] pairs)
+        {
+            foreach (var pair in pairs)
+            {
+                if (string.IsNullOrEmpty(text)) continue;
+                text = text.Replace(pair.first, pair.second);
+            }
+            return text;
+        }
+
+        /// <summary>
+        /// Escapes the occurences of all specified <paramref name="targets"/> with the <see cref="string"/> <paramref name="text"/>.
+        /// </summary>
+        /// <param name="text">The string whose members require to be escaped.</param>
+        /// <param name="escapeString">The string used to escape each target.</param>
+        /// <param name="targets">The members in the string <paramref name="text"/> that have to be escpaed.</param>
+        /// <returns>The string, in which all target members have been escaped.</returns>
+        public static string Escape(this string text, string escapeString, params string[] targets)
+        {
+            foreach (var target in targets)
+            {
+                if (string.IsNullOrEmpty(text)) continue;
+                text = text.Replace(target, escapeString + target);
+            }
+            return text;
+        }
+
+        /// <summary>
+        /// Converts text to another string format using the provided character encoding.
+        /// </summary>
+        /// <param name="text">The string to convert.</param>
+        /// <param name="encoding">The encoding used to convert the given <paramref name="text"/>.</param>
+        /// <returns>The encoded text equivalent.</returns>
+        public static string AsEncoded(this string text, Encoding encoding)
+            => encoding.GetString(encoding.GetBytes(text));
+
+        /// <summary>
+        /// Converts text to another string format using the UTF-7 character encoding.
+        /// </summary>
+        /// <param name="text">The string to convert.</param>
+        /// <returns>The UTF-7 text equivalent.</returns>
+        public static string AsUtf7(this string text)
+            => text.AsEncoded(Encoding.UTF7);
+
+        /// <summary>
+        /// Converts text to another string format using the UTF-8 character encoding.
+        /// </summary>
+        /// <param name="text">The string to convert.</param>
+        /// <returns>The UTF-8 text equivalent.</returns>
+        public static string AsUtf8(this string text)
+            => text.AsEncoded(Encoding.UTF8);
+
+        /// <summary>
+        /// Converts text to another string format using the UTF-32 character encoding.
+        /// </summary>
+        /// <param name="text">The string to convert.</param>
+        /// <returns>The UTF-32 text equivalent.</returns>
+        public static string AsUtf32(this string text)
+            => text.AsEncoded(Encoding.UTF32);
+
+        /// <summary>
+        /// Converts text to another string format using the ASCII character encoding.
+        /// </summary>
+        /// <param name="text">The string to convert.</param>
+        /// <returns>The ASCII text equivalent.</returns>
+        public static string AsAscii(this string text)
+            => text.AsEncoded(Encoding.ASCII);
+
+        /// <summary>
+        /// Converts text to another string using the UTF-16 with little endian byte order character encoding.
+        /// </summary>
+        /// <param name="text">The string to convert.</param>
+        /// <returns>The Unicode(UTF-16 using the little byte order endian byte order) text equivalent.</returns>
+        public static string AsUnicode(this string text)
+            => text.AsEncoded(Encoding.Unicode);
+
+        /// <summary>
+        /// Converts text to another string using the UTF-16 with big endian byte order character encoding.
+        /// </summary>
+        /// <param name="text">The string to convert.</param>
+        /// <returns>The Unicode (UTF-16 using big endian byte order) text equivalent.</returns>
+        public static string AsBigEndianUnicode(this string text)
+            => text.AsEncoded(Encoding.BigEndianUnicode);
+
+        /// <summary>
+        /// Encodes text to its Base-64 encoded equivaluent.
+        /// </summary>
+        /// <param name="text">The string to encode.</param>
+        /// <param name="encoding">The character enoding to obtain the binary form of the text.</param>
+        /// <returns>The Base-64 encoded equivalent of the string.</returns>
+        public static string AsBase64(this string text, Encoding encoding)
+            => Convert.ToBase64String(encoding.GetBytes(text));
+
+        /// <summary>
+        /// Decodes Base-64 text to a string using a provided character encoding.
+        /// </summary>
+        /// <param name="text">The Base-64 encoded string to decode.</param>
+        /// <param name="encoding">The character encoding to obtain the string from the decoded Base-64 binary.</param>
+        /// <returns>The string equivalent of the decoded Base-64 string.</returns>
+        public static string FromBase64String(this string text, Encoding encoding)
+            => encoding.GetString(Convert.FromBase64String(text));
+    }
+}

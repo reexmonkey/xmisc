@@ -11,7 +11,8 @@
     <AssemblyName>xmisc.technical.data.contracts</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>bd9bd9e3</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -49,27 +50,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="repository.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\xmisc.foundation.contracts\xmisc.foundation.contracts.csproj">
-      <Project>{0188be5c-bafa-4fac-b068-11dcf7cd918e}</Project>
-      <Name>xmisc.foundation.contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\xmisc.infrastructure.contracts\xmisc.infrastructure.contracts.csproj">
-      <Project>{82ed5f70-e1d9-456e-8686-c59306312726}</Project>
-      <Name>xmisc.infrastructure.contracts</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\SemanticGit.2.1.22\build\SemanticGit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SemanticGit.2.1.22\build\SemanticGit.targets'))" />
-  </Target>
-  <Import Project="..\packages\SemanticGit.2.1.22\build\SemanticGit.targets" Condition="Exists('..\packages\SemanticGit.2.1.22\build\SemanticGit.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

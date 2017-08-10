@@ -40,15 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="foundation\entity.cs" />
-    <Compile Include="foundation\ignore.cs" />
-    <Compile Include="foundation\erase.cs" />
-    <Compile Include="foundation\hydrate.cs" />
-    <Compile Include="foundation\read.cs" />
-    <Compile Include="foundation\persist.cs" />
-    <Compile Include="infrastucture\entity.cs" />
+    <Compile Include="foundation\dehydration.cs" />
+    <Compile Include="foundation\registration.cs" />
+    <Compile Include="foundation\deletion.cs" />
+    <Compile Include="foundation\erasure.cs" />
+    <Compile Include="foundation\hydration.cs" />
+    <Compile Include="foundation\recovery.cs" />
+    <Compile Include="foundation\query.cs" />
+    <Compile Include="foundation\persistence.cs" />
+    <Compile Include="infrastucture\keyable.cs" />
+    <Compile Include="infrastucture\forgettable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="foundation\key.cs" />
+    <Compile Include="foundation\keyquery.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentValidation, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.7.0.3\lib\net45\FluentValidation.dll</HintPath>
+    </Reference>
     <Reference Include="NodaTime, Version=2.0.1.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
       <HintPath>..\packages\NodaTime.2.0.1\lib\net45\NodaTime.dll</HintPath>
     </Reference>
@@ -43,25 +46,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="extensions\guid.cs" />
+    <Compile Include="extensions\fpi.cs" />
+    <Compile Include="generators\fpi.cs" />
+    <Compile Include="generators\integer.cs" />
+    <Compile Include="generators\long.cs" />
+    <Compile Include="generators\numeric.cs" />
     <Compile Include="generators\guid.cs" />
+    <Compile Include="generators\fingerprint.cs" />
+    <Compile Include="generators\uint.cs" />
+    <Compile Include="generators\ulong.cs" />
     <Compile Include="infrastructure\fpi.cs" />
-    <Compile Include="infrastructure\state.cs" />
+    <Compile Include="infrastructure\fpibase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="validators\fpi.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\xmisc.backbone.identity.contracts\xmisc.backbone.identity.contracts.csproj">
       <Project>{afc11fb5-9c7e-43a8-b874-3c817542179e}</Project>
       <Name>xmisc.backbone.identity.contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\xmisc.core\xmisc.core.csproj">
-      <Project>{eedf1367-a0fc-400a-a649-716261252b9e}</Project>
-      <Name>xmisc.core</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

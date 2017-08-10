@@ -1,6 +1,4 @@
-﻿using reexjungle.xmisc.foundation.concretes;
-using reexjungle.xmisc.foundation.contracts;
-using reexjungle.xmisc.technical.data.concretes.common;
+﻿using reexjungle.xmisc.technical.data.concretes.common;
 using ServiceStack.Common.Utils;
 using ServiceStack.OrmLite;
 using System;
@@ -10,6 +8,10 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using reexmonkey.xmisc.core.contracts.foundation;
+using reexmonkey.xmisc.core.linq;
+using reexmonkey.xmisc.core.linq.expressions;
+using reexmonkey.xmisc.core.linq.extensions;
 
 namespace reexjungle.xmisc.technical.data.concretes.orm
 {

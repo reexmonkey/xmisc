@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MsgPack, Version=0.8.0.0, Culture=neutral, PublicKeyToken=a2625990d5dc0167, processorArchitecture=MSIL">
+      <HintPath>..\packages\MsgPack.Cli.0.8.1\lib\net45\MsgPack.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -52,7 +55,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="extensions\guid.cs" />
+    <Compile Include="generators\fingerprint.cs" />
+    <Compile Include="guids\comb.cs" />
+    <Compile Include="guids\sha1.cs" />
+    <Compile Include="guids\md5.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -68,9 +74,22 @@
       <Project>{afc11fb5-9c7e-43a8-b874-3c817542179e}</Project>
       <Name>xmisc.backbone.identity.contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\xmisc.backbone.io.messagepack\xmisc.backbone.io.messagepack.csproj">
+      <Project>{60f07f57-ae0d-4de2-a2d9-95deaab4d541}</Project>
+      <Name>xmisc.backbone.io.messagepack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\xmisc.backbone.io.protobuf\xmisc.backbone.io.protobuf.csproj">
+      <Project>{f7b2e9f8-75d0-41a8-8c50-f5df58c350a7}</Project>
+      <Name>xmisc.backbone.io.protobuf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\xmisc.backbone.io\xmisc.backbone.io.formatter.csproj">
+      <Project>{79a78bbe-a004-460c-970b-450538ae3d5f}</Project>
+      <Name>xmisc.backbone.io.formatter</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

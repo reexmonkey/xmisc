@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using FluentValidation;
-using reexjungle.xmisc.foundation.concretes;
 using reexjungle.xmisc.infrastructure.concretes.extensions;
+using reexmonkey.xmisc.core.linq;
+using reexmonkey.xmisc.core.linq.extensions;
 using Xunit;
 
 namespace xmisc.tests.infrastructure

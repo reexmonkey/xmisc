@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using reexjungle.xmisc.infrastructure.contracts;
 
 namespace reexjungle.xmisc.technical.data.contracts
 {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using FizzWare.NBuilder;
-using reexjungle.xmisc.foundation.concretes;
-using reexjungle.xmisc.foundation.contracts;
 using reexjungle.xmisc.infrastructure.concretes.operations;
+using reexmonkey.xmisc.core.contracts.foundation;
+using reexmonkey.xmisc.core.system;
 using Xunit;
 
 namespace xmisc.tests.infrastructure

@@ -1,17 +1,20 @@
 ﻿using System;
-using xmisc.backbone.identity.concretes.extensions;
 using xmisc.backbone.identity.contracts.generators;
+using xmisc.backbone.identity.contracts.infrastructure;
 
 namespace xmisc.backbone.identity.concretes.generators
 {
-    public class RandomGuidKeyGenerator : GuidKeyGeneratorBase
+    public class RandomGuidKeyGenerator : IKeyGenerator<Guid>
     {
-        public override Guid GetNext() => Guid.NewGuid();
+        public Guid GetNullKey() => Guid.Empty;
+
+        public Guid GetNext() => Guid.NewGuid();
     }
 
-
-    public class SequentialGuidKeyGenerator : GuidKeyGeneratorBase
+    public class SequentialGuidKeyGenerator : IKeyGenerator<SequentialGuid>
     {
-        public override Guid GetNext() => Guid.NewGuid().AsVersion1Guid();
+        public SequentialGuid GetNullKey() => SequentialGuid.Empty;
+
+        public SequentialGuid GetNext() => SequentialGuid.NewGuid();
     }
 }
