@@ -11,6 +11,7 @@
     <TargetFramework>netstandard1.4</TargetFramework>
     <RootNamespace>reexmonkey.xmisc.core.io</RootNamespace>
 	<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+	<Title>$(PackageId)</Title>
     <Company>reexjungle</Company>
     <Authors>reexmonkey</Authors>
     <Description>Input/Output utilities and extensions.</Description>
