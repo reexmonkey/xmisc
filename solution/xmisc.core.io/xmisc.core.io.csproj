@@ -14,6 +14,7 @@
     <Company>reexjungle</Company>
     <Authors>reexmonkey</Authors>
     <Description>Input/Output utilities and extensions.</Description>
+	<Copyright>Copyright (c) 2015 -2017, reexjungle</Copyright>
     <PackageLicenseUrl>https://github.com/reexmonkey/xmisc/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
