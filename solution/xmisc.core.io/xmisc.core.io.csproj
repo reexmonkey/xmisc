@@ -19,6 +19,9 @@
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard1.4\xmisc.core.io.xml</DocumentationFile>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="GitInfo" Version="1.1.72" />
