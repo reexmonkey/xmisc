@@ -20,9 +20,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard1.4\xmisc.core.io.xml</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard1.4\.xml</DocumentationFile>
+  </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="1.1.72" >
+    <PackageReference Include="GitInfo" Version="1.1.72">
 	<PrivateAssets>All</PrivateAssets>
 	</PackageReference>	
     <PackageReference Include="System.Runtime" Version="4.3.0" />
