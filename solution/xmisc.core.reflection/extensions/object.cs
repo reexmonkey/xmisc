@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using reexmonkey.xmisc.core.linq.infrastructure;
 using reexmonkey.xmisc.core.reflection.infrastructure;
 
@@ -25,7 +23,7 @@ namespace reexmonkey.xmisc.core.reflection.extensions
         public static Func<TSource, object> GetProperty<TSource>(string name, BindingFlags flags = BindingFlags.Public)
         {
             var type = typeof(TSource);
-            var pi =  type.GetProperty(name, flags);
+            var pi = type.GetProperty(name, flags);
             if (pi == null || !pi.CanRead) return null;
             var gettermi = pi.GetGetMethod();
             var entity = Expression.Parameter(type);
@@ -46,7 +44,7 @@ namespace reexmonkey.xmisc.core.reflection.extensions
                 var getter = Expression.Call(entity, gettermi);
                 var o = Expression.Convert(getter, typeof(object));
                 var lambda = Expression.Lambda(o, entity);
-                yield return (Func<TSource, object>) lambda.Compile();
+                yield return (Func<TSource, object>)lambda.Compile();
             }
         }
 
@@ -74,7 +72,7 @@ namespace reexmonkey.xmisc.core.reflection.extensions
             return properties;
         }
 
-       
+
         /// <summary>
         /// Sets the properties of a target object from a given key-value pair collection of property elements
         /// </summary>
@@ -118,7 +116,7 @@ namespace reexmonkey.xmisc.core.reflection.extensions
                 if (tuple.property.IsIndexed)
                 {
                     for (var index = 0; index < tuple.property.Values.Count; ++index)
-                        pi.SetValue(target, tuple.property.Values[index], new object[] {index});
+                        pi.SetValue(target, tuple.property.Values[index], new object[] { index });
                 }
                 else pi.SetValue(target, tuple.property.Values[0], null);
             }
@@ -196,7 +194,7 @@ namespace reexmonkey.xmisc.core.reflection.extensions
             return Enumerable.Empty<object>();
         }
 
-        
+
         public static IEnumerable<object> Differences<T>(this T instance, T other, BindingFlags flags, params Expression<Func<T, object>>[] ignore)
             where T : class, new() => instance.Differences(other, flags, ignore.Select(x => x.GetMemberName()).ToArray());
 

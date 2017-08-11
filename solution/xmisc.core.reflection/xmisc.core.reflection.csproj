@@ -34,10 +34,7 @@
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
     <PackageReference Include="System.Runtime" Version="4.3.0" />
     <PackageReference Include="System.ValueTuple" Version="4.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\xmisc.core.linq\xmisc.core.linq.csproj" />
+    <PackageReference Include="xmisc.core.linq" Version="2.0.13-alpha" />
   </ItemGroup>
 
 </Project>
