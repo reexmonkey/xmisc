@@ -1,9 +1,9 @@
-﻿using reexmonkey.xmisc.core.security;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using reexmonkey.xmisc.core.cryptography.extensions;
 
-namespace xmisc.backbone.identity.contracts.infrastructure
+namespace reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure
 {
     [StructLayout(LayoutKind.Sequential)]
     [Serializable]
@@ -13,7 +13,7 @@ namespace xmisc.backbone.identity.contracts.infrastructure
         private readonly Guid guid;
         private static readonly object mutex = new object();
         private static ulong last;
-        private static ushort sequence = new RNGCryptoServiceProvider().GenerateUInt16();
+        private static ushort sequence = RandomNumberGenerator.Create().GenerateUInt16();
 
         public SequentialGuid(uint low, ushort mid, ushort hi, byte csl, byte csh, byte n0, byte n1, byte n2, byte n3, byte n4, byte n5)
         {
@@ -102,7 +102,7 @@ namespace xmisc.backbone.identity.contracts.infrastructure
 
         public static SequentialGuid NewGuid()
         {
-            var node = new RNGCryptoServiceProvider().Generate(6);
+            var node = RandomNumberGenerator.Create().Generate(6);
             node[0] |= 1; //multicast bit set to one, in order to avoid conflict with IEEE 802 network cards
             return Create(GetTimestamp(), sequence, node[0], node[1], node[2], node[3], node[4], node[5]);
         }
@@ -134,7 +134,7 @@ namespace xmisc.backbone.identity.contracts.infrastructure
 
         public override int GetHashCode() => guid.GetHashCode();
 
-        public string ToString(string format, IFormatProvider formatProvider) => guid.ToString(format, formatProvider);
+        public string ToString(string format, IFormatProvider formatProvider) => guid.ToString(format);
 
         public int CompareTo(object obj)
         {

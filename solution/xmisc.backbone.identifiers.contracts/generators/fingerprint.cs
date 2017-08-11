@@ -1,4 +1,4 @@
-﻿namespace xmisc.backbone.identity.contracts.generators
+﻿namespace reexmonkey.xmisc.backbone.identifiers.contracts.generators
 {
 
     public interface IFingerprintGenerator<out TKey>

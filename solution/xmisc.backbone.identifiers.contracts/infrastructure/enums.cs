@@ -1,4 +1,4 @@
-﻿namespace xmisc.backbone.identity.contracts.infrastructure
+﻿namespace reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure
 {
     /// <summary>
     /// Represents the status of an approval

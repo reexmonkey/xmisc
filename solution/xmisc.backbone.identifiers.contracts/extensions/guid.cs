@@ -1,7 +1,7 @@
 ﻿using System;
-using xmisc.backbone.identity.contracts.infrastructure;
+using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
 
-namespace xmisc.backbone.identity.contracts.extensions
+namespace reexmonkey.xmisc.backbone.identifiers.contracts.extensions
 {
     public static class GuidExtensions
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace xmisc.backbone.identity.contracts.infrastructure
+namespace reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure
 {
     /// <summary>
     /// Specifies a contract for identifying a component

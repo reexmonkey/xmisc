@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace xmisc.backbone.identity.contracts.generators
+namespace reexmonkey.xmisc.backbone.identifiers.contracts.generators
 {
     public interface IKeyGenerator<out TKey>
         where TKey : IEquatable<TKey>

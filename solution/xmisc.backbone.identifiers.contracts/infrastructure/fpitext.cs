@@ -1,4 +1,4 @@
-namespace xmisc.backbone.identity.contracts.infrastructure
+namespace reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure
 {
     /// <summary>
     /// Specifies a contract for the Text identifier of a Formal Public Identifiers (FPI)

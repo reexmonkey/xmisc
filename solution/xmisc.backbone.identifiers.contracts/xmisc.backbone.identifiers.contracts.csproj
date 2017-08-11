@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Target Name="AutoVersion" AfterTargets="AfterBuild">
+  <PropertyGroup>
+    <PackageVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)$(GitSemVerDashLabel)</PackageVersion>	
+  </PropertyGroup>	 
+  </Target>
+  <PropertyGroup>
+	<TargetFramework>netstandard1.4</TargetFramework>
+    <RootNamespace>reexmonkey.xmisc.backbone.identifiers.contracts</RootNamespace>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <Company>reexjungle</Company>
+    <Authors>reexmonkey</Authors>
+    <Description>Backbone contracts of identity.</Description>
+	<Copyright>Copyright (c) 2015 -2017, reexjungle</Copyright>
+    <PackageLicenseUrl>https://github.com/reexmonkey/xmisc/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+	<AssemblyName>xmisc.backbone.identitifiers.contracts</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard1.4\.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard1.4\.xml</DocumentationFile>
+  </PropertyGroup>
+    <ItemGroup>
+    <PackageReference Include="GitInfo" Version="1.1.72">
+	<PrivateAssets>All</PrivateAssets>
+	</PackageReference>
+    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
+    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.0" />
+    <PackageReference Include="System.Security.Cryptography.Primitives" Version="4.3.0" />
+    <PackageReference Include="xmisc.core.cryptography" Version="2.0.11-alpha" />
+  </ItemGroup>  
+</Project>

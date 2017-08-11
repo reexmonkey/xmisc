@@ -1,9 +1,9 @@
-﻿using reexmonkey.xmisc.core.security;
-using System;
+﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using reexmonkey.xmisc.core.cryptography.extensions;
 
-namespace xmisc.backbone.identity.contracts.infrastructure
+namespace reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure
 {
     public struct Sha1Guid
     {
@@ -96,7 +96,7 @@ namespace xmisc.backbone.identity.contracts.infrastructure
             var combined = new byte[namespaceId.Length + name.Length];
             Buffer.BlockCopy(namespaceId, 0, combined, 0, namespaceId.Length);
             Buffer.BlockCopy(name, 0, combined, namespaceId.Length, name.Length);
-            var hash = combined.GetHash(new SHA1CryptoServiceProvider());
+            var hash = combined.GetHash(SHA1.Create());
             return Create(hash);
         }
 
@@ -117,7 +117,7 @@ namespace xmisc.backbone.identity.contracts.infrastructure
 
         public override int GetHashCode() => guid.GetHashCode();
 
-        public string ToString(string format, IFormatProvider formatProvider) => guid.ToString(format, formatProvider);
+        public string ToString(string format, IFormatProvider formatProvider) => guid.ToString(format);
 
         public int CompareTo(object obj)
         {

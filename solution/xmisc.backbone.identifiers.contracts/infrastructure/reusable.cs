@@ -1,4 +1,4 @@
-﻿namespace xmisc.backbone.identity.contracts.infrastructure
+﻿namespace reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure
 {
     public interface IReusable<in TValue>
     {
