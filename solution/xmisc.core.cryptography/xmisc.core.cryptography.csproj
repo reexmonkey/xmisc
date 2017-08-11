@@ -1,10 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Target Name="AutoVersion" AfterTargets="AfterBuild">
   <PropertyGroup>
-	<AssemblyVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)</AssemblyVersion>
-	<AssemblyFileVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)</AssemblyFileVersion>
-	<AssemblyInformationalVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)$(GitSemVerDashLabel)</AssemblyInformationalVersion>
-    <PackageVersion>$(AssemblyInformationalVersion)</PackageVersion>	
+    <PackageVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)$(GitSemVerDashLabel)</PackageVersion>	
   </PropertyGroup>	 
   </Target>
   <PropertyGroup>
@@ -31,7 +28,7 @@
     <PackageReference Include="GitInfo" Version="1.1.72">
 	<PrivateAssets>All</PrivateAssets>
 	</PackageReference>
-    <PackageReference Include="xmisc.core.io" Version="2.0.5-alpha" />
+    <PackageReference Include="xmisc.core.io" Version="2.0.10-alpha" />
   </ItemGroup>
 
 </Project>
