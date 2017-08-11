@@ -1,17 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Target Name="AutoVersion" AfterTargets="AfterBuild">
   <PropertyGroup>
-	<AssemblyVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)</AssemblyVersion>
-	<AssemblyFileVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)</AssemblyFileVersion>
-	<AssemblyInformationalVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)$(GitSemVerDashLabel)</AssemblyInformationalVersion>
-    <PackageVersion>$(AssemblyInformationalVersion)</PackageVersion>	
+    <PackageVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)$(GitSemVerDashLabel)</PackageVersion>	
   </PropertyGroup>	 
   </Target>
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
     <RootNamespace>reexmonkey.xmisc.core.io</RootNamespace>
 	<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
-	<Title>$(PackageId)</Title>
     <Company>reexjungle</Company>
     <Authors>reexmonkey</Authors>
     <Description>Input/Output utilities and extensions.</Description>
@@ -26,7 +22,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="1.1.72" />
+    <PackageReference Include="GitInfo" Version="1.1.72" >
+	<PrivateAssets>All</PrivateAssets>
+	</PackageReference>	
     <PackageReference Include="System.Runtime" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
   </ItemGroup>
