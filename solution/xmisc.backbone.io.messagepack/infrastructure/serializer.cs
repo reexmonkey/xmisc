@@ -4,6 +4,9 @@ using System.IO;
 
 namespace reexmonkey.xmisc.backbone.io.messagepack.infrastructure
 {
+    /// <summary>
+    /// Represents binary serializer that uses MessagePack serialization.
+    /// </summary>
     public class MessagePackSerializer : BinarySerializerBase
     {
         public override byte[] Serialize<TSource>(TSource source)
