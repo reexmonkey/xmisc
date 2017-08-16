@@ -1,18 +1,19 @@
 ﻿
-using System.Reflection;
-
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("xmisc.backbone.io.formatter")]
-[assembly: AssemblyDescription(" Binary Formatter Serialization Adapter.")]
+
+using System.Reflection;
+
+[assembly: AssemblyTitle("xmisc.backbone.identifiers.contracts")]
+[assembly: AssemblyDescription("Implementation of backbone identifiers.")]
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
 #else
 [assembly: AssemblyConfiguration("Release")]
 #endif
 [assembly: AssemblyCompany("reexjungle")]
-[assembly: AssemblyProduct("xmisc.backbone.io.formatter")]
+[assembly: AssemblyProduct("xmisc.backbone.identifiers.contracts")]
 [assembly: AssemblyCopyright("Copyright (c) 2015 -2017, reexjungle")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

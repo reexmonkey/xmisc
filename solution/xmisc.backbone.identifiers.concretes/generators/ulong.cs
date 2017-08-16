@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 
-namespace xmisc.backbone.identity.concretes.generators
+namespace reexmonkey.xmisc.backbone.identifiers.concretes.generators
 {
-    public class RandomUnsignedIntegerKeyGenerator : NumericKeyGeneratorBase<ulong>
+    public class RandomUnsignedLongKeyGenerator : NumericKeyGeneratorBase<ulong>
     {
         private readonly RandomNumberGenerator generator;
 
-        public RandomUnsignedIntegerKeyGenerator()
+        public RandomUnsignedLongKeyGenerator()
         {
-            generator = new RNGCryptoServiceProvider();
+            generator = RandomNumberGenerator.Create();
         }
 
-        public RandomUnsignedIntegerKeyGenerator(RandomNumberGenerator generator)
+        public RandomUnsignedLongKeyGenerator(RandomNumberGenerator generator)
         {
             this.generator = generator ?? throw new ArgumentNullException(nameof(generator));
         }
@@ -28,16 +28,16 @@ namespace xmisc.backbone.identity.concretes.generators
     }
 
 
-    public class SequentialUnsignedIntegerKeyGenerator : ResuableNumericKeyGenerator<ulong>
+    public class SequentialUnsignedLongKeyGenerator : ResuableNumericKeyGenerator<ulong>
     {
         private ulong seed;
         private readonly Queue<ulong> pool;
 
-        public SequentialUnsignedIntegerKeyGenerator() : this(0)
+        public SequentialUnsignedLongKeyGenerator() : this(0)
         {
         }
 
-        public SequentialUnsignedIntegerKeyGenerator(ulong seed)
+        public SequentialUnsignedLongKeyGenerator(ulong seed)
         {
             this.seed = seed;
             pool = new Queue<ulong>();

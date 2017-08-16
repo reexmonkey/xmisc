@@ -1,8 +1,8 @@
 ﻿using System;
-using xmisc.backbone.identity.contracts.generators;
-using xmisc.backbone.identity.contracts.infrastructure;
+using reexmonkey.xmisc.backbone.identifiers.contracts.generators;
+using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
 
-namespace xmisc.backbone.identity.concretes.generators
+namespace reexmonkey.xmisc.backbone.identifiers.concretes.generators
 {
     public class RandomGuidKeyGenerator : IKeyGenerator<Guid>
     {

@@ -1,7 +1,6 @@
 ﻿using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using reexmonkey.xmisc.core.io.infrastructure;
-
+using System.Runtime.Serialization;
 namespace reexmonkey.xmisc.backbone.io.formatter.infrastructure
 {
     public class BinaryFormatSerializer : BinarySerializerBase

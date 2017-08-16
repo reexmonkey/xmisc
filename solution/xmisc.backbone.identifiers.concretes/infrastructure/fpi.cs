@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using xmisc.backbone.identity.contracts.infrastructure;
+using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
 
-namespace xmisc.backbone.identity.concretes.infrastructure
+namespace reexmonkey.xmisc.backbone.identifiers.concretes.infrastructure
 {
     public class Fpi : FpiBase, IEquatable<Fpi>
     {

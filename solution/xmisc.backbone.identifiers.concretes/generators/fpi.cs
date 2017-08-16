@@ -1,8 +1,8 @@
 ﻿using System;
-using xmisc.backbone.identity.concretes.infrastructure;
-using xmisc.backbone.identity.contracts.generators;
+using reexmonkey.xmisc.backbone.identifiers.concretes.infrastructure;
+using reexmonkey.xmisc.backbone.identifiers.contracts.generators;
 
-namespace xmisc.backbone.identity.concretes.generators
+namespace reexmonkey.xmisc.backbone.identifiers.concretes.generators
 {
     public class FpiGenerator : IKeyGenerator<Fpi>
     {

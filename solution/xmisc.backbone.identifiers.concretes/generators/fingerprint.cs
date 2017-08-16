@@ -1,11 +1,11 @@
-using reexmonkey.xmisc.core.io.infrastructure;
-using reexmonkey.xmisc.core.security;
 using System;
 using System.Security.Cryptography;
-using xmisc.backbone.identity.contracts.generators;
-using xmisc.backbone.identity.contracts.infrastructure;
+using reexmonkey.xmisc.backbone.identifiers.contracts.generators;
+using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
+using reexmonkey.xmisc.core.cryptography.extensions;
+using reexmonkey.xmisc.core.io.infrastructure;
 
-namespace xmisc.backbone.identity.concretes.generators
+namespace reexmonkey.xmisc.backbone.identifiers.concretes.generators
 {
     public class Md5FingerprintGenerator : IFingerprintGenerator<Md5Guid>
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 
-namespace xmisc.backbone.identity.concretes.generators
+namespace reexmonkey.xmisc.backbone.identifiers.concretes.generators
 {
     public class RandomLongKeyGenerator : NumericKeyGeneratorBase<long>
     {
@@ -11,7 +11,7 @@ namespace xmisc.backbone.identity.concretes.generators
 
         public RandomLongKeyGenerator()
         {
-            generator = new RNGCryptoServiceProvider();
+            generator = RandomNumberGenerator.Create();
         }
 
         public RandomLongKeyGenerator(RandomNumberGenerator generator)

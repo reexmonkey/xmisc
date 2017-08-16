@@ -1,7 +1,7 @@
 ﻿using System;
-using xmisc.backbone.identity.contracts.generators;
+using reexmonkey.xmisc.backbone.identifiers.contracts.generators;
 
-namespace xmisc.backbone.identity.concretes.generators
+namespace reexmonkey.xmisc.backbone.identifiers.concretes.generators
 {
     public abstract class NumericKeyGeneratorBase<TNumeric> : IKeyGenerator<TNumeric>
         where TNumeric : struct, IEquatable<TNumeric>, IComparable<TNumeric>, IComparable, IFormattable, IConvertible

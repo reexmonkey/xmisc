@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
-using xmisc.backbone.identity.concretes.infrastructure;
-using xmisc.backbone.identity.contracts.infrastructure;
+using reexmonkey.xmisc.backbone.identifiers.concretes.infrastructure;
+using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
 
-namespace xmisc.backbone.identity.concretes.validators
+namespace reexmonkey.xmisc.backbone.identifiers.concretes.validators
 {
     public class FpiBaseValidator : AbstractValidator<FpiBase>
     {

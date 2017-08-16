@@ -1,6 +1,6 @@
-﻿using xmisc.backbone.identity.concretes.infrastructure;
+﻿using reexmonkey.xmisc.backbone.identifiers.concretes.infrastructure;
 
-namespace xmisc.backbone.identity.concretes.extensions
+namespace reexmonkey.xmisc.backbone.identifiers.concretes.extensions
 {
     /// <summary>
     /// Provides extensions to the <see cref="Fpi"/> class.
