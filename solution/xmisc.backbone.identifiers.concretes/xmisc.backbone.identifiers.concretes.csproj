@@ -29,6 +29,6 @@
     <PackageReference Include="GitInfo" Version="1.1.72">
 	<PrivateAssets>All</PrivateAssets>
 	</PackageReference>
-    <PackageReference Include="xmisc.backbone.identifiers.contracts" Version="2.0.15-alpha" />
+    <PackageReference Include="xmisc.backbone.identifiers.contracts" Version="2.0.18-alpha" />
   </ItemGroup>
 </Project>
