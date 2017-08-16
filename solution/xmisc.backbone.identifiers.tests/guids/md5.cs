@@ -1,10 +1,10 @@
 ﻿using System.Text;
-using xmisc.backbone.identity.contracts.infrastructure;
+using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
 using Xunit;
 
 namespace xmisc.backbone.identity.tests.guids
 {
-    public class Sha1GuidTests
+    public class Md5GuidTests
     {
         [Theory]
         [InlineData("test", "test")]
@@ -14,8 +14,8 @@ namespace xmisc.backbone.identity.tests.guids
         public void TestUniqueness(string x, string y)
         {
             //act
-            var first = Sha1Guid.NewGuid(Encoding.Unicode.GetBytes(x));
-            var second = Sha1Guid.NewGuid(Encoding.Unicode.GetBytes(y));
+            var first = Md5Guid.NewGuid(Encoding.Unicode.GetBytes(x));
+            var second = Md5Guid.NewGuid(Encoding.Unicode.GetBytes(y));
 
             //assert
             Assert.Equal(first, second);
@@ -29,13 +29,13 @@ namespace xmisc.backbone.identity.tests.guids
         public void TestVersionNumber(string name)
         {
             //arrange
-            var guid = Sha1Guid.NewGuid(Encoding.Unicode.GetBytes(name));
+            var guid = Md5Guid.NewGuid(Encoding.Unicode.GetBytes(name));
             var bytes = guid.ToByteArray();
             //act
             var version = (ushort)(bytes[7] >> 4);
 
             //Assert
-            Assert.Equal(version, 5);
+            Assert.Equal(version, 3);
         }
     }
 }

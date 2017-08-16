@@ -1,4 +1,4 @@
-﻿using xmisc.backbone.identity.contracts.infrastructure;
+﻿using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
 using Xunit;
 
 namespace xmisc.backbone.identity.tests.guids
