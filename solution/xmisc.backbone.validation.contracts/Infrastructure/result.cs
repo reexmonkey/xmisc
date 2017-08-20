@@ -1,12 +1,11 @@
-﻿using FluentValidation.Results;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using xmisc.backbone.validation.contracts.Core;
+using FluentValidation.Results;
 
 namespace xmisc.backbone.validation.contracts.Infrastructure
 {
-    public abstract class AbstractValidationResult : ValidationResult, IValidationResult
+    public abstract class AbstractValidationResult : ValidationResult
     {
         protected AbstractValidationResult()
         {
@@ -16,47 +15,55 @@ namespace xmisc.backbone.validation.contracts.Infrastructure
         {
         }
 
-        protected AbstractValidationResult(ValidationResult result, Func<ValidationFailure, AbstractValidationFailure> func)
+        protected AbstractValidationResult(ValidationResult result, Func<ValidationFailure, AbstractValidationFailure> transform)
         {
-            foreach (var error in result.Errors)
-            {
-                AddFailure(func(error));
-            }
+            if (transform == null) throw new ArgumentNullException(nameof(transform));
+            AddErrors(result.Errors.Select(transform));
         }
 
         public new IList<AbstractValidationFailure> Errors => base.Errors.Cast<AbstractValidationFailure>().ToList();
 
-
-        public void AddFailure(AbstractValidationFailure failure)
+        public void AddError(AbstractValidationFailure error)
         {
-            if (!Errors.Contains(failure)) Errors.Add(failure);
+            error.Parent = this;
+            Errors.Add(error);
         }
 
-        public void AddFailures(IEnumerable<AbstractValidationFailure> failures)
+        public void AddErrors(IEnumerable<AbstractValidationFailure> errors)
         {
-            foreach (var failure in failures.Where(x => !Errors.Contains(x)))
-                Errors.Add(failure);
+            foreach (var error in errors) Errors.Add(error);
         }
 
-        public void RemoveFailure(AbstractValidationFailure failure) => Errors.Remove(failure);
+        public void RemoveError(AbstractValidationFailure error) => Errors.Remove(error);
 
-        public void RemoveFailures(IEnumerable<AbstractValidationFailure> failures)
+        public void RemoveErrors(IEnumerable<AbstractValidationFailure> errors)
         {
-            foreach (var failure in failures) Errors.Remove(failure);
+            foreach (var error in errors) Errors.Remove(error);
         }
 
-        public IEnumerable<AbstractValidationFailure> GetFailures(int? skip, int? take)
-            => skip != null && take != null ? Errors.Skip(skip.Value).Take(take.Value) : Errors;
+        public IEnumerable<AbstractValidationFailure> GetErrors(int? offset, int? count)
+            => offset != null && count != null ? Errors.Skip(offset.Value).Take(count.Value) : Errors;
 
-        IEnumerable<IValidationFailure> IValidationResult.GetFailures(int? skip, int? take)
-            => GetFailures(skip, take);
-
-        public IEnumerable<AbstractValidationFailure> FindFailures(Func<AbstractValidationFailure, bool> predicate, int? skip, int? take)
-            => skip != null && take != null
-            ? Errors.Where(predicate).Skip(skip.Value).Take(take.Value)
+        public IEnumerable<AbstractValidationFailure> FindErrors(Func<AbstractValidationFailure, bool> predicate, int? offset, int? count)
+            => offset != null && count != null
+            ? Errors.Where(predicate).Skip(offset.Value).Take(count.Value)
             : Errors.Where(predicate);
+    }
 
-        IEnumerable<IValidationFailure> IValidationResult.FindFailures(Func<IValidationFailure, bool> predicate, int? skip, int? take)
-            => FindFailures(predicate, skip, take);
+    public abstract class AbstractValidationResult<TState> : AbstractValidationResult
+    {
+        protected AbstractValidationResult()
+        {
+        }
+
+        protected AbstractValidationResult(IEnumerable<AbstractValidationFailure<TState>> failures)
+            : base(failures)
+        {
+        }
+
+        protected AbstractValidationResult(ValidationResult result, Func<ValidationFailure, AbstractValidationFailure<TState>> transform)
+            : base(result, transform)
+        {
+        }
     }
 }

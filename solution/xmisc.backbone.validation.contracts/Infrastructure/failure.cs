@@ -1,50 +1,66 @@
-﻿using FluentValidation.Results;
-using xmisc.backbone.validation.contracts.Core;
+﻿using System;
+using FluentValidation.Results;
+
 
 namespace xmisc.backbone.validation.contracts.Infrastructure
 {
-    public class AbstractValidationFailure : ValidationFailure, IValidationFailure
+    public abstract class AbstractValidationFailure : ValidationFailure
     {
-        public AbstractValidationFailure(string propertyName, string error, AbstractValidationState state = null, AbstractValidationResult parent = null)
+        protected AbstractValidationFailure(string propertyName, string error, AbstractValidationResult parent = null)
             : base(propertyName, error)
         {
-            State = state;
             Parent = parent;
         }
 
-        public AbstractValidationFailure(string propertyName, string error, object attemptedValue, AbstractValidationState state = null, AbstractValidationResult parent = null)
+        protected AbstractValidationFailure(string propertyName, string error, object attemptedValue, AbstractValidationResult parent = null)
             : base(propertyName, error, attemptedValue)
         {
-            State = state;
             Parent = parent;
         }
 
-        public AbstractValidationFailure(string propertyName, string error, AbstractValidationResult parent)
-            : this(propertyName, error, null, parent)
+        protected AbstractValidationFailure(ValidationFailure failure)
+            : base(failure?.PropertyName, failure?.ErrorMessage, failure?.AttemptedValue)
         {
+            CustomState = failure?.CustomState;
         }
-
-        public AbstractValidationFailure(string propertyName, string error, object attemptedValue, AbstractValidationResult parent)
-            : this(propertyName, error, attemptedValue, null, parent)
+        protected AbstractValidationFailure(AbstractValidationFailure other)
+            : base(other?.PropertyName, other?.ErrorMessage, other?.AttemptedValue)
         {
-        }
-
-        public AbstractValidationFailure(ValidationFailure failure) : base(failure?.PropertyName, failure?.ErrorMessage, failure?.AttemptedValue)
-        {
-        }
-
-        public AbstractValidationFailure(AbstractValidationFailure other) : base(other?.PropertyName, other?.ErrorMessage, other?.AttemptedValue)
-        {
-            State = other?.State;
+            CustomState = other?.CustomState;
             Parent = other?.Parent;
         }
 
-        public AbstractValidationState State { get; }
+        public AbstractValidationResult Parent { get; set; }
 
-        public AbstractValidationResult Parent { get; }
+    }
 
-        IValidationState IValidationFailure.State => State;
+    public abstract class AbstractValidationFailure<TState> : AbstractValidationFailure
+    {
+        protected AbstractValidationFailure(string propertyName, string error, TState state = default(TState), AbstractValidationResult parent = null)
+            : base(propertyName, error, parent)
+        {
+            CustomState = state;
+        }
 
-        IValidationResult IValidationFailure.Parent => Parent;
+        protected AbstractValidationFailure(string propertyName, string error, object attemptedValue, TState state = default(TState), AbstractValidationResult parent = null) : base(propertyName, error, attemptedValue, parent)
+        {
+            CustomState = state;
+        }
+
+        protected AbstractValidationFailure(ValidationFailure failure, Func<object, TState> transform) : base(failure)
+        {
+            if (transform == null) throw new ArgumentNullException(nameof(transform));
+            CustomState = transform(failure?.CustomState);
+        }
+
+        protected AbstractValidationFailure(AbstractValidationFailure other) : base(other)
+        {
+        }
+
+        public new TState CustomState
+        {
+            get => (TState)base.CustomState;
+            set => base.CustomState = value;
+        }
     }
 }
