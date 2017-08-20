@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace xmisc.backbone.repositories.contracts.foundation
+namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
 {
     /// <summary>
     /// Specifies a repository that fills ("hydrates") a data model with relational information from the data store.
     /// </summary>
     /// <typeparam name="TModel">The type of the model to hydrate.</typeparam>
-    public interface IModelHydrationRepository<TModel>
+    public interface IHumidifier<TModel>
     {
         /// <summary>
         /// Fills the specified model with data from the data store.

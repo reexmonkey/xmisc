@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using xmisc.backbone.repositories.contracts.infrastucture;
 
-namespace xmisc.backbone.repositories.contracts.foundation
+namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
 {
     /// <summary>
     /// Specifies a repository that registers data models by assigning identities to them.
     /// </summary>
     /// <typeparam name="TKey">The type of identifier that the data model uses.</typeparam>
     /// <typeparam name="TModel">The type of data model to create.</typeparam>
-    public interface IModelRegistrationRepository<TKey, TModel>
+    public interface IRegistrationRepository<TKey, TModel>
         where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
         where TModel : IHasKey<TKey>
     {

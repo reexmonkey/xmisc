@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using xmisc.backbone.repositories.contracts.infrastucture;
 
-namespace xmisc.backbone.repositories.contracts.foundation
+namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
 {
     /// <summary>
     /// Specifies a repository that erases entities from a data store.
     /// </summary>
     /// <typeparam name="TKey">The type of key, which identifies the model to erase.</typeparam>
     /// <typeparam name="TModel">The type of model to erase.</typeparam>
-    public interface IModelErasureRepository<in TKey, in TModel>
+    public interface IEraserRepository<in TKey, in TModel>
         where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
-        where TModel : IForgettable
     {
         /// <summary>
         /// Erases an entity that is specified by the provided <paramref name="key"/> from the data store.

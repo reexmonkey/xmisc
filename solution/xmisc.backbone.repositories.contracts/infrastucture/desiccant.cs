@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace xmisc.backbone.repositories.contracts.foundation
+namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
 {
     /// <summary>
     /// Specifies a repository that removes relational data store information from a data model.
     /// </summary>
     /// <typeparam name="TModel">The type of the data model whose relational details are to be removed.</typeparam>
-    public interface IDehydration<TModel>
+    public interface IDesiccantRepository<TModel>
     {
         /// <summary>
         /// Removes information from the specified data model.

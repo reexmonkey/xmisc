@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace xmisc.backbone.repositories.contracts.foundation
+namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
 {
     /// <summary>
     /// Specifies a repository that persists models to a data store.
     /// </summary>
     /// <typeparam name="TKey">The type of key, which identifies the model to persist.</typeparam>
     /// <typeparam name="TModel">The type of model to persist.</typeparam>
-    public interface IModelPersistenceRepository<in TKey, in TModel>
+    public interface IPersistenceRepository<in TKey, in TModel>
         where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
         where TModel : new()
 
