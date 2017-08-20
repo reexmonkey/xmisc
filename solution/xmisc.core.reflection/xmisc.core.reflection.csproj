@@ -5,7 +5,7 @@
   </PropertyGroup>	 
   </Target>
   <PropertyGroup>
-    <TargetFramework>netstandard1.5</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>reexmonkey.xmisc.core.reflection</RootNamespace>
 	<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>reexjungle</Company>
@@ -18,10 +18,10 @@
 	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard1.5\xmisc.core.reflection.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netstandard2.0\xmisc.core.reflection.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard1.5\xmisc.core.reflection.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\netstandard2.0\xmisc.core.reflection.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
