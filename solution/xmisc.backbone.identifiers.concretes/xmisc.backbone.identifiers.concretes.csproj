@@ -29,7 +29,6 @@
     <PackageReference Include="GitInfo" Version="2.0.0">
 	<PrivateAssets>All</PrivateAssets>
 	</PackageReference>
-    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.0" />
-    <PackageReference Include="xmisc.backbone.identifiers.contracts" Version="2.0.18-alpha" />
+    <PackageReference Include="xmisc.backbone.identifiers.contracts" Version="2.0.32-alpha" />
   </ItemGroup>
 </Project>
