@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography;
 using reexmonkey.xmisc.backbone.identifiers.concretes.generators;
 using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
+using reexmonkey.xmisc.backbone.io.formatter.infrastructure;
 using reexmonkey.xmisc.backbone.io.messagepack.infrastructure;
 using reexmonkey.xmisc.backbone.io.protobuf.infrastructure;
 using Xunit;
@@ -47,7 +48,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.tests.generators
         public void TestSha1FingerprintUniqueness()
         {
             //arrange
-            var generator = new Sha1FingerprintGenerator(new ProtoBufSerializer(), new SHA1CryptoServiceProvider());
+            var generator = new Sha1FingerprintGenerator(new BinaryFormatSerializer(), new SHA1CryptoServiceProvider());
 
             //act
             var fingerprint = generator.GetFingerprint(123456);

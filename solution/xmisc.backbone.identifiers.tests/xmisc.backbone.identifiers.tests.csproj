@@ -20,6 +20,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +30,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -47,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MsgPack.Cli">
-      <Version>0.8.1</Version>
+      <Version>0.9.1</Version>
     </PackageReference>
     <PackageReference Include="protobuf-net">
       <Version>2.3.2</Version>
@@ -57,6 +61,9 @@
     </PackageReference>
     <PackageReference Include="xmisc.backbone.identitifiers.concretes">
       <Version>2.0.33-alpha</Version>
+    </PackageReference>
+    <PackageReference Include="xmisc.backbone.io.formatter">
+      <Version>2.0.24-alpha</Version>
     </PackageReference>
     <PackageReference Include="xmisc.backbone.io.messagepack">
       <Version>2.0.18-alpha</Version>
