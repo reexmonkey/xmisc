@@ -30,7 +30,9 @@ namespace reexmonkey.xmisc.core.text.extensions
         /// Replaces substrings in a string using a regular expresion pattern.
         /// </summary>
         /// <param name="text">The string, whose substrings are identified through pattern-recognition.</param>
-        /// <param name="pattern">The regular expression pattern used in recognizing the substring in the string.</param>
+        /// <param name="pattern">
+        /// The regular expression pattern used in recognizing the substring in the string.
+        /// </param>
         /// <param name="replacement">The string to replaces each found substring in the string.</param>
         /// <param name="options"></param>
         /// <returns></returns>
@@ -41,7 +43,9 @@ namespace reexmonkey.xmisc.core.text.extensions
         /// Checks if a string matches the specified pattern.
         /// </summary>
         /// <param name="text">The string to be checked.</param>
-        /// <param name="pattern">The regular expression pattern used in recognizing the substring in the string.</param>
+        /// <param name="pattern">
+        /// The regular expression pattern used in recognizing the substring in the string.
+        /// </param>
         /// <param name="options">Regular expression options to be used in the check.</param>
         /// <returns></returns>
         public static bool Match(this string text, string pattern, RegexOptions options) => Regex.IsMatch(text, pattern, options);
@@ -51,9 +55,11 @@ namespace reexmonkey.xmisc.core.text.extensions
         /// </summary>
         /// <param name="text">The string to be searched</param>
         /// <param name="prefix">The string to be added at the beginning of each found substring</param>
-        /// <param name="pattern">The regular expression pattern used in recognizing the substrings in the string.</param>
-        /// <param name="options"></param>
-        /// <returns>The original string with </returns>
+        /// <param name="pattern">
+        /// The regular expression pattern used in recognizing the substrings in the string.
+        /// </param>
+        /// <param name="options">Regular expression options</param>
+        /// <returns>The original string that is appended wih <paramref name="prefix"/></returns>
         public static string FindAndPrepend(this string text, string prefix, string pattern, RegexOptions options)
         {
             var builder = new StringBuilder(text);
@@ -72,7 +78,9 @@ namespace reexmonkey.xmisc.core.text.extensions
         /// </summary>
         /// <param name="text">The string to be searched</param>
         /// <param name="suffix">The string to be added at the beginning of each found substring</param>
-        /// <param name="pattern">The regular expression pattern used in recognizing the substrings in the string.</param>
+        /// <param name="pattern">
+        /// The regular expression pattern used in recognizing the substrings in the string.
+        /// </param>
         /// <param name="options"></param>
         /// <returns></returns>
         public static string FindAndAppend(this string text, string suffix, string pattern, RegexOptions options)
@@ -93,41 +101,42 @@ namespace reexmonkey.xmisc.core.text.extensions
         /// </summary>
         /// <param name="text">The string, whose lines are folded.</param>
         /// <param name="max">The maximum limit allowed for each line of the string</param>
-        /// <param name="encoding"></param>
-        /// <param name="newline">The newline characters to delimit the line of the string.</param>
+        /// <param name="encoding">The character encoding used.</param>
+        /// <param name="newline">
+        /// The carriage-return-line-feed (CRLF) string to delimit <paramref name="text"/>.
+        /// </param>
+        /// <param name="whitespace">
+        /// The linear whitespace (space or horizontal tab) string that follows <paramref name="newline"/>.
+        /// </param>
         /// <returns>The string, whose lines are folded</returns>
-        public static string FoldLines(this string text, int max, Encoding encoding, string newline = "\r\n")
+        public static string FoldLines(this string text, int max, Encoding encoding, string newline = "\r\n", string whitespace = " ")
         {
             var lines = text.Split(new[] { newline }, StringSplitOptions.RemoveEmptyEntries);
             using (var stream = new MemoryStream(text.Length))
             {
                 var crlf = encoding.GetBytes(newline); //CRLF
-                var crlfs = encoding.GetBytes($"{newline} "); //CRLF and SPACE
+                var crlfs = encoding.GetBytes($"{newline}" + whitespace); //CRLF and (SPACE or HTAB)
                 for (var index = 0; index < lines.Length; index++)
                 {
                     var line = lines[index];
                     var bytes = encoding.GetBytes(line);
-                    var len = bytes.Length;
-                    if (len <= max)
+                    if (bytes.Length <= max)
                     {
-                        stream.Write(bytes, 0, len);
+                        stream.Write(bytes, 0, bytes.Length);
                         stream.Write(crlf, 0, crlf.Length);
                     }
                     else
                     {
-                        var blen = len / max; //calculate block length
-                        var rlen = len % max; //calculate remaining length
+                        var blocks = bytes.Length / max; //calculate block length
+                        var remainder = bytes.Length % max; //calculate remaining length
                         var b = 0;
-                        while (b < blen)
+                        while (b < blocks)
                         {
                             stream.Write(bytes, (b++) * max, max);
                             stream.Write(crlfs, 0, crlfs.Length);
                         }
-                        if (rlen > 0)
-                        {
-                            stream.Write(bytes, blen * max, rlen);
-                            stream.Write(crlf, 0, crlf.Length);
-                        }
+
+                        if (remainder > 0) stream.Write(bytes, blocks * max, remainder);
                     }
                 }
 
@@ -139,12 +148,19 @@ namespace reexmonkey.xmisc.core.text.extensions
         /// Unfolds the lines of a string, which have been delimited to a specified length.
         /// </summary>
         /// <param name="text">The string, whose lines are unfolded.</param>
-        /// <param name="newline">The newline characters, which were used to delimit the string to lines.</param>
+        /// <param name="newline">
+        /// The newline characters, which were used to delimit the string to lines.
+        /// </param>
+        /// <param name="whitespace">
+        /// The linear whitespace (space or horizontal tab) string that follows <paramref name="newline"/>.
+        /// </param>
         /// <returns>The string, whose lines are unfolded.</returns>
-        public static string UnfoldLines(this string text, string newline = "\r\n") => text.Replace($"{newline} ", string.Empty);
+        public static string UnfoldLines(this string text, string newline = "\r\n", string whitespace = " ")
+            => text.Replace(newline + whitespace, string.Empty);
 
         /// <summary>
-        /// Replaces the occurences of a first item of each tuple of strings in the current string instance with the second item of the tuple.
+        /// Replaces the occurences of a first item of each tuple of strings in the current string
+        /// instance with the second item of the tuple.
         /// </summary>
         /// <param name="text">The current string instance.</param>
         /// <param name="pairs">A enumerable collection of string tuples.</param>
@@ -160,11 +176,14 @@ namespace reexmonkey.xmisc.core.text.extensions
         }
 
         /// <summary>
-        /// Escapes the occurences of all specified <paramref name="targets"/> with the <see cref="string"/> <paramref name="text"/>.
+        /// Escapes the occurences of all specified <paramref name="targets"/> with the <see
+        /// cref="string"/><paramref name="text"/>.
         /// </summary>
         /// <param name="text">The string whose members require to be escaped.</param>
         /// <param name="escapeString">The string used to escape each target.</param>
-        /// <param name="targets">The members in the string <paramref name="text"/> that have to be escpaed.</param>
+        /// <param name="targets">
+        /// The members in the string <paramref name="text"/> that have to be escpaed.
+        /// </param>
         /// <returns>The string, in which all target members have been escaped.</returns>
         public static string Escape(this string text, string escapeString, params string[] targets)
         {
@@ -246,7 +265,9 @@ namespace reexmonkey.xmisc.core.text.extensions
         /// Decodes Base-64 text to a string using a provided character encoding.
         /// </summary>
         /// <param name="text">The Base-64 encoded string to decode.</param>
-        /// <param name="encoding">The character encoding to obtain the string from the decoded Base-64 binary.</param>
+        /// <param name="encoding">
+        /// The character encoding to obtain the string from the decoded Base-64 binary.
+        /// </param>
         /// <returns>The string equivalent of the decoded Base-64 string.</returns>
         public static string FromBase64String(this string text, Encoding encoding)
             => encoding.GetString(Convert.FromBase64String(text));

@@ -25,7 +25,7 @@ namespace xmisc.backbone.identity.tests.guids
             var third = SequentialGuid.NewGuid();
 
             //Assert
-            Assert.Equal(first < second && second < third, true);
+            Assert.True(first < second && second < third);
         }
 
 
@@ -40,7 +40,7 @@ namespace xmisc.backbone.identity.tests.guids
             var version = (ushort)(bytes[7] >> 4);
 
             //Assert
-            Assert.Equal(version, 1);
+            Assert.Equal(1, version);
         }
     }
 }

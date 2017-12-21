@@ -25,10 +25,10 @@
     <DocumentationFile>bin\Release\netstandard1.4\.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="2.0.0">
+    <PackageReference Include="GitInfo" Version="2.0.8">
 	<PrivateAssets>All</PrivateAssets>
 	</PackageReference>
-    <PackageReference Include="protobuf-net" Version="2.3.2" />
-    <PackageReference Include="xmisc.core.io" Version="2.0.10-alpha" />
+    <PackageReference Include="protobuf-net" Version="2.3.3" />
+    <PackageReference Include="xmisc.core.io" Version="2.0.26-alpha" />
   </ItemGroup>
 </Project>
