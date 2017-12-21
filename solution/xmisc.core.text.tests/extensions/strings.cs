@@ -9,8 +9,8 @@ namespace reexmonkey.xmisc.core.text.tests.extensions
         [Fact]
         public void TestExtractHexDigits()
         {
-            var data = "0x123456789ABCDEFtest";
-            var expected = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'e' };
+            var data = "xxxx0123456789ABCDEFxxxx";
+            var expected = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
             var result = data.ExtractHexDigits();
 
             Assert.Equal(expected, result);
