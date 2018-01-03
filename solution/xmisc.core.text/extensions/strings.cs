@@ -169,28 +169,35 @@ namespace reexmonkey.xmisc.core.text.extensions
         {
             foreach (var pair in pairs)
             {
-                if (string.IsNullOrEmpty(text)) continue;
+                if (string.IsNullOrEmpty(pair.first) || string.IsNullOrEmpty(pair.second)) continue;
                 text = text.Replace(pair.first, pair.second);
             }
             return text;
         }
 
-        /// <summary>
-        /// Escapes the occurences of all specified <paramref name="targets"/> with the <see
-        /// cref="string"/><paramref name="text"/>.
-        /// </summary>
-        /// <param name="text">The string whose members require to be escaped.</param>
-        /// <param name="escapeString">The string used to escape each target.</param>
-        /// <param name="targets">
-        /// The members in the string <paramref name="text"/> that have to be escpaed.
-        /// </param>
-        /// <returns>The string, in which all target members have been escaped.</returns>
+        public static string Replace(this string text, params (char first, char second)[] pairs)
+        {
+            foreach (var pair in pairs)
+            {
+                text = text.Replace(pair.first, pair.second);
+            }
+            return text;
+        }
+
         public static string Escape(this string text, string escapeString, params string[] targets)
         {
             foreach (var target in targets)
             {
-                if (string.IsNullOrEmpty(text)) continue;
                 text = text.Replace(target, escapeString + target);
+            }
+            return text;
+        }
+
+        public static string Escape(this string text, char escapeChar, params char[] targets)
+        {
+            foreach (var target in targets)
+            {
+                text = text.Replace(new string(new[] { target }), new string(new[] { escapeChar, target }));
             }
             return text;
         }

@@ -10,7 +10,7 @@ namespace reexmonkey.xmisc.core.text.tests.extensions
         public void TestExtractHexDigits()
         {
             var data = "xxxx0123456789ABCDEFxxxx";
-            var expected = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+            var expected = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
             var result = data.ExtractHexDigits();
 
             Assert.Equal(expected, result);
@@ -59,6 +59,38 @@ namespace reexmonkey.xmisc.core.text.tests.extensions
 
             var result = samplestring.UnfoldLines();
             Assert.Equal(expectedstring, result);
+        }
+
+        [Fact]
+        public void TestReplaceStrings()
+        {
+            var text = "The quick brown fox jumped over the lazy dogs";
+            var replaced = text.Replace(("fox", "cat"), ("dogs", "goats"));
+            Assert.Equal("The quick brown cat jumped over the lazy goats", replaced);
+        }
+
+        [Fact]
+        public void TestReplaceChars()
+        {
+            var text = "The quick brown fox jumped over the lazy dogs";
+            var replaced = text.Replace(('T', 'Z'), ('t', 'z'), ('o', 'i'));
+            Assert.Equal("Zhe quick briwn fix jumped iver zhe lazy digs", replaced);
+        }
+
+        [Fact]
+        public void TestEscapeStrings()
+        {
+            var text = @"The '/', '+' and '.' characters need to be escaped!";
+            var escaped = text.Escape(@"\", "/", "+", ".");
+            Assert.Equal(@"The '\/', '\+' and '\.' characters need to be escaped!", escaped);
+        }
+
+        [Fact]
+        public void TestEscapeChars()
+        {
+            var text = @"The '/', '+' and '.' characters need to be escaped!";
+            var escaped = text.Escape('\\', '/', '+', '.');
+            Assert.Equal(@"The '\/', '\+' and '\.' characters need to be escaped!", escaped);
         }
     }
 }
