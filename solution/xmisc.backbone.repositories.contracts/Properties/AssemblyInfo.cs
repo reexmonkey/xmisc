@@ -12,9 +12,9 @@ using System.Reflection;
 #else
 [assembly: AssemblyConfiguration("Release")]
 #endif
-[assembly: AssemblyCompany("reexjungle")]
+[assembly: AssemblyCompany("reexmonkey")]
 [assembly: AssemblyProduct("xmisc.backbone.repositories.contracts")]
-[assembly: AssemblyCopyright("Copyright (c) 2015 -2017, reexjungle")]
+[assembly: AssemblyCopyright("Copyright (c) 2015 -2017, reexmonkey")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
