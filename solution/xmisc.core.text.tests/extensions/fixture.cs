@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace reexmonkey.xmisc.core.text.extensions
+namespace reexmonkey.xmisc.core.text.tests.extensions
 {
     public static class FixtureExtensions
     {
