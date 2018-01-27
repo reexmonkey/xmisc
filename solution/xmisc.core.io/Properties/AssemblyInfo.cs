@@ -1,9 +1,7 @@
-﻿
-using System.Reflection;
+﻿using System.Reflection;
 
-// General Information about an assembly is controlled through the following
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
+// General Information about an assembly is controlled through the following set of attributes.
+// Change these attribute values to modify the information associated with an assembly.
 [assembly: AssemblyTitle("xmisc.core.io")]
 [assembly: AssemblyDescription("Input/Output utilities and extensions.")]
 #if DEBUG
@@ -11,13 +9,11 @@ using System.Reflection;
 #else
 [assembly: AssemblyConfiguration("Release")]
 #endif
-[assembly: AssemblyCompany("reexjungle")]
+[assembly: AssemblyCompany("reexmonkey")]
 [assembly: AssemblyProduct("xmisc.core.io")]
-[assembly: AssemblyCopyright("Copyright (c) 2015 -2017, reexjungle")]
+[assembly: AssemblyCopyright("Copyright (c) 2015-2018, reexjungle")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-
-
 [assembly: AssemblyVersion(
     ThisAssembly.Git.BaseVersion.Major + "." +
     ThisAssembly.Git.BaseVersion.Minor + "." +

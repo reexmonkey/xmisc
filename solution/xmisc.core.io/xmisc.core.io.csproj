@@ -15,7 +15,7 @@
     <PackageLicenseUrl>https://github.com/reexmonkey/xmisc/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard1.4\xmisc.core.io.xml</DocumentationFile>
