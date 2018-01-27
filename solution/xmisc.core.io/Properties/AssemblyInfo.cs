@@ -11,7 +11,7 @@
 #endif
 [assembly: AssemblyCompany("reexmonkey")]
 [assembly: AssemblyProduct("xmisc.core.io")]
-[assembly: AssemblyCopyright("Copyright (c) 2015-2018, reexjungle")]
+[assembly: AssemblyCopyright("Copyright (c) 2015-2018, reexmonkey")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyVersion(
