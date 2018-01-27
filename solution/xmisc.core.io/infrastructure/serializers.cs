@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
@@ -7,7 +8,9 @@ namespace reexmonkey.xmisc.core.io.infrastructure
     /// <summary>
     /// Specifies an abstract serializer that serializes objects to the <typeparamref name="TData"/> format.
     /// </summary>
-    /// <typeparam name="TData">The type of the data that the serializer produces from the serialization process.</typeparam>
+    /// <typeparam name="TData">
+    /// The type of the data that the serializer produces from the serialization process.
+    /// </typeparam>
     public abstract class SerializerBase<TData>
     {
         /// <summary>
@@ -21,7 +24,9 @@ namespace reexmonkey.xmisc.core.io.infrastructure
         /// <summary>
         /// Deserializes the specified data into an object of type <typeparamref name="TSource"/>.
         /// </summary>
-        /// <typeparam name="TSource">The type of object that the serializer produces from the deserialization.</typeparam>
+        /// <typeparam name="TSource">
+        /// The type of object that the serializer produces from the deserialization.
+        /// </typeparam>
         /// <param name="data">The data to deserialize.</param>
         /// <returns>The result of the deserialization</returns>
         public abstract TSource Deserialize<TSource>(TData data);
@@ -65,7 +70,9 @@ namespace reexmonkey.xmisc.core.io.infrastructure
         /// <summary>
         /// Attempts to deserialize the specified data into an object of type <typeparamref name="TSource"/>.
         /// </summary>
-        /// <typeparam name="TSource">The type of object that the serializer produces from the deserialization.</typeparam>
+        /// <typeparam name="TSource">
+        /// The type of object that the serializer produces from the deserialization.
+        /// </typeparam>
         /// <param name="data">The result of the deserialization.</param>
         /// <param name="source">The source.</param>
         /// <returns>True if the deserialization succeeds; otherwise false.</returns>
@@ -104,34 +111,37 @@ namespace reexmonkey.xmisc.core.io.infrastructure
         /// <typeparam name="TSource">The type of source object to serialize.</typeparam>
         /// <param name="source">The source object to serialize.</param>
         /// <returns>The result of the serialization.</returns>
-        public async Task<TData> SerializeAsync<TSource>(TSource source) => await Task.FromResult(Serialize(source));
+        public abstract Task<TData> SerializeAsync<TSource>(TSource source);
 
         /// <summary>
         /// Asynchronously deserializes the specified data into an object of type <typeparamref name="TSource"/>.
         /// </summary>
-        /// <typeparam name="TSource">The type of object that the serializer produces from the deserialization.</typeparam>
+        /// <typeparam name="TSource">
+        /// The type of object that the serializer produces from the deserialization.
+        /// </typeparam>
         /// <param name="data">The data to deserialize.</param>
         /// <returns>The result of the deserialization</returns>
-        public async Task<TSource> DeserializeAsync<TSource>(TData data) => await Task.FromResult(Deserialize<TSource>(data));
-
-
+        public abstract Task<TSource> DeserializeAsync<TSource>(TData data);
     }
 
     /// <summary>
-    /// Specifies an abstract serializer that serializes objects to <see cref="byte"/>s.
+    /// Specifies an abstract serializer that serializes objects to <see cref="byte"/> s.
     /// </summary>
     public abstract class BinarySerializerBase : SerializerBase<byte[]>
     {
-
     }
 
     /// <summary>
-    /// Specifies an abstract serializer that serializes objects to <see cref="string"/>s.
+    /// Specifies an abstract serializer that serializes objects to <see cref="string"/> s.
     /// </summary>
     public abstract class TextSerializerBase : SerializerBase<string>
     {
+    }
 
-
-
+    /// <summary>
+    /// Specifies an abstract serializer that serializes objects to <see cref="Stream"/> s.
+    /// </summary>
+    public abstract class StreamSerializerBase : SerializerBase<Stream>
+    {
     }
 }
