@@ -1,11 +1,11 @@
-﻿using reexmonkey.xmisc.core.io.serializers;
-using System;
+﻿using System;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using reexmonkey.xmisc.core.io.serializers;
 
-namespace xmisc.core.system.net.http.extensions
+namespace reexmonkey.xmisc.core.system.net.http.extensions
 {
     public static class HttpClientExtensions
     {
