@@ -1,8 +1,9 @@
 ﻿using ProtoBuf;
-using reexmonkey.xmisc.core.io.infrastructure;
 using System.IO;
+using System.Threading.Tasks;
+using reexmonkey.xmisc.core.io.serializers;
 
-namespace reexmonkey.xmisc.backbone.io.protobuf.infrastructure
+namespace reexmonkey.xmisc.backbone.io.protobuf.serializers
 {
     public class ProtoBufSerializer : BinarySerializerBase
     {
@@ -22,5 +23,9 @@ namespace reexmonkey.xmisc.backbone.io.protobuf.infrastructure
                 return Serializer.Deserialize<TSource>(stream);
             }
         }
+
+        public async override Task<byte[]> SerializeAsync<TSource>(TSource source) => await Task.FromResult(Serialize(source));
+
+        public async override Task<TSource> DeserializeAsync<TSource>(byte[] data) => await Task.FromResult(Deserialize<TSource>(data));
     }
 }

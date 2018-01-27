@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using reexmonkey.xmisc.core.io.infrastructure;
-namespace reexmonkey.xmisc.backbone.io.formatter.infrastructure
+using System.Threading.Tasks;
+using reexmonkey.xmisc.core.io.serializers;
+
+namespace reexmonkey.xmisc.backbone.io.formatter.serializers
 {
     public class BinaryFormatSerializer : BinarySerializerBase
     {
@@ -9,7 +11,7 @@ namespace reexmonkey.xmisc.backbone.io.formatter.infrastructure
         {
             using (var stream = new MemoryStream())
             {
-                var formatter = new BinaryFormatter(); ;
+                var formatter = new BinaryFormatter();
                 formatter.Serialize(stream, source);
                 return stream.ToArray();
             }
@@ -24,5 +26,8 @@ namespace reexmonkey.xmisc.backbone.io.formatter.infrastructure
             }
         }
 
+        public override async Task<byte[]> SerializeAsync<TSource>(TSource source) => await Task.FromResult(Serialize(source));
+
+        public override async Task<TSource> DeserializeAsync<TSource>(byte[] data) => await Task.FromResult(Deserialize<TSource>(data));
     }
 }

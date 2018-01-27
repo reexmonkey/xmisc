@@ -29,6 +29,6 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
-    <PackageReference Include="xmisc.core.io" Version="2.0.26-alpha" />
+    <PackageReference Include="xmisc.core.io" Version="3.0.2-alpha" />
   </ItemGroup>
 </Project>
