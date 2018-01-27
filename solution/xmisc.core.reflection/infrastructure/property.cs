@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace reexmonkey.xmisc.core.reflection.infrastructure
 {
@@ -13,6 +11,7 @@ namespace reexmonkey.xmisc.core.reflection.infrastructure
     public class Property
     {
         private readonly List<object> backstore;
+
         /// <summary>
         /// Gets the name of the property
         /// </summary>
@@ -24,7 +23,8 @@ namespace reexmonkey.xmisc.core.reflection.infrastructure
         public Type Type { get; }
 
         /// <summary>
-        /// Gets the values of the property in case the property is indexed, otherwise the first element is the value
+        /// Gets the values of the property in case the property is indexed, otherwise the first
+        /// element is the value
         /// </summary>
         public ReadOnlyCollection<object> Values => backstore.AsReadOnly();
 
@@ -38,16 +38,17 @@ namespace reexmonkey.xmisc.core.reflection.infrastructure
         /// </summary>
         /// <param name="name">The name of the property</param>
         /// <param name="type">The type of the property</param>
-        /// <param name="values">The values of the property in case the property is indexed, otherwise the first element is the value</param>
+        /// <param name="values">
+        /// The values of the property in case the property is indexed, otherwise the first element
+        /// is the value
+        /// </param>
         public Property(string name, Type type, IEnumerable<object> values)
         {
             Name = name;
             Type = type;
             backstore = values != null ? new List<object>(values) : new List<object>();
         }
-
     }
-
 
     public class PropertyInfo<TValue> : Property
     {
