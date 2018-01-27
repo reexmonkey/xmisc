@@ -5,16 +5,16 @@
 
 using System.Reflection;
 
-[assembly: AssemblyTitle("xmisc.backbone.repositories.contracts")]
-[assembly: AssemblyDescription("Common contracts of domain services (repository interfaces).")]
+[assembly: AssemblyTitle("xmisc.backbone.io.jil.contracts")]
+[assembly: AssemblyDescription("JIL Serialization Adapter.")]
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
 #else
 [assembly: AssemblyConfiguration("Release")]
 #endif
 [assembly: AssemblyCompany("reexmonkey")]
-[assembly: AssemblyProduct("xmisc.backbone.repositories.contracts")]
-[assembly: AssemblyCopyright("Copyright (c) 2015 -2017, reexmonkey")]
+[assembly: AssemblyProduct("xmisc.backbone.io.jil.contracts")]
+[assembly: AssemblyCopyright("Copyright (c) 2015-2018, reexmonkey")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,3 +32,4 @@ using System.Reflection;
     ThisAssembly.Git.SemVer.Minor + "." +
     ThisAssembly.Git.SemVer.Patch +
     ThisAssembly.Git.SemVer.DashLabel)]
+

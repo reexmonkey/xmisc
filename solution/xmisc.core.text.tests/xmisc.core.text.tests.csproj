@@ -58,6 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="extensions\fixture.cs" />
     <Compile Include="extensions\strings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

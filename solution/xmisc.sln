@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{DBEFFF0A-1EDF-4083-80C4-BCC33CD92353}"
 EndProject
@@ -46,6 +46,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "validation", "validation", "{0C84A314-BFD0-43BB-9711-C19EBA78D358}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xmisc.core.text.tests", "xmisc.core.text.tests\xmisc.core.text.tests.csproj", "{BEB00BC8-F170-41B2-A01C-0CA52D993AA1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net", "net", "{30988507-4FFA-4051-8E0E-49C6B56CA7E0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xmisc.backbone.net.contracts", "xmisc.backbone.net.contracts\xmisc.backbone.net.contracts.csproj", "{733C14ED-0741-488A-BB06-720CCF5A6746}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xmisc.backbone.io.jil", "xmisc.backbone.io.jil\xmisc.backbone.io.jil.csproj", "{78145F2C-5594-4E80-AE4F-68ACEF4211E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -113,6 +119,14 @@ Global
 		{BEB00BC8-F170-41B2-A01C-0CA52D993AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEB00BC8-F170-41B2-A01C-0CA52D993AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEB00BC8-F170-41B2-A01C-0CA52D993AA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{733C14ED-0741-488A-BB06-720CCF5A6746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{733C14ED-0741-488A-BB06-720CCF5A6746}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{733C14ED-0741-488A-BB06-720CCF5A6746}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{733C14ED-0741-488A-BB06-720CCF5A6746}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78145F2C-5594-4E80-AE4F-68ACEF4211E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78145F2C-5594-4E80-AE4F-68ACEF4211E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78145F2C-5594-4E80-AE4F-68ACEF4211E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78145F2C-5594-4E80-AE4F-68ACEF4211E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -137,6 +151,9 @@ Global
 		{82F8E9E3-430B-4DF7-A86B-58783064A7EB} = {3F102311-4557-4DD9-B2E5-977FB9232D6F}
 		{0C84A314-BFD0-43BB-9711-C19EBA78D358} = {3F102311-4557-4DD9-B2E5-977FB9232D6F}
 		{BEB00BC8-F170-41B2-A01C-0CA52D993AA1} = {4E5E84A6-BF4F-4685-8F70-4D6424DBA171}
+		{30988507-4FFA-4051-8E0E-49C6B56CA7E0} = {3F102311-4557-4DD9-B2E5-977FB9232D6F}
+		{733C14ED-0741-488A-BB06-720CCF5A6746} = {30988507-4FFA-4051-8E0E-49C6B56CA7E0}
+		{78145F2C-5594-4E80-AE4F-68ACEF4211E3} = {BC760B34-AAE1-4381-BA84-9260A48BABB5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {776D82FA-CF53-410F-9114-54BE92B3B50D}
