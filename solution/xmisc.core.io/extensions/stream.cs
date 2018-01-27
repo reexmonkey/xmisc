@@ -124,5 +124,38 @@ namespace reexmonkey.xmisc.core.io.extensions
             }
             return stream;
         }
+
+        /// <summary>
+        /// Copies a sequence of bytes from a source to a target stream.
+        /// </summary>
+        /// <param name="destination">The target stream.</param>
+        /// <param name="source">The source stream.</param>
+        /// <param name="bufferSize">The size of the buffer, in bytes, used during the copying.</param>
+        /// <remarks>Credits: https://stackoverflow.com/questions/3212707/how-to-get-a-memorystream-from-a-stream-in-net</remarks>
+        public static void CopyStream(this Stream destination, Stream source, int bufferSize)
+        {
+            var buffer = new byte[bufferSize];
+            int read;
+            while ((read = source.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                destination.Write(buffer, 0, read);
+            }
+        }
+
+        /// <summary>
+        /// Copies a sequence of bytes from a source to a target stream in an asynchronous operation.
+        /// </summary>
+        /// <param name="destination">The target stream.</param>
+        /// <param name="source">The source stream.</param>
+        /// <param name="bufferSize">The size of the buffer, in bytes, used during the copying.</param>
+        public static async Task CopyStreamAsync(this Stream destination, Stream source, int bufferSize)
+        {
+            var buffer = new byte[bufferSize];
+            int read;
+            while ((read = await source.ReadAsync(buffer, 0, buffer.Length)) > 0)
+            {
+                await destination.WriteAsync(buffer, 0, read);
+            }
+        }
     }
 }
