@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
-using reexmonkey.xmisc.core.io.infrastructure;
+using reexmonkey.xmisc.core.io.serializers;
 
 namespace reexmonkey.xmisc.core.cryptography.extensions
 {
@@ -25,7 +25,10 @@ namespace reexmonkey.xmisc.core.cryptography.extensions
         public static double GetHashValue(this double value, HashAlgorithm cipher) => BitConverter.ToDouble(BitConverter.GetBytes(value).GetHash(cipher), 0);
 
         public static decimal GetHashValue<TSerializer>(this decimal value, TSerializer serializer, HashAlgorithm cipher)
-            where TSerializer : BinarySerializerBase => serializer.Deserialize<decimal>(value.GetBinaryHash(serializer, cipher));
+            where TSerializer : BinarySerializerBase
+        {
+            return serializer.Deserialize<decimal>(value.GetBinaryHash(serializer, cipher));
+        }
 
         #endregion Hash Functions
 
