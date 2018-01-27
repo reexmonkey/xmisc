@@ -1,9 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
-namespace reexmonkey.xmisc.core.io.infrastructure
+namespace reexmonkey.xmisc.core.io.serializers
 {
     /// <summary>
     /// Specifies an abstract serializer that serializes objects to the <typeparamref name="TData"/> format.
@@ -122,26 +121,5 @@ namespace reexmonkey.xmisc.core.io.infrastructure
         /// <param name="data">The data to deserialize.</param>
         /// <returns>The result of the deserialization</returns>
         public abstract Task<TSource> DeserializeAsync<TSource>(TData data);
-    }
-
-    /// <summary>
-    /// Specifies an abstract serializer that serializes objects to <see cref="byte"/> s.
-    /// </summary>
-    public abstract class BinarySerializerBase : SerializerBase<byte[]>
-    {
-    }
-
-    /// <summary>
-    /// Specifies an abstract serializer that serializes objects to <see cref="string"/> s.
-    /// </summary>
-    public abstract class TextSerializerBase : SerializerBase<string>
-    {
-    }
-
-    /// <summary>
-    /// Specifies an abstract serializer that serializes objects to <see cref="Stream"/> s.
-    /// </summary>
-    public abstract class StreamSerializerBase : SerializerBase<Stream>
-    {
     }
 }

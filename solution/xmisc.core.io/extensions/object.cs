@@ -1,5 +1,5 @@
-﻿using reexmonkey.xmisc.core.io.infrastructure;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using reexmonkey.xmisc.core.io.serializers;
 
 namespace reexmonkey.xmisc.core.io.extensions
 {
@@ -11,7 +11,9 @@ namespace reexmonkey.xmisc.core.io.extensions
         /// <summary>
         /// Clones the given <paramref name="source"/> by using the provided <paramref name="serializer"/>.
         /// </summary>
-        /// <typeparam name="TSource">The type of the input data consumed by the <paramref name="serializer"/>.</typeparam>
+        /// <typeparam name="TSource">
+        /// The type of the input data consumed by the <paramref name="serializer"/>.
+        /// </typeparam>
         /// <typeparam name="TData">The type of output data produced by the <paramref name="serializer"/>.</typeparam>
         /// <param name="source">The source object to deep clone.</param>
         /// <param name="serializer">The serializer that clones the <paramref name="source"/> deeply.</param>
@@ -25,7 +27,9 @@ namespace reexmonkey.xmisc.core.io.extensions
         /// <summary>
         /// Asynchronously clones the given <paramref name="source"/> by using the provided <paramref name="serializer"/>.
         /// </summary>
-        /// <typeparam name="TSource">The type of the input data consumed by the <paramref name="serializer"/>.</typeparam>
+        /// <typeparam name="TSource">
+        /// The type of the input data consumed by the <paramref name="serializer"/>.
+        /// </typeparam>
         /// <typeparam name="TData">The type of output data produced by the <paramref name="serializer"/>.</typeparam>
         /// <param name="source">The source object to deep clone.</param>
         /// <param name="serializer">The serializer that clones the <paramref name="source"/> deeply.</param>
@@ -34,7 +38,6 @@ namespace reexmonkey.xmisc.core.io.extensions
         {
             var data = await serializer.SerializeAsync(source);
             return await serializer.DeserializeAsync<TSource>(data);
-
         }
     }
 }

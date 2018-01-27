@@ -1,10 +1,10 @@
-﻿using reexmonkey.xmisc.core.io.infrastructure;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using reexmonkey.xmisc.core.io.serializers;
 
 namespace reexmonkey.xmisc.core.io.extensions
 {
