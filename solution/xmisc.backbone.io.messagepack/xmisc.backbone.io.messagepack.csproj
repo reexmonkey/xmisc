@@ -29,6 +29,6 @@
 	<PrivateAssets>All</PrivateAssets>
 	</PackageReference>
     <PackageReference Include="MsgPack.Cli" Version="0.9.2" />
-    <PackageReference Include="xmisc.core.io" Version="3.0.2-alpha" />
+    <PackageReference Include="xmisc.core.io" Version="4.0.1-alpha" />
   </ItemGroup>
 </Project>

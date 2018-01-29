@@ -18,10 +18,19 @@ namespace reexmonkey.xmisc.backbone.io.formatter.serializers
 
         public override Stream Serialize<TSource>(TSource source)
         {
+            bool success = false;
             var stream = new MemoryStream();
-            var formatter = new BinaryFormatter();
-            formatter.Serialize(stream, source);
-            return stream;
+            try
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(stream, source);
+                success = true;
+                return stream;
+            }
+            finally
+            {
+                if (!success) stream.Dispose();
+            }
         }
 
         public override TSource Deserialize<TSource>(Stream data)

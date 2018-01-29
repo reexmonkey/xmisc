@@ -1,44 +1,78 @@
-﻿using System;
+﻿using reexmonkey.xmisc.core.io.serializers;
+using System;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
-using reexmonkey.xmisc.core.io.extensions;
-using reexmonkey.xmisc.core.io.serializers;
 
 namespace reexmonkey.xmisc.backbone.io.jil.serializers
 {
     public class JilStreamSerializer : StreamSerializerBase
     {
-        private readonly JilSerializer textSerializer = new JilSerializer();
-        private readonly BinarySerializerBase binarySerializer;
+        private readonly JilTextSerializer inner = new JilTextSerializer();
+        private readonly Encoding encoding;
         private readonly int bufferSize;
 
-        public JilStreamSerializer(int bufferSize, BinarySerializerBase binarySerializer)
+        public JilStreamSerializer(Encoding encoding, int bufferSize)
         {
             if (bufferSize <= 0) throw new ArgumentOutOfRangeException(nameof(bufferSize));
-            this.binarySerializer = binarySerializer ?? throw new ArgumentNullException(nameof(binarySerializer));
+            this.encoding = encoding ?? throw new ArgumentNullException(nameof(encoding));
             this.bufferSize = bufferSize;
         }
 
         public override Stream Serialize<TSource>(TSource source)
         {
-            return source.Stream(bufferSize, textSerializer);
+            var success = false;
+            var stream = new MemoryStream();
+            try
+            {
+                using (var writer = new StreamWriter(stream, encoding, bufferSize, true))
+                {
+                    writer.AutoFlush = true;
+                    writer.Write(inner.SerializeAsync(source));
+                }
+                success = true;
+                return stream;
+            }
+            finally
+            {
+                if (!success) stream.Dispose();
+            }
         }
 
         public override TSource Deserialize<TSource>(Stream data)
         {
-            var bytes = data.ReadBytes(bufferSize);
-            return binarySerializer.Deserialize<TSource>(bytes);
+            using (var reader = new StreamReader(data, encoding, true, bufferSize))
+            {
+                return inner.Deserialize<TSource>(reader.ReadToEnd());
+            }
         }
 
         public override async Task<Stream> SerializeAsync<TSource>(TSource source)
         {
-            return await source.StreamAsync(bufferSize, textSerializer);
+            var success = false;
+            var stream = new MemoryStream();
+            try
+            {
+                using (var writer = new StreamWriter(stream, encoding, bufferSize, true))
+                {
+                    writer.AutoFlush = true;
+                    await writer.WriteAsync(await inner.SerializeAsync(source));
+                }
+                success = await Task.FromResult(true);
+                return await Task.FromResult(stream);
+            }
+            finally
+            {
+                if (!success) stream.Dispose();
+            }
         }
 
         public override async Task<TSource> DeserializeAsync<TSource>(Stream data)
         {
-            var bytes = data.ReadBytes(bufferSize);
-            return await binarySerializer.DeserializeAsync<TSource>(bytes);
+            using (var reader = new StreamReader(data, encoding, true, bufferSize))
+            {
+                return await inner.DeserializeAsync<TSource>(await reader.ReadToEndAsync());
+            }
         }
     }
 }

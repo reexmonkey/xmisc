@@ -4,7 +4,7 @@ using reexmonkey.xmisc.core.io.serializers;
 
 namespace reexmonkey.xmisc.backbone.io.jil.serializers
 {
-    public class JilSerializer : TextSerializerBase
+    public class JilTextSerializer : TextSerializerBase
     {
         public override TSource Deserialize<TSource>(string data) => JSON.Deserialize<TSource>(data, Options.IncludeInherited);
 
