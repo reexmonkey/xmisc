@@ -1,9 +1,9 @@
 ﻿using System.Security.Cryptography;
 using reexmonkey.xmisc.backbone.identifiers.concretes.generators;
 using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
-using reexmonkey.xmisc.backbone.io.formatter.infrastructure;
-using reexmonkey.xmisc.backbone.io.messagepack.infrastructure;
-using reexmonkey.xmisc.backbone.io.protobuf.infrastructure;
+using reexmonkey.xmisc.backbone.io.formatter.serializers;
+using reexmonkey.xmisc.backbone.io.messagepack.serializers;
+using reexmonkey.xmisc.backbone.io.protobuf.serializers;
 using Xunit;
 
 namespace reexmonkey.xmisc.backbone.identifiers.tests.generators
