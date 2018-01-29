@@ -6,8 +6,4 @@ install:
 - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
 script:
 - dotnet restore
-- dotnet build
-- xbuild /p:Configuration=Release solution/xmisc.sln
-- mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./xmisc.backbone.identifiers.tests/bin/Release/xmisc.backbone.identifiers.tests.dll
-- mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./xmisc.core.text.tests/bin/Release/xmisc.core.text.tests.dll
 
