@@ -2,9 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
-using reexmonkey.xmisc.core.io.serializers;
 
 namespace reexmonkey.xmisc.core.io.extensions
 {
@@ -33,11 +31,11 @@ namespace reexmonkey.xmisc.core.io.extensions
         }
 
         /// <summary>
-        /// Gets the checksum of the <paramref name="stream"/> object using the provided <paramref name="algorithm"/>.
+        /// Gets the checksum of a <paramref name="stream"/> object.
         /// </summary>
         /// <param name="stream">The stream whose integerity is checked.</param>
         /// <param name="algorithm">
-        /// The algorithm to compute the hash of the <paramref name="stream"/> object..
+        /// The algorithm to compute the hash of the <paramref name="stream"/>.
         /// </param>
         /// <returns>The checksum of the stream object.</returns>
         public static string GetChecksum(this Stream stream, HashAlgorithm algorithm)
@@ -47,115 +45,36 @@ namespace reexmonkey.xmisc.core.io.extensions
         }
 
         /// <summary>
-        /// Serializes the given instance into a memory stream.
+        /// Reads bytes from stream in an asynchronous operation.
         /// </summary>
-        /// <typeparam name="TSource">The type of instance to serialize and stream.</typeparam>
-        /// <param name="source">The instance to stream.</param>
-        /// <param name="serializer">
-        /// The serializer that serialiizes <paramref name="source"/> into an array of bytes.
-        /// </param>
-        /// <returns>A memory stream, to which the serialized bytes are wriiten.</returns>
-        public static Stream Stream<TSource>(this TSource source, BinarySerializerBase serializer)
+        /// <param name="stream">The stream to read.</param>
+        /// <param name="buffersize">The size of the buffer during the read process.</param>
+        /// <returns>The promise of bytes read from the stream.</returns>
+        public static async Task<byte[]> ReadBytesAsync(this Stream stream, int buffersize = 4096)
         {
-            var stream = new MemoryStream();
-            var bytes = serializer.Serialize(source);
-            stream.Write(bytes, 0, bytes.Length);
-            return stream;
-        }
+            if (stream is MemoryStream memorystream) return await Task.FromResult(memorystream.ToArray());
 
-        /// <summary>
-        /// Serializes the given instance into a memory stream in an asynchronous operation.
-        /// </summary>
-        /// <typeparam name="TSource">The type of instance to serialize and stream.</typeparam>
-        /// <param name="source">The instance to stream.</param>
-        /// <param name="serializer">
-        /// The serializer that serialiizes <paramref name="source"/> into an array of bytes.
-        /// </param>
-        /// <returns>
-        /// The asynchronous operation that returns a memory stream, to which the serialized bytes
-        /// are wriiten.
-        /// </returns>
-        public static async Task<Stream> StreamAsync<TSource>(this TSource source, BinarySerializerBase serializer)
-        {
-            var stream = new MemoryStream();
-            var bytes = serializer.Serialize(source);
-            await stream.WriteAsync(bytes, 0, bytes.Length);
-            return await Task.FromResult(stream);
-        }
-
-        /// <summary>
-        /// Serializes the given instance into a memory stream.
-        /// </summary>
-        /// <typeparam name="TSource">The type of instance to serialize and stream.</typeparam>
-        /// <param name="source">The instance to stream.</param>
-        /// <param name="bufferSize">The size, in bytes, for buffer used in the streaming.</param>
-        /// <param name="serializer">
-        /// The serializer that serialiizes <paramref name="source"/> into an array of bytes.
-        /// </param>
-        /// <returns>A memory stream, to which the serialized bytes are wriiten.</returns>
-        public static Stream Stream<TSource>(this TSource source, int bufferSize, TextSerializerBase serializer)
-        {
-            var stream = new MemoryStream();
-            using (var writer = new StreamWriter(stream, new UTF8Encoding(false), bufferSize, true) { AutoFlush = true })
+            var buffer = new byte[buffersize];
+            using (var mstream = new MemoryStream())
             {
-                writer.Write(serializer.Serialize(source));
-            }
-            return stream;
-        }
-
-        /// <summary>
-        /// Serializes the given instance into a memory stream in an asynchronous operation.
-        /// </summary>
-        /// <typeparam name="TSource">The type of instance to serialize and stream.</typeparam>
-        /// <param name="source">The instance to stream.</param>
-        /// <param name="bufferSize">The size, in bytes, for buffer used in the streaming.</param>
-        /// <param name="serializer">
-        /// The serializer that serialiizes <paramref name="source"/> into an array of bytes.
-        /// </param>
-        /// <returns>
-        /// An asynchronous operation that returns a memory stream, to which the serialized bytes are wriiten.
-        /// </returns>
-        public static async Task<Stream> StreamAsync<TSource>(this TSource source, int bufferSize, TextSerializerBase serializer)
-        {
-            var stream = new MemoryStream();
-            using (var writer = new StreamWriter(stream, new UTF8Encoding(false), bufferSize, true) { AutoFlush = true })
-            {
-                await writer.WriteAsync(await serializer.SerializeAsync(source));
-            }
-            return stream;
-        }
-
-        /// <summary>
-        /// Copies a sequence of bytes from a source to a target stream.
-        /// </summary>
-        /// <param name="destination">The target stream.</param>
-        /// <param name="source">The source stream.</param>
-        /// <param name="bufferSize">The size of the buffer, in bytes, used during the copying.</param>
-        /// <remarks>Credits: https://stackoverflow.com/questions/3212707/how-to-get-a-memorystream-from-a-stream-in-net</remarks>
-        public static void CopyStream(this Stream destination, Stream source, int bufferSize)
-        {
-            var buffer = new byte[bufferSize];
-            int read;
-            while ((read = source.Read(buffer, 0, buffer.Length)) > 0)
-            {
-                destination.Write(buffer, 0, read);
+                int read;
+                while ((read = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                {
+                    await mstream.WriteAsync(buffer, 0, read);
+                }
+                return await Task.FromResult(mstream.ToArray());
             }
         }
 
         /// <summary>
-        /// Copies a sequence of bytes from a source to a target stream in an asynchronous operation.
+        /// Gets the checksum value of a <paramref name="stream"/> in asynchronous operation.
         /// </summary>
-        /// <param name="destination">The target stream.</param>
-        /// <param name="source">The source stream.</param>
-        /// <param name="bufferSize">The size of the buffer, in bytes, used during the copying.</param>
-        public static async Task CopyStreamAsync(this Stream destination, Stream source, int bufferSize)
-        {
-            var buffer = new byte[bufferSize];
-            int read;
-            while ((read = await source.ReadAsync(buffer, 0, buffer.Length)) > 0)
-            {
-                await destination.WriteAsync(buffer, 0, read);
-            }
-        }
+        /// <param name="stream">The stream whose integerity is checked.</param>
+        /// <param name="algorithm">
+        /// The algorithm to compute the hash of the <paramref name="stream"/>.
+        /// </param>
+        /// <returns>The promise of a checksum value.</returns>
+        public static async Task<string> GetChecksumAsync(this Stream stream, HashAlgorithm algorithm)
+            => await Task.FromResult(GetChecksum(stream, algorithm));
     }
 }

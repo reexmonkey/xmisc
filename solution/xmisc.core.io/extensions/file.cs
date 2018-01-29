@@ -127,7 +127,6 @@ namespace reexmonkey.xmisc.core.io.extensions
             }
         }
 
-
         /// <summary>
         /// Asynchronously Enumerates all the files in the current directory that satisfy the given predicate.
         /// </summary>

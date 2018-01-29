@@ -20,8 +20,7 @@ namespace reexmonkey.xmisc.core.io.extensions
         /// <returns>A deep clone of the <paramref name="source"/>.</returns>
         public static TSource DeepClone<TSource, TData>(this TSource source, SerializerBase<TData> serializer)
         {
-            var data = serializer.Serialize(source);
-            return serializer.Deserialize<TSource>(data);
+            return serializer.Deserialize<TSource>(serializer.Serialize(source));
         }
 
         /// <summary>
@@ -36,8 +35,7 @@ namespace reexmonkey.xmisc.core.io.extensions
         /// <returns>A deep clone of the <paramref name="source"/>.</returns>
         public static async Task<TSource> DeepCloneAsync<TSource, TData>(this TSource source, SerializerBase<TData> serializer)
         {
-            var data = await serializer.SerializeAsync(source);
-            return await serializer.DeserializeAsync<TSource>(data);
+            return await serializer.DeserializeAsync<TSource>(await serializer.SerializeAsync(source));
         }
     }
 }
