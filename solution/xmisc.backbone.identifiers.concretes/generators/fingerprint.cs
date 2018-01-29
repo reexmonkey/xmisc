@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using reexmonkey.xmisc.backbone.identifiers.contracts.generators;
 using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
 using reexmonkey.xmisc.core.cryptography.extensions;
-using reexmonkey.xmisc.core.io.infrastructure;
+using reexmonkey.xmisc.core.io.serializers;
 
 namespace reexmonkey.xmisc.backbone.identifiers.concretes.generators
 {
