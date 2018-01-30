@@ -35,7 +35,7 @@ namespace xmisc.backbone.identity.tests.guids
             var version = (ushort)(bytes[7] >> 4);
 
             //Assert
-            Assert.Equal(version, 3);
+            Assert.Equal(3, version);
         }
     }
 }
