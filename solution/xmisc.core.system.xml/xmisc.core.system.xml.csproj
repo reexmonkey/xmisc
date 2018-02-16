@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Target Name="AutoVersion" AfterTargets="AfterBuild">
+  <PropertyGroup>
+    <PackageVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)$(GitSemVerDashLabel)</PackageVersion>	
+  </PropertyGroup>	 
+  </Target>
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+    <RootNamespace>reexmonkey.xmisc.core.system.xml</RootNamespace>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+   <PackageReference Include="GitInfo" Version="2.0.8">
+	 <PrivateAssets>All</PrivateAssets>
+	</PackageReference>
+   <PackageReference Include="System.ValueTuple" Version="4.4.0" />
+   <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>
