@@ -14,7 +14,7 @@ namespace xmisc.core.system.net.http.tests.extensions
         public void TestJsonClientGet()
         {
             //arrange
-            var address = Fixture.Client.BaseAddress.Combine("questions".ToUri());
+            var address = "questions".ToUri();
 
             //act
             var polls = Fixture.Client.Get<List<Poll>>(address, Fixture.JilTextSerializer);
@@ -27,7 +27,7 @@ namespace xmisc.core.system.net.http.tests.extensions
         public void TestJsonStreamClientGet()
         {
             //arrange
-            var address = Fixture.Client.BaseAddress.Combine("questions".ToUri());
+            var address = "questions".ToUri();
 
             //act
             var polls = Fixture.Client.Get<List<Poll>>(address, Fixture.JilStreamSerializer);
@@ -40,7 +40,7 @@ namespace xmisc.core.system.net.http.tests.extensions
         public async Task TestJsonClientGetAsync()
         {
             //arrange
-            var address = Fixture.Client.BaseAddress.Combine("questions".ToUri());
+            var address = "questions".ToUri();
             
             //act
             var polls = await Fixture.Client.GetAsync<List<Poll>>(address, Fixture.JilTextSerializer);
@@ -53,7 +53,7 @@ namespace xmisc.core.system.net.http.tests.extensions
         public async Task TestJsonStreamClientGetAsync()
         {
             //arrange
-            var address = Fixture.Client.BaseAddress.Combine("questions".ToUri());
+            var address = "questions".ToUri();
 
             //act
             var polls = await Fixture.Client.GetAsync<List<Poll>>(address, Fixture.JilStreamSerializer);

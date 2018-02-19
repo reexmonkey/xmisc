@@ -8,25 +8,7 @@ namespace reexmonkey.xmisc.core.system.net.http.extensions
 {
     public static class HttpPatchClientExtensions
     {
-        #region Conversion Methods
-
-        private static async Task<StringContent> AsContentAsync<T>(this TextSerializerBase serializer, T instance)
-        {
-            return new StringContent(await serializer.SerializeAsync(instance));
-        }
-
-        private static async Task<ByteArrayContent> AsContentAsync<T>(this BinarySerializerBase serializer, T content)
-        {
-            return new ByteArrayContent(await serializer.SerializeAsync(content));
-        }
-
-        private static async Task<StreamContent> AsContentAsync<T>(this StreamSerializerBase serializer, T content)
-        {
-            return new StreamContent(await serializer.SerializeAsync(content));
-        }
-
-        #endregion Conversion Methods
-
+    
         #region PATCH Methods
 
         public static async Task<HttpResponseMessage> PatchAsync(this HttpClient client, Uri requestUri, HttpContent content)

@@ -8,27 +8,6 @@ namespace reexmonkey.xmisc.core.system.net.http.extensions
 {
     public static class HttpPutClientExtensions
     {
-        #region Conversion Methods
-
-        private static async Task<StringContent> AsContentAsync<T>(this TextSerializerBase serializer, T instance)
-        {
-            return new StringContent(await serializer.SerializeAsync(instance));
-        }
-
-        private static async Task<ByteArrayContent> AsContentAsync<T>(this BinarySerializerBase serializer, T content)
-        {
-            return new ByteArrayContent(await serializer.SerializeAsync(content));
-        }
-
-        private static async Task<StreamContent> AsContentAsync<T>(this StreamSerializerBase serializer, T content)
-        {
-            return new StreamContent(await serializer.SerializeAsync(content));
-        }
-
-        #endregion Conversion Methods
-
-        #region PUT Methods
-
         //Put <T> Methods (text serialization)
 
         public static HttpResponseMessage Put<T>(this HttpClient client, Uri requestUri, T content, TextSerializerBase serializer)
@@ -136,7 +115,5 @@ namespace reexmonkey.xmisc.core.system.net.http.extensions
                 return await client.PutAsync(requestUri, stream, token);
             }
         }
-
-        #endregion PUT Methods
     }
 }

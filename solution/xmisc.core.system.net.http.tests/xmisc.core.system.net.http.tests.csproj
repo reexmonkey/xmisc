@@ -12,6 +12,7 @@
     <PackageReference Include="xmisc.backbone.io.jil" Version="4.0.2-alpha" />
     <PackageReference Include="xmisc.backbone.io.messagepack" Version="4.0.2-alpha" />
     <PackageReference Include="xmisc.backbone.io.protobuf" Version="4.0.2-alpha" />
+    <PackageReference Include="xmisc.core.linq" Version="2.0.28-alpha" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
   </ItemGroup>

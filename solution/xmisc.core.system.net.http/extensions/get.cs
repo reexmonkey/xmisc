@@ -9,25 +9,6 @@ namespace reexmonkey.xmisc.core.system.net.http.extensions
 {
     public static class HttpGetClientExtensions
     {
-        private static async Task<T> DeserializeResponseAsync<T>(this TextSerializerBase serializer, HttpResponseMessage response)
-        {
-            var textual = await response.Content.ReadAsStringAsync();
-            return await serializer.DeserializeAsync<T>(textual);
-        }
-
-        private static async Task<T> DeserializeResponseAsync<T>(this BinarySerializerBase serializer, HttpResponseMessage response)
-        {
-            return await serializer.DeserializeAsync<T>(await response.Content.ReadAsByteArrayAsync());
-        }
-
-        private static async Task<T> DeserializeResponseAsync<T>(this StreamSerializerBase serializer, HttpResponseMessage response)
-        {
-            using (var stream = await response.Content.ReadAsStreamAsync())
-            {
-                return await serializer.DeserializeAsync<T>(stream);
-            }
-        }
-
         //Get<T> Methods (text serialization)
 
         public static T Get<T>(this HttpClient client, Uri requestUri, TextSerializerBase serializer)
