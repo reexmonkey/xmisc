@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Serialization;
+using System.Reflection;
 
 namespace reexmonkey.xmisc.core.system.xml.extensions
 {
@@ -76,6 +79,28 @@ namespace reexmonkey.xmisc.core.system.xml.extensions
         public static T SafeReadElementContentAs<T>(this XmlReader reader, Func<object, T> transform, string localName, string namespaceURI)
             => !reader.IsEmptyElement ? transform(reader.ReadElementContentAsObject(localName, namespaceURI)) : default(T);
 
+        public static T SafeReadElementContentAs<T>(this XmlReader reader, XmlSerializer serializer)
+            => serializer.CanDeserialize(reader) ? (T)serializer.Deserialize(reader) : default(T);
+
+        public static T SafeReadElementContentAs<T>(this XmlReader reader)
+            => reader.SafeReadElementContentAs<T>(new XmlSerializer(typeof(T)));
+
+        public static T SafeReadElementContentAs<T>(this XmlReader reader, string defaultNamespace)
+            => reader.SafeReadElementContentAs<T>(new XmlSerializer(typeof(T), defaultNamespace));
+
+        public static T SafeReadElementContentAs<T>(this XmlReader reader, XmlRootAttribute root)
+            => reader.SafeReadElementContentAs<T>(new XmlSerializer(typeof(T), root));
+
+        public static T SafeReadElementContentAs<T>(this XmlReader reader, XmlRootAttribute root, params Type[] extraTypes)
+        {
+            var match = extraTypes.FirstOrDefault(t =>
+            {
+                var ti = t.GetTypeInfo();
+                return typeof(T).GetTypeInfo().IsAssignableFrom(ti) && !ti.IsAbstract;
+            });
+            return match != null ? reader.SafeReadElementContentAs<T>(new XmlSerializer(match, root)) : default(T);
+        }
+
         public static async Task<string> SafeReadElementContentAsStringAsync(this XmlReader reader)
             => !reader.IsEmptyElement ? await reader.ReadElementContentAsStringAsync() : await Task.FromResult(string.Empty);
 
@@ -99,5 +124,27 @@ namespace reexmonkey.xmisc.core.system.xml.extensions
 
         public static async Task<T> SafeReadElementContentAsAsync<T>(this XmlReader reader, Func<object, T> transform, string localName, string namespaceURI)
             => !reader.IsEmptyElement ? await Task.FromResult(transform(reader.ReadElementContentAsObject(localName, namespaceURI))) : await Task.FromResult(default(T));
+
+        public static async Task<T> SafeReadElementContentAsAsync<T>(this XmlReader reader, XmlSerializer serializer)
+            => await Task.FromResult(reader.SafeReadElementContentAs<T>(serializer));
+
+        public static async Task<T> SafeReadElementContentAsAsync<T>(this XmlReader reader)
+            => await Task.FromResult(reader.SafeReadElementContentAs<T>());
+
+        public static async Task<T> SafeReadElementContentAsAsync<T>(this XmlReader reader, string defaultNamespace)
+            => await Task.FromResult(reader.SafeReadElementContentAs<T>(defaultNamespace));
+
+        public static async Task<T> SafeReadElementContentAsAsync<T>(this XmlReader reader, XmlRootAttribute root)
+            => await Task.FromResult(reader.SafeReadElementContentAs<T>(root));
+
+        public static async Task<T> SafeReadElementContentAsAsync<T>(this XmlReader reader, XmlRootAttribute root, params Type[] extraTypes)
+        {
+            var match = extraTypes.FirstOrDefault(t =>
+            {
+                var ti = t.GetTypeInfo();
+                return typeof(T).GetTypeInfo().IsAssignableFrom(ti) && !ti.IsAbstract;
+            });
+            return match != null ? await reader.SafeReadElementContentAsAsync<T>(new XmlSerializer(match, root)) : await Task.FromResult(default(T));
+        }
     }
 }
