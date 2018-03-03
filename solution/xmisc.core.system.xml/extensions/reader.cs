@@ -125,17 +125,17 @@ namespace reexmonkey.xmisc.core.system.xml.extensions
         public static async Task<T> SafeReadElementContentAsAsync<T>(this XmlReader reader, Func<object, T> transform, string localName, string namespaceURI)
             => !reader.IsEmptyElement ? await Task.FromResult(transform(reader.ReadElementContentAsObject(localName, namespaceURI))) : await Task.FromResult(default(T));
 
-        public static async Task<T> SafeReadElementContentAsAsync<T>(this XmlReader reader, XmlSerializer serializer)
-            => await Task.FromResult(reader.SafeReadElementContentAs<T>(serializer));
+        public static Task<T> SafeReadElementContentAsAsync<T>(this XmlReader reader, XmlSerializer serializer)
+            => Task.FromResult(reader.SafeReadElementContentAs<T>(serializer));
 
-        public static async Task<T> SafeReadElementContentAsAsync<T>(this XmlReader reader)
-            => await Task.FromResult(reader.SafeReadElementContentAs<T>());
+        public static Task<T> SafeReadElementContentAsAsync<T>(this XmlReader reader)
+            => Task.FromResult(reader.SafeReadElementContentAs<T>());
 
-        public static async Task<T> SafeReadElementContentAsAsync<T>(this XmlReader reader, string defaultNamespace)
-            => await Task.FromResult(reader.SafeReadElementContentAs<T>(defaultNamespace));
+        public static Task<T> SafeReadElementContentAsAsync<T>(this XmlReader reader, string defaultNamespace)
+            => Task.FromResult(reader.SafeReadElementContentAs<T>(defaultNamespace));
 
-        public static async Task<T> SafeReadElementContentAsAsync<T>(this XmlReader reader, XmlRootAttribute root)
-            => await Task.FromResult(reader.SafeReadElementContentAs<T>(root));
+        public static Task<T> SafeReadElementContentAsAsync<T>(this XmlReader reader, XmlRootAttribute root)
+            => Task.FromResult(reader.SafeReadElementContentAs<T>(root));
 
         public static async Task<T> SafeReadElementContentAsAsync<T>(this XmlReader reader, XmlRootAttribute root, params Type[] extraTypes)
         {

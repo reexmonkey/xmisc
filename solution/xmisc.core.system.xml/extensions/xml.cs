@@ -49,14 +49,14 @@ namespace reexmonkey.xmisc.core.system.xml.extensions
             }
         }
 
-        public static async Task<(bool status, XDocument document, Exception exception)> TryAsXDocumentAsync(this string xml)
-            => await Task.FromResult(TryAsXDocument(xml));
+        public static Task<(bool status, XDocument document, Exception exception)> TryAsXDocumentAsync(this string xml)
+            => Task.FromResult(TryAsXDocument(xml));
 
-        public static async Task<(bool status, XDocument document, Exception exception)> TryAsXDocumentAsync(this string xml, LoadOptions options)
-            => await Task.FromResult(TryAsXDocument(xml, options));
+        public static Task<(bool status, XDocument document, Exception exception)> TryAsXDocumentAsync(this string xml, LoadOptions options)
+            => Task.FromResult(TryAsXDocument(xml, options));
 
-        public static async Task<XDocument> AsXDocumentAsync(this string xml) => await Task.FromResult(AsXDocument(xml));
+        public static Task<XDocument> AsXDocumentAsync(this string xml) => Task.FromResult(AsXDocument(xml));
 
-        public static async Task<XDocument> AsXDocumentAsync(this string xml, LoadOptions options) => await Task.FromResult(XDocument.Parse(xml, options));
+        public static Task<XDocument> AsXDocumentAsync(this string xml, LoadOptions options) => Task.FromResult(XDocument.Parse(xml, options));
     }
 }
