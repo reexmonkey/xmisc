@@ -81,103 +81,155 @@ namespace reexmonkey.xmisc.core.system.xml.extensions
 
         public static XElement AsXElement<T>(this T value, Encoding encoding)
         {
-            var serializer = new XmlSerializer(typeof(T));
+            var serializer = new XmlSerializer(value.GetType());
             return serializer.Serialize(value, encoding);
         }
 
         public static XElement AsXElement<T>(this T value, Encoding encoding, string defaultNamespace)
         {
-            var serializer = new XmlSerializer(typeof(T), defaultNamespace);
+            var serializer = new XmlSerializer(value.GetType(), defaultNamespace);
             return serializer.Serialize(value, encoding);
         }
 
         public static XElement AsXElement<T>(this T value, Encoding encoding, XmlRootAttribute attribute)
         {
-            var serializer = new XmlSerializer(typeof(T), attribute);
+            var serializer = new XmlSerializer(value.GetType(), attribute);
             return serializer.Serialize(value, encoding);
         }
 
         public static XElement AsXElement<T>(this T value, Encoding encoding, Type[] extraTypes)
         {
-            var serializer = new XmlSerializer(typeof(T), extraTypes);
+            var serializer = new XmlSerializer(value.GetType(), extraTypes);
             return serializer.Serialize(value, encoding);
         }
 
         public static IEnumerable<XElement> AsXElements<T>(this IEnumerable<T> values, Encoding encoding)
         {
-            var serializer = new XmlSerializer(typeof(T));
-            return serializer.Serialize(values, encoding);
+            var elements = new List<XElement>();
+            foreach (var value in values)
+            {
+                var serializer = new XmlSerializer(value.GetType());
+                var element = serializer.Serialize(value, encoding);
+                elements.Add(element);
+            }
+            return elements;
         }
 
         public static IEnumerable<XElement> AsXElements<T>(this IEnumerable<T> values, Encoding encoding, string defaultNamespace)
         {
-            var serializer = new XmlSerializer(typeof(T), defaultNamespace);
-            return serializer.Serialize(values, encoding);
+            var elements = new List<XElement>();
+            foreach (var value in values)
+            {
+                var serializer = new XmlSerializer(value.GetType(), defaultNamespace);
+                var element = serializer.Serialize(value, encoding);
+                elements.Add(element);
+            }
+            return elements;
         }
 
         public static IEnumerable<XElement> AsXElements<T>(this IEnumerable<T> values, Encoding encoding, XmlRootAttribute attribute)
         {
-            var serializer = new XmlSerializer(typeof(T), attribute);
-            return serializer.Serialize(values, encoding);
+            var elements = new List<XElement>();
+            foreach (var value in values)
+            {
+                var serializer = new XmlSerializer(value.GetType(), attribute);
+                var element = serializer.Serialize(value, encoding);
+                elements.Add(element);
+            }
+            return elements;
         }
 
         public static IEnumerable<XElement> AsXElements<T>(this IEnumerable<T> values, Encoding encoding, Type[] extraTypes)
         {
-            var serializer = new XmlSerializer(typeof(T), extraTypes);
-            return serializer.Serialize(values, encoding);
+            var elements = new List<XElement>();
+            foreach (var value in values)
+            {
+                var serializer = new XmlSerializer(value.GetType(), extraTypes);
+                var element = serializer.Serialize(value, encoding);
+                elements.Add(element);
+            }
+            return elements;
         }
 
         public static bool IsValid(this XElement element) => !string.IsNullOrEmpty((string)element);
 
-        private static async Task<T> DeserializeAsync<T>(this XmlSerializer serializer, XElement element)
-            => await Task.FromResult(serializer.Deserialize<T>(element));
+        private static Task<T> DeserializeAsync<T>(this XmlSerializer serializer, XElement element)
+        {
+            return Task.FromResult(serializer.Deserialize<T>(element));
+        }
 
-        private static async Task<XElement> SerializeAsync<T>(this XmlSerializer serializer, T value, Encoding encoding)
-            => await Task.FromResult(serializer.Serialize(value, encoding));
+        private static Task<XElement> SerializeAsync<T>(this XmlSerializer serializer, T value, Encoding encoding)
+        {
+            return Task.FromResult(serializer.Serialize(value, encoding));
+        }
 
-        private static async Task<IEnumerable<XElement>> SerializeAsync<T>(this XmlSerializer serializer, IEnumerable<T> values, Encoding encoding)
-            => await Task.FromResult(serializer.Serialize(values, encoding));
+        private static Task<IEnumerable<XElement>> SerializeAsync<T>(this XmlSerializer serializer, IEnumerable<T> values, Encoding encoding)
+        {
+            return Task.FromResult(serializer.Serialize(values, encoding));
+        }
 
-        public static async Task<T> AsAsync<T>(this XElement element)
-            => await Task.FromResult(element.As<T>());
+        public static Task<T> AsAsync<T>(this XElement element)
+        {
+            return Task.FromResult(element.As<T>());
+        }
 
-        public static async Task<T> AsAsync<T>(this XElement element, XmlRootAttribute attribute)
-            => await Task.FromResult(element.As<T>(attribute));
+        public static Task<T> AsAsync<T>(this XElement element, XmlRootAttribute attribute)
+        {
+            return Task.FromResult(element.As<T>(attribute));
+        }
 
-        public static async Task<T> AsAsync<T>(this XElement element, Type[] extraTypes)
-            => await Task.FromResult(element.As<T>(extraTypes));
+        public static Task<T> AsAsync<T>(this XElement element, Type[] extraTypes)
+        {
+            return Task.FromResult(element.As<T>(extraTypes));
+        }
 
-        public static async Task<IEnumerable<T>> AsAsync<T>(this IEnumerable<XElement> elements, string defaultNamespace)
-            => await Task.FromResult(elements.As<T>(defaultNamespace));
+        public static Task<IEnumerable<T>> AsAsync<T>(this IEnumerable<XElement> elements, string defaultNamespace)
+        {
+            return Task.FromResult(elements.As<T>(defaultNamespace));
+        }
 
-        public static async Task<IEnumerable<T>> AsAsync<T>(this IEnumerable<XElement> elements, XmlRootAttribute attribute)
-            => await Task.FromResult(elements.As<T>(attribute));
+        public static Task<IEnumerable<T>> AsAsync<T>(this IEnumerable<XElement> elements, XmlRootAttribute attribute)
+        {
+            return Task.FromResult(elements.As<T>(attribute));
+        }
 
-        public static async Task<IEnumerable<T>> AsAsync<T>(this IEnumerable<XElement> elements, Type[] extraTypes)
-            => await Task.FromResult(elements.As<T>(extraTypes));
+        public static Task<IEnumerable<T>> AsAsync<T>(this IEnumerable<XElement> elements, Type[] extraTypes)
+        {
+            return Task.FromResult(elements.As<T>(extraTypes));
+        }
 
-        public static async Task<XElement> AsXElementAsync<T>(this T value, Encoding encoding)
-            => await Task.FromResult(value.AsXElement(encoding));
+        public static Task<XElement> AsXElementAsync<T>(this T value, Encoding encoding)
+        {
+            return Task.FromResult(value.AsXElement(encoding));
+        }
 
-        public static async Task<XElement> AsXElementAsync<T>(this T value, Encoding encoding, string defaultNamespace)
-            => await Task.FromResult(value.AsXElement(encoding, defaultNamespace));
+        public static Task<XElement> AsXElementAsync<T>(this T value, Encoding encoding, string defaultNamespace)
+        {
+            return Task.FromResult(value.AsXElement(encoding, defaultNamespace));
+        }
 
-        public static async Task<XElement> AsXElementAsync<T>(this T value, Encoding encoding, XmlRootAttribute attribute)
-            => await Task.FromResult(value.AsXElement(encoding, attribute));
+        public static Task<XElement> AsXElementAsync<T>(this T value, Encoding encoding, XmlRootAttribute attribute)
+        {
+            return Task.FromResult(value.AsXElement(encoding, attribute));
+        }
 
-        public static async Task<XElement> AsXElementAsync<T>(this T value, Encoding encoding, Type[] extraTypes)
-            => await Task.FromResult(value.AsXElement(encoding, extraTypes));
+        public static Task<XElement> AsXElementAsync<T>(this T value, Encoding encoding, Type[] extraTypes)
+        {
+            return Task.FromResult(value.AsXElement(encoding, extraTypes));
+        }
 
-        public static async Task<IEnumerable<XElement>> AsXElementsAsync<T>(this IEnumerable<T> values, Encoding encoding)
-            => await Task.FromResult(values.AsXElements(encoding));
+        public static Task<IEnumerable<XElement>> AsXElementsAsync<T>(this IEnumerable<T> values, Encoding encoding)
+        {
+            return Task.FromResult(values.AsXElements(encoding));
+        }
 
-        public static async Task<IEnumerable<XElement>> AsXElementsAsync<T>(this IEnumerable<T> values, Encoding encoding, string defaultNamespace)
-            => await Task.FromResult(values.AsXElements(encoding, defaultNamespace));
+        public static Task<IEnumerable<XElement>> AsXElementsAsync<T>(this IEnumerable<T> values, Encoding encoding, string defaultNamespace)
+            => Task.FromResult(values.AsXElements(encoding, defaultNamespace));
 
-        public static async Task<IEnumerable<XElement>> AsXElementsAsync<T>(this IEnumerable<T> values, Encoding encoding, XmlRootAttribute attribute)
-            => await Task.FromResult(values.AsXElements(encoding, attribute));
+        public static Task<IEnumerable<XElement>> AsXElementsAsync<T>(this IEnumerable<T> values, Encoding encoding, XmlRootAttribute attribute)
+            => Task.FromResult(values.AsXElements(encoding, attribute));
 
-        public static async Task<IEnumerable<XElement>> AsXElementsAsync<T>(this IEnumerable<T> values, Encoding encoding, Type[] extraTypes)
-            => await Task.FromResult(values.AsXElements(encoding, extraTypes));
+        public static Task<IEnumerable<XElement>> AsXElementsAsync<T>(this IEnumerable<T> values, Encoding encoding, Type[] extraTypes)
+            => Task.FromResult(values.AsXElements(encoding, extraTypes));
     }
 }
