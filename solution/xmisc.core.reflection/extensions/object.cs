@@ -9,7 +9,6 @@ using reexmonkey.xmisc.core.reflection.infrastructure;
 namespace reexmonkey.xmisc.core.reflection.extensions
 {
     /// <summary>
-    /// 
     /// </summary>
     public static class ObjectExtensions
     {
@@ -36,8 +35,7 @@ namespace reexmonkey.xmisc.core.reflection.extensions
         public static IEnumerable<Func<TSource, object>> GetProperties<TSource>(BindingFlags flags = BindingFlags.Public)
         {
             var type = typeof(TSource);
-            var properties = type.GetProperties(flags).Where(x => x.CanRead);
-            foreach (var pi in properties)
+            foreach (var pi in type.GetProperties(flags).Where(x => x.CanRead))
             {
                 var gettermi = pi.GetGetMethod();
                 var entity = Expression.Parameter(type);
@@ -52,7 +50,10 @@ namespace reexmonkey.xmisc.core.reflection.extensions
         /// Gets the properties of an object
         /// </summary>
         /// <param name="source">The source object</param>
-        /// <returns>A key-value pair collection of properties, where the key is the name of the property and the value a property element </returns>
+        /// <returns>
+        /// A key-value pair collection of properties, where the key is the name of the property and
+        /// the value a property element
+        /// </returns>
         public static Dictionary<string, Property> GetProperties(this object source)
         {
             var properties = new Dictionary<string, Property>();
@@ -71,7 +72,6 @@ namespace reexmonkey.xmisc.core.reflection.extensions
             }
             return properties;
         }
-
 
         /// <summary>
         /// Sets the properties of a target object from a given key-value pair collection of property elements
@@ -125,7 +125,8 @@ namespace reexmonkey.xmisc.core.reflection.extensions
         }
 
         /// <summary>
-        /// Copies the properties from the <paramref name="source"/> object to the <paramref name="target"/> object.
+        /// Copies the properties from the <paramref name="source"/> object to the <paramref
+        /// name="target"/> object.
         /// </summary>
         /// <param name="source">The source object</param>
         /// <param name="target">The target object</param>
@@ -155,50 +156,5 @@ namespace reexmonkey.xmisc.core.reflection.extensions
 
             return target;
         }
-
-
-        public static bool PropertiesEquals<T>(this T instance, T other, BindingFlags flags, params string[] ignore) where T : class
-        {
-            if (instance != null && other != null)
-            {
-                var type = typeof(T);
-                var diff =
-                    from pi in type.GetProperties(flags)
-                    where !ignore.Contains(pi.Name)
-                    let self = type.GetProperty(pi.Name)?.GetValue(instance, null)
-                    let foreign = type.GetProperty(pi.Name)?.GetValue(other, null)
-                    where self != foreign && (self == null || !self.Equals(foreign))
-                    select self;
-                return !diff.Any();
-            }
-            return instance == other;
-        }
-
-
-        public static IEnumerable<object> Differences<T>(this T instance, T other, BindingFlags flags, params string[] ignore)
-            where T : class, new()
-        {
-            if (instance != null && other != null)
-            {
-                var type = typeof(T);
-                var ignoreList = new List<string>(ignore);
-                var diff =
-                    from pi in type.GetProperties(flags)
-                    where !ignoreList.Contains(pi.Name)
-                    let self = type.GetProperty(pi.Name)?.GetValue(instance, null)
-                    let foreign = type.GetProperty(pi.Name)?.GetValue(other, null)
-                    where self != foreign && (self == null || !self.Equals(foreign))
-                    select self;
-                return diff;
-            }
-            return Enumerable.Empty<object>();
-        }
-
-
-        public static IEnumerable<object> Differences<T>(this T instance, T other, BindingFlags flags, params Expression<Func<T, object>>[] ignore)
-            where T : class, new() => instance.Differences(other, flags, ignore.Select(x => x.GetMemberName()).ToArray());
-
-
-
     }
 }
