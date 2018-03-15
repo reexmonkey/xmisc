@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-
 namespace reexmonkey.xmisc.core.reflection.extensions
 {
     /// <summary>
@@ -85,7 +84,6 @@ namespace reexmonkey.xmisc.core.reflection.extensions
         /// <returns>The file paths to the assemblies of the given type declarations. </returns>
         public static IEnumerable<string> GetAssemblyFilePaths(this Type[] types) => types.Select(x => x.GetAssemblyFilePath());
 
-
         /// <summary>
         /// Gets the file paths to the assemblies of given objects.
         /// </summary>
@@ -118,7 +116,7 @@ namespace reexmonkey.xmisc.core.reflection.extensions
         /// Gets the friendly name (optionally with a DLL suffix) of an assembly from the given assembly identity.
         /// </summary>
         /// <param name="name">The unique identity of an assembly in full.</param>
-        /// <param name="dllsuffix">Determines whether the DLL suffix should be added to the friendly name. 
+        /// <param name="dllsuffix">Determines whether the DLL suffix should be added to the friendly name.
         /// True if added; otherwise false.</param>
         /// <returns>The friendly name of the assembly identity.</returns>
         public static string ToFriendlyName(this AssemblyName name, bool dllsuffix = true) => dllsuffix ? name.Name : name.Name + ".dll";
