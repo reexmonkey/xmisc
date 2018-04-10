@@ -11,7 +11,6 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
     /// <typeparam name="TModel">The type of model to persist.</typeparam>
     public interface IPersistenceRepository<in TKey, in TModel>
         where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
-        where TModel : new()
 
     {
         /// <summary>
