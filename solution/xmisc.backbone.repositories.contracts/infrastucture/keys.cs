@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
@@ -24,15 +25,17 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// <summary>
         /// Asynchronously gets the data item that uniquely identifies the entity.
         /// </summary>
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param> 
         /// <returns>The asynchronous operation that returns a data item that uniquely identifies the entity.</returns>
-        Task<TKey> GetKeyAsync();
+        Task<TKey> GetKeyAsync(CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Asynchronously sets the data item that uniquely identifies the entity.
         /// </summary>
         /// <param name="key">The data item that uniquely identifies the entity</param>
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param> 
         /// <returns>The asynchronous operation that sets the the data item, which uniquely identifies the entity.</returns>
-        Task SetKeyAsync(TKey key);
+        Task SetKeyAsync(TKey key, CancellationToken token = default(CancellationToken));
     }
 
     /// <summary>
@@ -62,15 +65,17 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// </summary>
         /// <typeparam name="TKeyAttribute"></typeparam>
         /// <param name="attribute">The key attribute to add to the pool of key attributes.</param>
-        /// <returns>An asynchronous operation that adds a key attribute to the pool of key attributes.</returns>
-        Task AddKeyAttributeAsync<TKeyAttribute>(TKeyAttribute attribute);
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param> 
+        /// <returns>A promise that the key attribute shall be added to the pool of key attributes.</returns>
+        Task AddKeyAttributeAsync<TKeyAttribute>(TKeyAttribute attribute, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Asynchronously removes a key attribute from the pool of key attributes.
         /// </summary>
         /// <typeparam name="TKeyAttribute">The type of key attribute to remove.</typeparam>
         /// <param name="attribute">The key attribute to remove from the pool of key attributes.</param>
-        /// <returns>An asynchronous operation that removes a key attribute from the pool of key attributes.</returns>
-        Task RemoveKeyAttributeAsync<TKeyAttribute>(TKeyAttribute attribute);
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param> 
+        /// <returns>A promise that the key attribute shall be remnoved from the pool of key attributes.</returns>
+        Task RemoveKeyAttributeAsync<TKeyAttribute>(TKeyAttribute attribute, CancellationToken token = default(CancellationToken));
     }
 }
