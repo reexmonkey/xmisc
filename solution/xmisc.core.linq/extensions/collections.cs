@@ -166,30 +166,6 @@ namespace reexmonkey.xmisc.core.linq.extensions
         public static IEnumerable<TSource> Concat<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, Func<TSource, bool> predicate) => first.Concat(second).Where(predicate);
 
         /// <summary>
-        /// Merges the elements of two sequences. Only non-existing elements of the first sequence are selected from the second sequence.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements of the input sequences</typeparam>
-        /// <param name="first">A sequence that contains elements</param>
-        /// <param name="second">Another sequence that contains elements</param>
-        /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
-        /// <returns>A union of the two sequences, where only non-existing elements of the first sequence are selected from the second sequence</returns>
-        public static IEnumerable<TSource> Merge<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null)
-            => second != null ? first.Union(second, comparer) : first;
-
-        /// <summary>
-        /// Merges the elements of a sequence to those of a <see cref="IList{T}"/>. Only non-existing elements of the list are selected from the given sequence.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements of the list and the input sequence</typeparam>
-        /// <param name="this">A list that contains elements</param>
-        /// <param name="others">Another sequence that contains elements</param>
-        /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
-        public static void Merge<TSource>(this IList<TSource> @this, IEnumerable<TSource> others, IEqualityComparer<TSource> comparer = null)
-        {
-            var diffs = others.Except(@this, comparer);
-            foreach (var diff in diffs) @this.Add(diff);
-        }
-
-        /// <summary>
         /// Gets the value for a given key if the key exists, otherwise the key and value are automatically added to the dictionary.
         /// </summary>
         /// <typeparam name="TKey">The type of key used for the retrieval or adding of the value.</typeparam>
