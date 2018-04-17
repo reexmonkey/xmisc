@@ -256,5 +256,54 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// </param>
         /// <returns>A singleton</returns>
         public static IEnumerable<TSource> AsSingleton<TSource>(this TSource source, bool fast) => fast ? new[] { source } : source.AsSingleton();
+
+        private static IEnumerable<TSource> OptimizedSkip<TSource>(this IList<TSource> source, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                yield return source[i];
+            }
+            yield break;
+        }
+        private static IEnumerable<TSource> OptimizedTake<TSource>(this List<TSource> source, int offset, int count)
+        {
+            return source.GetRange(offset, count);
+        }
+
+
+        /// <summary>
+        /// Bypasses a specified number of elements in a sequence and then returns the remaining elements.
+        /// <para/> This method is an optimzation of the <see cref="IEnumerable{T}"/>.Skip(int) method. 
+        /// <para/> Use this method if the <paramref name="source"/> sequence is a potential <see cref="IList{T}"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
+        /// <param name="source">An <see cref="IEnumerable{T}"/> to return elements from.</param>
+        /// <param name="count">The number of elements to skip before returning the remaining elements.</param>
+        /// <returns>An <see cref="IEnumerable{T}"/>that contains the elements that occur after the specified index in the input sequence.</returns>
+        public static IEnumerable<TSource> FastSkip<TSource>(this IEnumerable<TSource> source, int count)
+        {
+            if (count <= 0) return source;
+            var list = source as IList<TSource>;
+            return list != null ? list.OptimizedSkip(count) : source.Skip(count);
+        }
+
+        /// <summary>
+        /// Returns a specified number of contiguous elements from the start of a sequence.
+        /// <para/> This method is an optimzation of the <see cref="IEnumerable{T}"/>.Take(int) method.
+        /// <para/> Use this method if the <paramref name="source"/> sequence is a potential <see cref="List{T}"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
+        /// <param name="source">The sequence to return elements from.</param>
+        /// <param name="count">The number of elements to return.</param>
+        /// <returns>An <see cref="IEnumerable{T}"/> that contains the specified number of elements from the start of the input sequence.</returns>
+        public static IEnumerable<TSource> FastTake<TSource>(this IEnumerable<TSource> source, int count)
+        {
+            if (count <= 0) return Enumerable.Empty<TSource>();
+            if (count >= source.Count()) return source;
+            var list = source as List<TSource>;
+            return list != null ? list.GetRange(0, count) : source.Take(count);
+        }
+
+
     }
 }
