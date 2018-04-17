@@ -25,8 +25,10 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// Excludes access to data models that are specified by the provided <paramref name="keys"/> from the data store.
         /// </summary>
         /// <param name="keys">The identifiers that specify the data models to exclude.</param>
+        /// <param name="offset">The number of data models to bypass.</param>
+        /// <param name="count">The numbers of data models to return.</param> 
         /// <returns>The number of data models trashed.</returns>
-        int TrashAllByKeys(IEnumerable<TKey> keys);
+        int TrashAllByKeys(IEnumerable<TKey> keys, int? offset = null, int? count = null);
 
         /// <summary>
         /// Excludes access to the specified data model from the data store.
@@ -53,8 +55,10 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// Restores data models that are specified by the provided <paramref name="keys"/> from the data store.
         /// </summary>
         /// <param name="keys">The identifiers that specify the data models to exclude.</param>
+        /// <param name="offset">The number of data models to bypass.</param>
+        /// <param name="count">The numbers of data models to return.</param> 
         /// <returns>The number of data models trashed.</returns>
-        int RestoreAllByKeys(IEnumerable<TKey> keys);
+        int RestoreAllByKeys(IEnumerable<TKey> keys, int? offset = null, int? count = null);
 
         /// <summary>
         /// Restores the specified data model from the data store.
@@ -67,8 +71,10 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// Restores the specified data models from the data store.
         /// </summary>
         /// <param name="models">The data models in the data store to exclude.</param>
+        /// <param name="offset">The number of data models to bypass.</param>
+        /// <param name="count">The numbers of data models to return.</param> 
         /// <returns>The number of data models trashed.</returns>
-        int RestoreAll(IEnumerable<TModel> models);
+        int RestoreAll(IEnumerable<TModel> models, int? offset = null, int? count = null);
 
         /// <summary>
         /// Excludes asynchronously a data model that is specified by the provided <paramref name="key"/> from the data store.
@@ -82,9 +88,11 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// Excludes asynchronously data models that are specified by the provided <paramref name="keys"/> from the data store.
         /// </summary>
         /// <param name="keys">The identifiers that specify the data models to exclude.</param>
+        /// <param name="offset">The number of data models to bypass.</param>
+        /// <param name="count">The numbers of data models to return.</param> 
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise to return the number of data models trashed.</returns>
-        Task<int> TrashAllByKeysAsync(IEnumerable<TKey> keys, CancellationToken token = default(CancellationToken));
+        Task<int> TrashAllByKeysAsync(IEnumerable<TKey> keys, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Excludes asynchronously the specified data model from the datastore.
@@ -114,9 +122,11 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// Excludes asynchronously data models that are specified by the provided <paramref name="keys"/> from the data store.
         /// </summary>
         /// <param name="keys">The identifiers that specify the data models to exclude.</param>
+        /// <param name="offset">The number of data models to bypass.</param>
+        /// <param name="count">The numbers of data models to return.</param> 
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise to return the number of data models trashed.</returns>
-        Task<int> RestoreAllByKeysAsync(IEnumerable<TKey> keys, CancellationToken token = default(CancellationToken));
+        Task<int> RestoreAllByKeysAsync(IEnumerable<TKey> keys, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Excludes asynchronously the specified data model from the data store.

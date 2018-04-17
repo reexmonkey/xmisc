@@ -126,7 +126,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// Gets asynchronously all the data models in the data store and optionally paginates the results.
         /// <para/> For pagination to work, a non-null values must be given for <paramref name="offset"/> and <paramref name="count"/>.
         /// </summary>
-        /// <param name="offset">Specifies the number of data models to skip.</param>
+        /// <param name="offset">Specifies the number of data models to bypass.</param>
         /// <param name="count">Specifies the numbers of data models to return per page.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise that returns retrieved data models; otherwise the default values of the data models.</returns>
