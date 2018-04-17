@@ -71,10 +71,8 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// Restores the specified data models from the data store.
         /// </summary>
         /// <param name="models">The data models in the data store to exclude.</param>
-        /// <param name="offset">The number of data models to bypass.</param>
-        /// <param name="count">The numbers of data models to return.</param> 
         /// <returns>The number of data models trashed.</returns>
-        int RestoreAll(IEnumerable<TModel> models, int? offset = null, int? count = null);
+        int RestoreAll(IEnumerable<TModel> models);
 
         /// <summary>
         /// Excludes asynchronously a data model that is specified by the provided <paramref name="key"/> from the data store.
