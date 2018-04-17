@@ -270,7 +270,6 @@ namespace reexmonkey.xmisc.core.linq.extensions
             return source.GetRange(offset, count);
         }
 
-
         /// <summary>
         /// Bypasses a specified number of elements in a sequence and then returns the remaining elements.
         /// <para/> This method is an optimzation of the <see cref="IEnumerable{T}"/>.Skip(int) method. 
