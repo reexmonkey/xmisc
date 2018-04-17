@@ -36,7 +36,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// <param name="offset">Specifies the number of data models to skip.</param>
         /// <param name="count">Specifies the numbers of data models to return per page.</param>
         /// <returns>The found data models.</returns>
-        IEnumerable<TModel> FindByKeysAll(IEnumerable<TKey> keys, int? offset = null, int? count = null);
+        IEnumerable<TModel> FindAllByKeys(IEnumerable<TKey> keys, int? offset = null, int? count = null);
 
         /// <summary>
         /// Finds all data models that satisfy the given predicate and optionally paginates the results.
