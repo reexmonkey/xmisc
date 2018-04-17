@@ -32,14 +32,14 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// </summary>
         /// <param name="model">The entity in the data store to erase.</param>
         /// <returns>True if the entity was erased; otherwise false.</returns>
-        void Erase(TModel model);
+        bool Erase(TModel model);
 
         /// <summary>
         /// Erases the specified entities from the data store.
         /// </summary>
         /// <param name="models">The entities in the data store to erase.</param>
         /// <returns>The number of entities erased.</returns>
-        void EraseAll(IEnumerable<TModel> models);
+        int EraseAll(IEnumerable<TModel> models);
 
         /// <summary>
         /// Asynchronously erases an entity that is specified by the provided <paramref name="key"/>.

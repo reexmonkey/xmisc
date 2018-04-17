@@ -120,7 +120,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// <param name="count">Specifies the numbers of data models to return per page.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise that returns found data models; otherwise the default values of the data models.</returns>
-        IEnumerable<Task<TModel>> FindAllAsync(Expression<Func<TModel, bool>> predicate, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
+        Task<IEnumerable<TModel>> FindAllAsync(Expression<Func<TModel, bool>> predicate, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Gets asynchronously all the data models in the data store and optionally paginates the results.
