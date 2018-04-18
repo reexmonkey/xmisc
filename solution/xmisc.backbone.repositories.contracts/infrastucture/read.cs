@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
 {
     /// <summary>
-    /// Specifies a repository that queries information about a data model from the data store.
+    /// Specifies a repository that queries information about a data model from a data store.
     /// </summary>
-    /// <typeparam name="TKey">The type of the key.</typeparam>
+    /// <typeparam name="TKey">The type of the key that uniquely identifies a model.</typeparam>
     /// <typeparam name="TModel">The type of the model.</typeparam>
     public interface IReadRepository<TKey, TModel>
         where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
@@ -34,7 +34,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// </summary>
         /// <param name="keys">The keys of the data models to search for.</param>
         /// <param name="offset">Specifies the number of data models to skip.</param>
-        /// <param name="count">Specifies the numbers of data models to return per page.</param>
+        /// <param name="count">Specifies the number of data models to return per page.</param>
         /// <returns>The found data models.</returns>
         IEnumerable<TModel> FindAllByKeys(IEnumerable<TKey> keys, int? offset = null, int? count = null);
 
@@ -44,8 +44,8 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// </summary>
         /// <param name="predicate">The condition that when evaluated to true, returns the found data model.</param>
         /// <param name="offset">Specifies the number of data models to skip.</param>
-        /// <param name="count">Specifies the numbers of data models to return per page.</param>
-        /// <returns>The found data models.</returns>
+        /// <param name="count">Specifies the number of data models to return per page.</param>
+        /// <returns>The found data models; otherwise an empty sequence.</returns>
         IEnumerable<TModel> FindAll(Expression<Func<TModel, bool>> predicate, int? offset = null, int? count = null);
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// <para/> For pagination to work, a non-null values must be given for <paramref name="offset"/> and <paramref name="count"/>.
         /// </summary>
         /// <param name="offset">Specifies the number of data models to skip.</param>
-        /// <param name="count">Specifies the numbers of data models to return per page.</param>
+        /// <param name="count">Specifies the number of data models to return per page.</param>
         /// <returns>All data models in data store.</returns>
         IEnumerable<TModel> Get(int? offset = null, int? count = null);
 
@@ -62,7 +62,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// <para /> Optionally the
         /// </summary>
         /// <param name="offset">Ignores the specified number of keys.</param>
-        /// <param name="count">Returns the the specified numbers of keys.</param>
+        /// <param name="count">Returns the the specified number of keys.</param>
         /// <returns>The number of key of data models from the serach that may optionally have been filtered.</returns>
         IEnumerable<TKey> GetKeys(int? offset = null, int? count = null);
 
@@ -106,7 +106,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// </summary>
         /// <param name="keys">The keys of the data models to search for.</param>
         /// <param name="offset">Specifies the number of data models to skip.</param>
-        /// <param name="count">Specifies the numbers of data models to return per page.</param>
+        /// <param name="count">Specifies the number of data models to return per page.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise that returns found data models; otherwise the default values of the data models.</returns>
         Task<IEnumerable<TModel>> FindAllByKeysAsync(IEnumerable<TKey> keys, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
@@ -117,7 +117,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// </summary>
         /// <param name="predicate">The condition that when evaluated to true, returns the found data model.</param>
         /// <param name="offset">Specifies the number of data models to skip.</param>
-        /// <param name="count">Specifies the numbers of data models to return per page.</param>
+        /// <param name="count">Specifies the number of data models to return per page.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise that returns found data models; otherwise the default values of the data models.</returns>
         Task<IEnumerable<TModel>> FindAllAsync(Expression<Func<TModel, bool>> predicate, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
@@ -127,7 +127,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// <para/> For pagination to work, a non-null values must be given for <paramref name="offset"/> and <paramref name="count"/>.
         /// </summary>
         /// <param name="offset">Specifies the number of data models to bypass.</param>
-        /// <param name="count">Specifies the numbers of data models to return per page.</param>
+        /// <param name="count">Specifies the number of data models to return per page.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise that returns retrieved data models; otherwise the default values of the data models.</returns>
         Task<IEnumerable<TModel>> GetAsync(int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
@@ -155,7 +155,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// <para /> Optionally the
         /// </summary>
         /// <param name="offset">Ignores the specified number of keys.</param>
-        /// <param name="count">Returns the the specified numbers of keys.</param>
+        /// <param name="count">Returns the the specified number of keys.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>The number of key of data models from the serach that may optionally have been filtered.</returns>
         Task<IEnumerable<TKey>> GetKeysAsync(int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
