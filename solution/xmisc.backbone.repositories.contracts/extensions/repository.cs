@@ -26,7 +26,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         /// <param name="count">The number of data models to return.</param>
         /// <returns>A dictionary that contains grouped data models satisfying the <paramref name="predicate"/>.</returns>
         public static IDictionary<TKey, List<TModel>> FindAll<TKey, TModel, TRepository>(
-            this TRepository repository, 
+            this TRepository repository,
             Expression<Func<TModel, bool>> predicate,
             Func<TModel, TKey> keySelector,
             int? offset = null,
@@ -34,7 +34,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
             where TRepository : IWriteRepository<TKey, TModel>, IReadRepository<TKey, TModel>
             where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
         {
-            var models =  repository.FindAll(predicate, offset, count);
+            var models = repository.FindAll(predicate, offset, count);
             return models.GroupBy(keySelector).ToDictionary(g => g.Key, g => g.ToList());
         }
 
@@ -56,13 +56,109 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
             Expression<Func<TModel, bool>> predicate,
             Func<TModel, TKey> keySelector,
             int? offset = null,
-            int? count = null, 
+            int? count = null,
             CancellationToken token = default(CancellationToken))
             where TRepository : IWriteRepository<TKey, TModel>, IReadRepository<TKey, TModel>
             where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
         {
             var models = await repository.FindAllAsync(predicate, offset, count, token);
             return models.GroupBy(keySelector).ToDictionary(g => g.Key, g => g.ToList());
+        }
+
+        /// <summary>
+        /// Reconciles two models by using the default equality comparer and either saves the local model to a data store or removes the remote model from the store.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key to uniquely identify the model.</typeparam>
+        /// <typeparam name="TModel">The type of the model to reconcile and save.</typeparam>
+        /// <typeparam name="TRepository">The type of the repository that reconciles and either saves or removes models from a data store.</typeparam>
+        /// <param name="repository">The repository that reconciles and either saves or removes models from a data store.</param>
+        /// <param name="local">The model to save on the data store.</param>
+        /// <param name="remote">The model retrieved from the data store that needs to be reconiled with <paramref name="local"/>.</param>
+        /// <param name="default">The default value for instances of the <typeparamref name="TModel"/> data type.</param>
+        public static void Reconcile<TKey, TModel, TRepository>(
+            this TRepository repository,
+            TModel local,
+            TModel remote,
+            TModel @default)
+            where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
+            where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        {
+            repository.Reconcile<TKey, TModel, TRepository>(local, remote, @default, EqualityComparer<TModel>.Default);
+        }
+
+        /// <summary>
+        /// Reconciles asynchronously two models by using the default equality comparer and either saves the local model to a data store or removes the remote model from the store.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key to uniquely identify the model.</typeparam>
+        /// <typeparam name="TModel">The type of the model to reconcile and save.</typeparam>
+        /// <typeparam name="TRepository">The type of the repository that reconciles and either saves or removes models from a data store.</typeparam>
+        /// <param name="repository">The repository that reconciles and either saves or removes models from a data store.</param>
+        /// <param name="local">The model to save on the data store.</param>
+        /// <param name="remote">The model retrieved from the data store that needs to be reconiled with <paramref name="local"/>.</param>
+        /// <param name="default">The default value for instances of the <typeparamref name="TModel"/> data type.</param>
+        public static Task ReconcileAsync<TKey, TModel, TRepository>(
+            this TRepository repository,
+            TModel local,
+            TModel remote,
+            TModel @default)
+            where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
+            where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        {
+            return repository.ReconcileAsync<TKey, TModel, TRepository>(local, remote, @default, EqualityComparer<TModel>.Default);
+        }
+
+        /// <summary>
+        /// Reconciles two models by using the provided equality comparer and either saves the local model to a data store or removes the remote model from the store.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key to uniquely identify the model.</typeparam>
+        /// <typeparam name="TModel">The type of the model to reconcile and save.</typeparam>
+        /// <typeparam name="TRepository">The type of the repository that reconciles and either saves or removes models from a data store.</typeparam>
+        /// <param name="repository">The repository that reconciles and either saves or removes models from a data store.</param>
+        /// <param name="local">The model to save on the data store.</param>
+        /// <param name="remote">The model retrieved from the data store that needs to be reconiled with <paramref name="local"/>.</param>
+        /// <param name="default">The default value for instances of the <typeparamref name="TModel"/> data type.</param>
+        /// <param name="comparer">The equality comparer to apply during reconciliation of changes between the <paramref name="local"/> and <paramref name="remote"/> models.</param>
+        public static void Reconcile<TKey, TModel, TRepository>(
+            this TRepository repository,
+            TModel local,
+            TModel remote,
+            TModel @default,
+            IEqualityComparer<TModel> comparer)
+            where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
+            where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        {
+            if (!comparer.Equals(local, @default)) repository.Save(local);//Insert or update local model
+            else //No local model available => Remove existing model from the data store
+            {
+                if (!comparer.Equals(remote, @default)) repository.Erase(remote);
+            }
+        }
+
+        /// <summary>
+        /// Reconciles asynchronously two models by using the provided equality comparer and either saves the local model to a data store or removes the remote model from the store.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key to uniquely identify the model.</typeparam>
+        /// <typeparam name="TModel">The type of the model to reconcile and save.</typeparam>
+        /// <typeparam name="TRepository">The type of the repository that reconciles and either saves or removes models from a data store.</typeparam>
+        /// <param name="repository">The repository that reconciles and either saves or removes models from a data store.</param>
+        /// <param name="local">The model to save on the data store.</param>
+        /// <param name="remote">The model retrieved from the data store that needs to be reconiled with <paramref name="local"/>.</param>
+        /// <param name="default">The default value for instances of the <typeparamref name="TModel"/> data type.</param>
+        /// <param name="comparer">The equality comparer to apply during reconciliation of changes between the <paramref name="local"/> and <paramref name="remote"/> models.</param>
+        public async static Task ReconcileAsync<TKey, TModel, TRepository>(
+            this TRepository repository,
+            TModel local,
+            TModel remote,
+            TModel @default,
+            IEqualityComparer<TModel> comparer)
+            where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
+            where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        {
+            if (!comparer.Equals(local, @default)) await repository.SaveAsync(local);//Insert or update local model
+            else //No local model available => Remove existing model from the data store
+            {
+                if (!comparer.Equals(remote, @default)) await repository.EraseAsync(remote);
+            }
         }
 
         /// <summary>
@@ -77,14 +173,14 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         /// <param name="repository">The repository that reconciles and saves models to a remote data store.</param>
         /// <param name="local">The sequence that contains models to save on the remote data store.</param>
         /// <param name="remote">The sequence that contains models from the remote data store.</param>
-        public static void SynchronizeAll<TKey, TModel, TRepository>(
+        public static void ReconcileAll<TKey, TModel, TRepository>(
             this TRepository repository,
             IEnumerable<TModel> local,
             IEnumerable<TModel> remote)
             where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
             where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
         {
-            repository.SynchronizeAll<TKey, TModel, TRepository>(local, remote, EqualityComparer<TModel>.Default);
+            repository.ReconcileAll<TKey, TModel, TRepository>(local, remote, EqualityComparer<TModel>.Default);
         }
 
         /// <summary>
@@ -100,7 +196,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         /// <param name="local">The sequence that contains models to save on the remote data store.</param>
         /// <param name="remote">The sequence that contains models from the remote data store.</param>
         /// <param name="comparer">The equality comparer to apply during reconciliation of changes between <paramref name="local"/> and <paramref name="remote"/> models.</param>
-        public static void SynchronizeAll<TKey, TModel, TRepository>(
+        public static void ReconcileAll<TKey, TModel, TRepository>(
             this TRepository repository,
             IEnumerable<TModel> local,
             IEnumerable<TModel> remote,
@@ -137,7 +233,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         /// <param name="remote">The sequence that contains models from the remote data store.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>The promise to reconcile changes between the sequences.</returns>
-        public static Task SynchronizeAllAsync<TKey, TModel, TRepository>(
+        public static Task ReconcileAllAsync<TKey, TModel, TRepository>(
             this TRepository repository,
             IEnumerable<TModel> local,
             IEnumerable<TModel> remote,
@@ -145,7 +241,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
             where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
             where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
         {
-            return repository.SynchronizeAllAsync<TKey, TModel, TRepository>(local, remote, EqualityComparer<TModel>.Default, token);
+            return repository.ReconcileAllAsync<TKey, TModel, TRepository>(local, remote, EqualityComparer<TModel>.Default, token);
         }
 
         /// <summary>
@@ -162,7 +258,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         /// <param name="remote">The sequence that contains models from the remote data store.</param>
         /// <param name="comparer">The equality comparer to apply during reconciliation of changes between <paramref name="local"/> and <paramref name="remote"/> models.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
-        public static async Task SynchronizeAllAsync<TKey, TModel, TRepository>(
+        public static async Task ReconcileAllAsync<TKey, TModel, TRepository>(
             this TRepository repository,
             IEnumerable<TModel> local,
             IEnumerable<TModel> remote,

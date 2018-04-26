@@ -19,10 +19,10 @@
 	<AssemblyName>xmisc.backbone.repositories.contracts</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard1.4\.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netstandard1.4\xmisc.backbone.repositories.contracts.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard1.4\.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\netstandard1.4\xmisc.backbone.repositories.contracts.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="GitInfo" Version="2.0.8">
