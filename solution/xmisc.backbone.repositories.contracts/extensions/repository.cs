@@ -18,24 +18,23 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         /// </summary>
         /// <typeparam name="TKey">The type of key to uniquely identify each data model.</typeparam>
         /// <typeparam name="TModel">The type of data model to search.</typeparam>
-        /// <typeparam name="TRepository">The type of repository that contains the data models.</typeparam>
         /// <param name="repository">The repository that contains the data model.</param>
         /// <param name="predicate">The condition that when evaluated to true, returns the found data models.</param>
         /// <param name="keySelector">A function to extract the specified key for each data model group.</param>
         /// <param name="offset">The number of data models to bypass.</param>
         /// <param name="count">The number of data models to return.</param>
         /// <returns>A dictionary that contains grouped data models satisfying the <paramref name="predicate"/>.</returns>
-        public static IDictionary<TKey, List<TModel>> FindAll<TKey, TModel, TRepository>(
-            this TRepository repository,
+        public static IDictionary<TKey, List<TModel>> FindAll<TKey, TModel>(
+            this IReadRepository<TKey, TModel> repository,
             Expression<Func<TModel, bool>> predicate,
             Func<TModel, TKey> keySelector,
             int? offset = null,
             int? count = null)
-            where TRepository : IWriteRepository<TKey, TModel>, IReadRepository<TKey, TModel>
             where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
         {
-            var models = repository.FindAll(predicate, offset, count);
-            return models.GroupBy(keySelector).ToDictionary(g => g.Key, g => g.ToList());
+            return repository
+                .FindAll(predicate, offset, count)
+                .GroupBy(keySelector).ToDictionary(g => g.Key, g => g.ToList());
         }
 
         /// <summary>
@@ -43,7 +42,6 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         /// </summary>
         /// <typeparam name="TKey">The type of key to uniquely identify each data model.</typeparam>
         /// <typeparam name="TModel">The type of data model to search.</typeparam>
-        /// <typeparam name="TRepository">The type of repository that contains the data models.</typeparam>
         /// <param name="repository">The repository that contains the data model.</param>
         /// <param name="predicate">The condition that when evaluated to true, returns the found data models.</param>
         /// <param name="keySelector">A function to extract the specified key for each data model group.</param>
@@ -51,18 +49,17 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         /// <param name="count">The number of data models to return.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A dictionary that contains grouped data models satisfying the <paramref name="predicate"/>.</returns>
-        public static async Task<IDictionary<TKey, List<TModel>>> FindAllAsync<TKey, TModel, TRepository>(
-            this TRepository repository,
+        public static async Task<IDictionary<TKey, List<TModel>>> FindAllAsync<TKey, TModel>(
+            this IReadRepository<TKey, TModel> repository,
             Expression<Func<TModel, bool>> predicate,
             Func<TModel, TKey> keySelector,
             int? offset = null,
             int? count = null,
             CancellationToken token = default(CancellationToken))
-            where TRepository : IWriteRepository<TKey, TModel>, IReadRepository<TKey, TModel>
             where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
         {
-            var models = await repository.FindAllAsync(predicate, offset, count, token);
-            return models.GroupBy(keySelector).ToDictionary(g => g.Key, g => g.ToList());
+            return (await repository.FindAllAsync(predicate, offset, count, token))
+                .GroupBy(keySelector).ToDictionary(g => g.Key, g => g.ToList());
         }
 
         /// <summary>
