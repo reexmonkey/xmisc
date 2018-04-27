@@ -38,7 +38,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         }
 
         /// <summary>
-        /// Finds asynchronously all data models that satisfy the given predicate and groups them according to the specified key selector.
+        /// Finds all data models asynchronously that satisfy the given predicate and groups them according to the specified key selector.
         /// </summary>
         /// <typeparam name="TKey">The type of key to uniquely identify each data model.</typeparam>
         /// <typeparam name="TModel">The type of data model to search.</typeparam>
@@ -63,16 +63,19 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         }
 
         /// <summary>
-        /// Reconciles two models by using the default equality comparer and either saves the local model to a data store or removes the remote model from the store.
+        /// Saves the <paramref name="local"/> version of a data model to the data store if it is available; 
+        /// otherwise erases the <paramref name="remote"/> version of that model from the data store.
+        /// <para/> The default equality comparer is used to check the availability of the <paramref name="local"/> version by comparing the it to a given <paramref name="default"/> value.
         /// </summary>
-        /// <typeparam name="TKey">The type of the key to uniquely identify the model.</typeparam>
-        /// <typeparam name="TModel">The type of the model to reconcile and save.</typeparam>
-        /// <typeparam name="TRepository">The type of the repository that reconciles and either saves or removes models from a data store.</typeparam>
-        /// <param name="repository">The repository that reconciles and either saves or removes models from a data store.</param>
-        /// <param name="local">The model to save on the data store.</param>
-        /// <param name="remote">The model retrieved from the data store that needs to be reconiled with <paramref name="local"/>.</param>
-        /// <param name="default">The default value for instances of the <typeparamref name="TModel"/> data type.</param>
-        public static void Reconcile<TKey, TModel, TRepository>(
+        /// <typeparam name="TKey">The type of the key to uniquely identify a data model.</typeparam>
+        /// <typeparam name="TModel">The type of data model to save.</typeparam>
+        /// <typeparam name="TRepository">The type of repository that saves or erases a data model.</typeparam>
+        /// <param name="repository">The repository that saves or erases a data model.</param>
+        /// <param name="local">The data model to save on the data store.</param>
+        /// <param name="remote">Data model from the data store to compare with with <paramref name="local"/> model.</param>
+        /// <param name="default">The default value of a data model.</param>
+        /// <seealso cref="IWriteRepository{TKey, TModel}.Save(TModel)"/>
+        private static void SaveImpl<TKey, TModel, TRepository>(
             this TRepository repository,
             TModel local,
             TModel remote,
@@ -80,42 +83,52 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
             where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
             where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
         {
-            repository.Reconcile<TKey, TModel, TRepository>(local, remote, @default, EqualityComparer<TModel>.Default);
+            repository.SaveImpl<TKey, TModel, TRepository>(local, remote, @default, EqualityComparer<TModel>.Default);
         }
 
+
         /// <summary>
-        /// Reconciles asynchronously two models by using the default equality comparer and either saves the local model to a data store or removes the remote model from the store.
+        /// Saves the <paramref name="local"/> version of a data model asynchronously to the data store if it is available; 
+        /// otherwise erases the <paramref name="remote"/> version of that model asynchronously from the data store.
+        /// <para/> The default equality comparer is used to check the availability of the <paramref name="local"/> version by comparing the it to a given <paramref name="default"/> value.
         /// </summary>
-        /// <typeparam name="TKey">The type of the key to uniquely identify the model.</typeparam>
-        /// <typeparam name="TModel">The type of the model to reconcile and save.</typeparam>
-        /// <typeparam name="TRepository">The type of the repository that reconciles and either saves or removes models from a data store.</typeparam>
-        /// <param name="repository">The repository that reconciles and either saves or removes models from a data store.</param>
-        /// <param name="local">The model to save on the data store.</param>
-        /// <param name="remote">The model retrieved from the data store that needs to be reconiled with <paramref name="local"/>.</param>
-        /// <param name="default">The default value for instances of the <typeparamref name="TModel"/> data type.</param>
-        public static Task ReconcileAsync<TKey, TModel, TRepository>(
+        /// <typeparam name="TKey">The type of the key to uniquely identify a data model.</typeparam>
+        /// <typeparam name="TModel">The type of data model to save.</typeparam>
+        /// <typeparam name="TRepository">The type of repository that saves or erases a data model.</typeparam>
+        /// <param name="repository">The repository that saves or erases a data model.</param>
+        /// <param name="local">The data model to save asynchronously on the data store.</param>
+        /// <param name="remote">TData model from the data store to compare with with <paramref name="local"/> model.</param>
+        /// <param name="default">The default value of a data model.</param>
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        /// <returns>A promise to save the <paramref name="local"/> version of a data model asynchronously to the data store.</returns>
+        /// <seealso cref="IWriteRepository{TKey, TModel}.SaveAsync(TModel, CancellationToken)"/>
+        private static Task SaveImplAsync<TKey, TModel, TRepository>(
             this TRepository repository,
             TModel local,
             TModel remote,
-            TModel @default)
+            TModel @default, 
+            CancellationToken token = default(CancellationToken))
             where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
             where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
         {
-            return repository.ReconcileAsync<TKey, TModel, TRepository>(local, remote, @default, EqualityComparer<TModel>.Default);
+            return repository.SaveImplAsync<TKey, TModel, TRepository>(local, remote, @default, EqualityComparer<TModel>.Default, token);
         }
 
         /// <summary>
-        /// Reconciles two models by using the provided equality comparer and either saves the local model to a data store or removes the remote model from the store.
+        /// Saves the <paramref name="local"/> version of a data model to the data store if it is available; 
+        /// otherwise erases the <paramref name="remote"/> version of that model from the data store.
+        /// <para/> The provided equality comparer is used to check the availability of the <paramref name="local"/> version by comparing the it to a given <paramref name="default"/> value.
         /// </summary>
-        /// <typeparam name="TKey">The type of the key to uniquely identify the model.</typeparam>
-        /// <typeparam name="TModel">The type of the model to reconcile and save.</typeparam>
-        /// <typeparam name="TRepository">The type of the repository that reconciles and either saves or removes models from a data store.</typeparam>
-        /// <param name="repository">The repository that reconciles and either saves or removes models from a data store.</param>
-        /// <param name="local">The model to save on the data store.</param>
-        /// <param name="remote">The model retrieved from the data store that needs to be reconiled with <paramref name="local"/>.</param>
-        /// <param name="default">The default value for instances of the <typeparamref name="TModel"/> data type.</param>
-        /// <param name="comparer">The equality comparer to apply during reconciliation of changes between the <paramref name="local"/> and <paramref name="remote"/> models.</param>
-        public static void Reconcile<TKey, TModel, TRepository>(
+        /// <typeparam name="TKey">The type of the key to uniquely identify a data model.</typeparam>
+        /// <typeparam name="TModel">The type of data model to save.</typeparam>
+        /// <typeparam name="TRepository">The type of repository that saves or erases a data model.</typeparam>
+        /// <param name="repository">The repository that saves or erases a data model.</param>
+        /// <param name="local">The data model to save on the data store.</param>
+        /// <param name="remote">Data model from the data store to compare with with <paramref name="local"/> model.</param>
+        /// <param name="default">The default value of a data model.</param>
+        /// <param name="comparer">The equality comparer that compares the <paramref name="local"/> version of a data model to a given <paramref name="default"/> value.</param>
+        /// <seealso cref="IWriteRepository{TKey, TModel}.Save(TModel)"/>
+        private static void SaveImpl<TKey, TModel, TRepository>(
             this TRepository repository,
             TModel local,
             TModel remote,
@@ -132,68 +145,76 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         }
 
         /// <summary>
-        /// Reconciles asynchronously two models by using the provided equality comparer and either saves the local model to a data store or removes the remote model from the store.
+        /// Saves the <paramref name="local"/> version of a data model asynchronously to the data store if it is available; 
+        /// otherwise erases the <paramref name="remote"/> version of that model from the data store.
+        /// <para/> The provided equality comparer is used to check the availability of the <paramref name="local"/> version by comparing the it to a given <paramref name="default"/> value.
         /// </summary>
-        /// <typeparam name="TKey">The type of the key to uniquely identify the model.</typeparam>
-        /// <typeparam name="TModel">The type of the model to reconcile and save.</typeparam>
-        /// <typeparam name="TRepository">The type of the repository that reconciles and either saves or removes models from a data store.</typeparam>
-        /// <param name="repository">The repository that reconciles and either saves or removes models from a data store.</param>
-        /// <param name="local">The model to save on the data store.</param>
-        /// <param name="remote">The model retrieved from the data store that needs to be reconiled with <paramref name="local"/>.</param>
-        /// <param name="default">The default value for instances of the <typeparamref name="TModel"/> data type.</param>
-        /// <param name="comparer">The equality comparer to apply during reconciliation of changes between the <paramref name="local"/> and <paramref name="remote"/> models.</param>
-        public async static Task ReconcileAsync<TKey, TModel, TRepository>(
+        /// <typeparam name="TKey">The type of the key to uniquely identify a data model.</typeparam>
+        /// <typeparam name="TModel">The type of data model to save or erase.</typeparam>
+        /// <typeparam name="TRepository">The type of repository that saves or erases a data model.</typeparam>
+        /// <param name="repository">The repository that saves or erases a data model.</param>
+        /// <param name="local">The data model to save on the data store.</param>
+        /// <param name="remote">Data model from the data store to compare with with <paramref name="local"/> model.</param>
+        /// <param name="default">The default value of a data model.</param>
+        /// <param name="comparer">The equality comparer that compares the <paramref name="local"/> version of a data model to a given <paramref name="default"/> value.</param>
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        /// <returns>A promise to save the <paramref name="local"/> version of a data model asynchronously to the data store.</returns>
+        /// <seealso cref="IWriteRepository{TKey, TModel}.SaveAsync(TModel, CancellationToken)"/>
+        private async static Task SaveImplAsync<TKey, TModel, TRepository>(
             this TRepository repository,
             TModel local,
             TModel remote,
             TModel @default,
-            IEqualityComparer<TModel> comparer)
+            IEqualityComparer<TModel> comparer, 
+            CancellationToken token = default(CancellationToken))
             where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
             where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
         {
-            if (!comparer.Equals(local, @default)) await repository.SaveAsync(local);//Insert or update local model
+            if (!comparer.Equals(local, @default)) await repository.SaveAsync(local, token);//Insert or update local model
             else //No local model available => Remove existing model from the data store
             {
-                if (!comparer.Equals(remote, @default)) await repository.EraseAsync(remote);
+                if (!comparer.Equals(remote, @default)) await repository.EraseAsync(remote, token);
             }
         }
 
         /// <summary>
-        /// Reconciles changes between two sequences by using the default equality comparer and saves the difference to a remote data store.
-        /// <para/> 1. In the trivial case (no <paramref name="remote"/> models), all <paramref name="local"/> models on the <paramref name="remote"/> are saved on the data store.
-        /// <para/> 2. If the remote data store already contains models, these are reconciled with <paramref name="local"/> models and the difference persisted on the data store.
-        /// <para/> 3. In the special case (available <paramref name="remote"/> models but no <paramref name="local"/> models), changes are synchronized by deleting all <paramref name="remote"/> models.
+        /// Saves the <paramref name="local"/> sequence of data models to the data store after synchronizing changes with the <paramref name="remote"/> sequence of data elements.
+        /// <para/>1. The given <paramref name="local"/> sequence is non-empty: Erases elements of the <paramref name="remote"/> sequence of data models from the data store that are not found in the sequence of <paramref name="local"/> data models 
+        /// and saves all <paramref name="local"/> data models.
+        /// <para/>2. The given <paramref name="local"/> is empty: erases all elements of the <paramref name="remote"/> sequence of data models from the data store.
+        /// <para/> The default equality comparer is used to compare elements of the <paramref name="local"/> sequence against elements of the <paramref name="remote"/> sequence.
         /// </summary>
-        /// <typeparam name="TKey">The type of the key to uniquely identify the model.</typeparam>
-        /// <typeparam name="TModel">The type of the model to reconcile and save.</typeparam>
-        /// <typeparam name="TRepository">The type of the repository that reconciles the sequences and saves models to a remote data store.</typeparam>
-        /// <param name="repository">The repository that reconciles and saves models to a remote data store.</param>
-        /// <param name="local">The sequence that contains models to save on the remote data store.</param>
-        /// <param name="remote">The sequence that contains models from the remote data store.</param>
-        public static void ReconcileAll<TKey, TModel, TRepository>(
+        /// <typeparam name="TKey">The type of the key to uniquely identify each data model.</typeparam>
+        /// <typeparam name="TModel">The type of data model to save or erase.</typeparam>
+        /// <typeparam name="TRepository">The type of repository that saves or erases a data model.</typeparam>
+        /// <param name="repository">The repository that saves or erases a data model.</param>
+        /// <param name="local">The sequence of data models to save on the data store.</param>
+        /// <param name="remote">The sequence of data models from the data store to compare with the <paramref name="local"/> sequence of models.</param>
+        private static void SaveAllImpl<TKey, TModel, TRepository>(
             this TRepository repository,
             IEnumerable<TModel> local,
             IEnumerable<TModel> remote)
             where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
             where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
         {
-            repository.ReconcileAll<TKey, TModel, TRepository>(local, remote, EqualityComparer<TModel>.Default);
+            repository.SaveAllImpl<TKey, TModel, TRepository>(local, remote, EqualityComparer<TModel>.Default);
         }
 
         /// <summary>
-        /// Reconciles changes between two sequences by using the specified equality comparer and saves the difference to a remote data store.
-        /// <para/> 1. In the trivial case (no <paramref name="remote"/> models), all <paramref name="local"/> models on the <paramref name="remote"/> are saved on the data store.
-        /// <para/> 2. If the remote data store already contains models, these are reconciled with <paramref name="local"/> models and the difference persisted on the data store.
-        /// <para/> 3. In the special case (available <paramref name="remote"/> models but no <paramref name="local"/> models), changes are synchronized by deleting all <paramref name="remote"/> models.
+        /// Saves the <paramref name="local"/> sequence of data models to the data store after synchronizing changes with the <paramref name="remote"/> sequence of data elements.
+        /// <para/>1. The given <paramref name="local"/> sequence is non-empty: Erases elements of the <paramref name="remote"/> sequence of data models from the data store that are not found in the sequence of <paramref name="local"/> data models 
+        /// and saves all <paramref name="local"/> data models.
+        /// <para/>2. The given <paramref name="local"/> is empty: erases all elements of the <paramref name="remote"/> sequence of data models from the data store.
+        /// <para/> The given equality <paramref name="comparer"/> is used to compare elements of the <paramref name="local"/> sequence against elements of the <paramref name="remote"/> sequence.
         /// </summary>
-        /// <typeparam name="TKey">The type of the key to uniquely identify the model.</typeparam>
-        /// <typeparam name="TModel">The type of the model to reconcile and save.</typeparam>
-        /// <typeparam name="TRepository">The type of the repository that reconciles the sequences and saves models to a remote data store.</typeparam>
-        /// <param name="repository">The repository that reconciles and saves models to a remote data store.</param>
-        /// <param name="local">The sequence that contains models to save on the remote data store.</param>
-        /// <param name="remote">The sequence that contains models from the remote data store.</param>
-        /// <param name="comparer">The equality comparer to apply during reconciliation of changes between <paramref name="local"/> and <paramref name="remote"/> models.</param>
-        public static void ReconcileAll<TKey, TModel, TRepository>(
+        /// <typeparam name="TKey">The type of the key to uniquely identify each data model.</typeparam>
+        /// <typeparam name="TModel">The type of data model to save or erase.</typeparam>
+        /// <typeparam name="TRepository">The type of repository that saves or erases a data model.</typeparam>
+        /// <param name="repository">The repository that saves or erases a data model.</param>
+        /// <param name="local">The sequence of data models to save on the data store.</param>
+        /// <param name="remote">The sequence of data models from the data store to compare with the <paramref name="local"/> sequence of models.</param>
+        /// <param name="comparer">The equality comparer that compares elements of the <paramref name="local"/> and <paramref name="remote"/> sequence of data models.</param>
+        private static void SaveAllImpl<TKey, TModel, TRepository>(
             this TRepository repository,
             IEnumerable<TModel> local,
             IEnumerable<TModel> remote,
@@ -217,20 +238,21 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         }
 
         /// <summary>
-        /// Reconciles changes asynchronously between two sequences by using the default equality comparer and saves the difference to a remote data store.
-        /// <para/> 1. In the trivial case (no <paramref name="remote"/> models), all <paramref name="local"/> models on the <paramref name="remote"/> are saved on the data store.
-        /// <para/> 2. If the remote data store already contains models, these are reconciled with <paramref name="local"/> models and the difference persisted on the data store.
-        /// <para/> 3. In the special case (available <paramref name="remote"/> models but no <paramref name="local"/> models), changes are synchronized by deleting all <paramref name="remote"/> models.
+        /// Saves the <paramref name="local"/> sequence of data models asynchronously to the data store after synchronizing changes with the <paramref name="remote"/> sequence of data elements.
+        /// <para/>1. The given <paramref name="local"/> sequence is non-empty: Erases elements of the <paramref name="remote"/> sequence of data models from the data store that are not found in the sequence of <paramref name="local"/> data models 
+        /// and saves all <paramref name="local"/> data models.
+        /// <para/>2. The given <paramref name="local"/> is empty: erases all elements of the <paramref name="remote"/> sequence of data models from the data store.
         /// </summary>
-        /// <typeparam name="TKey">The type of the key to uniquely identify the model.</typeparam>
-        /// <typeparam name="TModel">The type of the model to reconcile and save.</typeparam>
-        /// <typeparam name="TRepository">The type of the repository that reconciles the sequences and saves models to a remote data store.</typeparam>
-        /// <param name="repository">The repository that reconciles and saves models to a remote data store.</param>
-        /// <param name="local">The sequence that contains models to save on the remote data store.</param>
-        /// <param name="remote">The sequence that contains models from the remote data store.</param>
+        /// <typeparam name="TKey">The type of the key to uniquely identify each data model.</typeparam>
+        /// <typeparam name="TModel">The type of data model to save or erase.</typeparam>
+        /// <typeparam name="TRepository">The type of repository that saves or erases a data model.</typeparam>
+        /// <param name="repository">The repository that saves or erases a data model.</param>
+        /// <param name="local">The sequence of data models to save on the data store.</param>
+        /// <param name="remote">The sequence of data models from the data store to compare with the <paramref name="local"/> sequence of models.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
-        /// <returns>The promise to reconcile changes between the sequences.</returns>
-        public static Task ReconcileAllAsync<TKey, TModel, TRepository>(
+        /// <returns>A promise to save the <paramref name="local"/> sequence of a data models asynchronously to the data store.</returns>
+        /// <seealso cref="IWriteRepository{TKey, TModel}.SaveAsync(TModel, CancellationToken)"/>
+        private static Task SaveAllImplAsync<TKey, TModel, TRepository>(
             this TRepository repository,
             IEnumerable<TModel> local,
             IEnumerable<TModel> remote,
@@ -238,24 +260,27 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
             where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
             where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
         {
-            return repository.ReconcileAllAsync<TKey, TModel, TRepository>(local, remote, EqualityComparer<TModel>.Default, token);
+            return repository.SaveAllImplAsync<TKey, TModel, TRepository>(local, remote, EqualityComparer<TModel>.Default, token);
         }
 
         /// <summary>
-        /// Reconciles changes asynchronously between two sequences by using the specified equality comparer and saves the difference to a remote data store.
-        /// <para/> 1. In the trivial case (no <paramref name="remote"/> models), all <paramref name="local"/> models on the <paramref name="remote"/> are saved on the data store.
-        /// <para/> 2. If the remote data store already contains models, these are reconciled with <paramref name="local"/> models and the difference persisted on the data store.
-        /// <para/> 3. In the special case (available <paramref name="remote"/> models but no <paramref name="local"/> models), changes are synchronized by deleting all <paramref name="remote"/> models.
+        /// Saves the <paramref name="local"/> sequence of data models asynchronously to the data store after synchronizing changes with the <paramref name="remote"/> sequence of data elements.
+        /// <para/>1. The given <paramref name="local"/> sequence is non-empty: Erases elements of the <paramref name="remote"/> sequence of data models from the data store that are not found in the sequence of <paramref name="local"/> data models 
+        /// and saves all <paramref name="local"/> data models.
+        /// <para/>2. The given <paramref name="local"/> is empty: erases all elements of the <paramref name="remote"/> sequence of data models from the data store.
+        /// <para/> The given equality <paramref name="comparer"/> is used to compare elements of the <paramref name="local"/> sequence against elements of the <paramref name="remote"/> sequence.
         /// </summary>
-        /// <typeparam name="TKey">The type of the key to uniquely identify the model.</typeparam>
-        /// <typeparam name="TModel">The type of the model to reconcile and save.</typeparam>
-        /// <typeparam name="TRepository">The type of the repository that reconciles the sequences and saves models to a remote data store.</typeparam>
-        /// <param name="repository">The repository that reconciles and saves models to a remote data store.</param>
-        /// <param name="local">The sequence that contains models to save on the remote data store.</param>
-        /// <param name="remote">The sequence that contains models from the remote data store.</param>
-        /// <param name="comparer">The equality comparer to apply during reconciliation of changes between <paramref name="local"/> and <paramref name="remote"/> models.</param>
+        /// <typeparam name="TKey">The type of the key to uniquely identify each data model.</typeparam>
+        /// <typeparam name="TModel">The type of data model to save or erase.</typeparam>
+        /// <typeparam name="TRepository">The type of repository that saves or erases a data model.</typeparam>
+        /// <param name="repository">The repository that saves or erases a data model.</param>
+        /// <param name="local">The sequence of data models to save on the data store.</param>
+        /// <param name="remote">The sequence of data models from the data store to compare with the <paramref name="local"/> sequence of models.</param>
+        /// <param name="comparer">The equality comparer that compares elements of the <paramref name="local"/> and <paramref name="remote"/> sequence of data models.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
-        public static async Task ReconcileAllAsync<TKey, TModel, TRepository>(
+        /// <returns>A promise to save the <paramref name="local"/> sequence of a data models asynchronously to the data store.</returns>
+        /// <seealso cref="IWriteRepository{TKey, TModel}.SaveAsync(TModel, CancellationToken)"/> 
+        private static async Task SaveAllImplAsync<TKey, TModel, TRepository>(
             this TRepository repository,
             IEnumerable<TModel> local,
             IEnumerable<TModel> remote,
@@ -277,6 +302,223 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
             {
                 if (remote.Any()) await repository.EraseAllAsync(remote, token);
             }
+        }
+
+        /// <summary>
+        /// Saves the <paramref name="local"/> version of a data model to the data store if it is available; 
+        /// otherwise erases the <paramref name="remote"/> version of that model from the data store.
+        /// <para/> The default equality comparer is used to check the availability of the <paramref name="local"/> version by comparing the it to a given <paramref name="default"/> value.
+        /// <para/> It is recommended to call this method, if <paramref name="remote"/> is guranteed to be different from the <paramref name="default"/> value.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key to uniquely identify a data model.</typeparam>
+        /// <typeparam name="TModel">The type of data model to save.</typeparam>
+        /// <typeparam name="TRepository">The type of repository that saves or erases a data model.</typeparam>
+        /// <param name="repository">The repository that saves or erases a data model.</param>
+        /// <param name="local">The data model to save on the data store.</param>
+        /// <param name="remote">Data model from the data store to compare with with <paramref name="local"/> model.</param>
+        /// <param name="default">The default value of a data model.</param>
+        /// <seealso cref="IWriteRepository{TKey, TModel}.Save(TModel)"/>
+        public static void Save<TKey, TModel, TRepository>(this TRepository repository, TModel local, TModel remote, TModel @default)
+            where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
+            where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        {
+            repository.Save<TKey, TModel, TRepository>(local, remote, @default, EqualityComparer<TModel>.Default);
+        }
+
+        /// <summary>
+        /// Saves the <paramref name="local"/> version of a data model asynchronously to the data store if it is available; 
+        /// otherwise erases the <paramref name="remote"/> version of that model asynchronously from the data store.
+        /// <para/> The default equality comparer is used to check the availability of the <paramref name="local"/> version by comparing the it to a given <paramref name="default"/> value.
+        /// <para/> It is recommended to call this method, if <paramref name="remote"/> is guranteed to be different from the <paramref name="default"/> value.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key to uniquely identify a data model.</typeparam>
+        /// <typeparam name="TModel">The type of data model to save.</typeparam>
+        /// <typeparam name="TRepository">The type of repository that saves or erases a data model.</typeparam>
+        /// <param name="repository">The repository that saves or erases a data model.</param>
+        /// <param name="local">The data model to save asynchronously on the data store.</param>
+        /// <param name="remote">TData model from the data store to compare with with <paramref name="local"/> model.</param>
+        /// <param name="default">The default value of a data model.</param>
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        /// <seealso cref="IWriteRepository{TKey, TModel}.SaveAsync(TModel, CancellationToken)"/>
+        public async static Task SaveAsync<TKey, TModel, TRepository>(
+            this TRepository repository,
+            TModel local,
+            TModel remote,
+            TModel @default, 
+            CancellationToken token = default(CancellationToken))
+            where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
+            where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        {
+            await repository.SaveAsync<TKey, TModel, TRepository>(local, remote, @default, EqualityComparer<TModel>.Default);
+        }
+
+        /// <summary>
+        /// Saves the <paramref name="local"/> version of a data model to the data store if it is available; 
+        /// otherwise erases the <paramref name="remote"/> version of that model from the data store.
+        /// <para/> The provided equality comparer is used to check the availability of the <paramref name="local"/> version by comparing the it to a given <paramref name="default"/> value.
+        /// <para/> It is recommended to call this method, if <paramref name="remote"/> is guranteed to be different from the <paramref name="default"/> value.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key to uniquely identify a data model.</typeparam>
+        /// <typeparam name="TModel">The type of data model to save.</typeparam>
+        /// <typeparam name="TRepository">The type of repository that saves or erases a data model.</typeparam>
+        /// <param name="repository">The repository that saves or erases a data model.</param>
+        /// <param name="local">The data model to save on the data store.</param>
+        /// <param name="remote">Data model from the data store to compare with with <paramref name="local"/> model.</param>
+        /// <param name="default">The default value of a data model.</param>
+        /// <param name="comparer">The equality comparer that compares the <paramref name="local"/> version of a data model to a given <paramref name="default"/> value.</param>
+        /// <seealso cref="IWriteRepository{TKey, TModel}.Save(TModel)"/>
+        public static void Save<TKey, TModel, TRepository>(
+            this TRepository repository,
+            TModel local,
+            TModel remote,
+            TModel @default,
+            IEqualityComparer<TModel> comparer)
+            where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
+            where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        {
+            if (remote != null) repository.SaveImpl<TKey, TModel, TRepository>(local, remote, @default, comparer);
+            else if (local != null) repository.Save(local);
+        }
+
+        /// <summary>
+        /// Saves the <paramref name="local"/> version of a data model asynchronously to the data store if it is available; 
+        /// otherwise erases the <paramref name="remote"/> version of that model from the data store.
+        /// <para/> The provided equality comparer is used to check the availability of the <paramref name="local"/> version by comparing the it to a given <paramref name="default"/> value.
+        /// <para/> It is recommended to call this method, if <paramref name="remote"/> is guranteed to be different from the <paramref name="default"/> value.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key to uniquely identify a data model.</typeparam>
+        /// <typeparam name="TModel">The type of data model to save or erase.</typeparam>
+        /// <typeparam name="TRepository">The type of repository that saves or erases a data model.</typeparam>
+        /// <param name="repository">The repository that saves or erases a data model.</param>
+        /// <param name="local">The data model to save on the data store.</param>
+        /// <param name="remote">Data model from the data store to compare with with <paramref name="local"/> model.</param>
+        /// <param name="default">The default value of a data model.</param>
+        /// <param name="comparer">The equality comparer that compares the <paramref name="local"/> version of a data model to a given <paramref name="default"/> value.</param>
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        /// <seealso cref="IWriteRepository{TKey, TModel}.SaveAsync(TModel, CancellationToken)"/>
+        public async static Task SaveAsync<TKey, TModel, TRepository>(
+            this TRepository repository,
+            TModel local,
+            TModel remote,
+            TModel @default,
+            IEqualityComparer<TModel> comparer, 
+            CancellationToken token = default(CancellationToken))
+            where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
+            where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        {
+            if (remote != null) await repository.SaveImplAsync<TKey, TModel, TRepository>(local, remote, @default, comparer);
+            else if (local != null) await repository.SaveAsync(local);
+        }
+
+        /// <summary>
+        /// Saves the <paramref name="local"/> sequence of data models to the data store after synchronizing changes with the <paramref name="remote"/> sequence of data elements.
+        /// <para/>1. The given <paramref name="local"/> sequence is non-empty: Erases elements of the <paramref name="remote"/> sequence of data models from the data store that are not found in the sequence of <paramref name="local"/> data models 
+        /// and saves all <paramref name="local"/> data models.
+        /// <para/>2. The given <paramref name="local"/> is empty: erases all elements of the <paramref name="remote"/> sequence of data models from the data store.
+        /// <para/> The default equality comparer is used to compare elements of the <paramref name="local"/> sequence against elements of the <paramref name="remote"/> sequence.
+        /// <para/> It is recommended to call this method, if <paramref name="remote"/> sequence of data models is guranteed to be non-empty.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key to uniquely identify each data model.</typeparam>
+        /// <typeparam name="TModel">The type of data model to save or erase.</typeparam>
+        /// <typeparam name="TRepository">The type of repository that saves or erases a data model.</typeparam>
+        /// <param name="repository">The repository that saves or erases a data model.</param>
+        /// <param name="local">The sequence of data models to save on the data store.</param>
+        /// <param name="remote">The sequence of data models from the data store to compare with the <paramref name="local"/> sequence of models.</param>
+        /// <seealso cref="IWriteRepository{TKey, TModel}.SaveAll(IEnumerable{TModel})"/>
+        public static void SaveAll<TKey, TModel, TRepository>(
+            this TRepository repository,
+            IEnumerable<TModel> local,
+            IEnumerable<TModel> remote)
+            where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
+            where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        {
+            repository.SaveAll<TKey, TModel, TRepository>(local, remote, EqualityComparer<TModel>.Default);
+        }
+
+        /// <summary>
+        /// Saves the <paramref name="local"/> sequence of data models to the data store after synchronizing changes with the <paramref name="remote"/> sequence of data elements.
+        /// <para/>1. The given <paramref name="local"/> sequence is non-empty: Erases elements of the <paramref name="remote"/> sequence of data models from the data store that are not found in the sequence of <paramref name="local"/> data models 
+        /// and saves all <paramref name="local"/> data models.
+        /// <para/>2. The given <paramref name="local"/> is empty: erases all elements of the <paramref name="remote"/> sequence of data models from the data store.
+        /// <para/> The given equality <paramref name="comparer"/> is used to compare elements of the <paramref name="local"/> sequence against elements of the <paramref name="remote"/> sequence.
+        /// <para/> It is recommended to call this method, if <paramref name="remote"/> sequence of data models is guranteed to be non-empty.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key to uniquely identify each data model.</typeparam>
+        /// <typeparam name="TModel">The type of data model to save or erase.</typeparam>
+        /// <typeparam name="TRepository">The type of repository that saves or erases a data model.</typeparam>
+        /// <param name="repository">The repository that saves or erases a data model.</param>
+        /// <param name="local">The sequence of data models to save on the data store.</param>
+        /// <param name="remote">The sequence of data models from the data store to compare with the <paramref name="local"/> sequence of models.</param>
+        /// <param name="comparer">The equality comparer that compares elements of the <paramref name="local"/> and <paramref name="remote"/> sequence of data models.</param>
+        /// <seealso cref="IWriteRepository{TKey, TModel}.SaveAll(IEnumerable{TModel})"/>
+        public static void SaveAll<TKey, TModel, TRepository>(
+            this TRepository repository,
+            IEnumerable<TModel> local,
+            IEnumerable<TModel> remote,
+            IEqualityComparer<TModel> comparer)
+            where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
+            where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        {
+            if (remote.Any()) repository.SaveAllImpl<TKey, TModel, TRepository>(local, remote, comparer);
+            else if (local.Any()) repository.SaveAll(local);
+        }
+
+        /// <summary>
+        /// Saves the <paramref name="local"/> sequence of data models asynchronously to the data store after synchronizing changes with the <paramref name="remote"/> sequence of data elements.
+        /// <para/>1. The given <paramref name="local"/> sequence is non-empty: Erases elements of the <paramref name="remote"/> sequence of data models from the data store that are not found in the sequence of <paramref name="local"/> data models 
+        /// and saves all <paramref name="local"/> data models.
+        /// <para/>2. The given <paramref name="local"/> is empty: erases all elements of the <paramref name="remote"/> sequence of data models from the data store.
+        /// <para/> It is recommended to call this method, if <paramref name="remote"/> sequence of data models is guranteed to be non-empty.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key to uniquely identify each data model.</typeparam>
+        /// <typeparam name="TModel">The type of data model to save or erase.</typeparam>
+        /// <typeparam name="TRepository">The type of repository that saves or erases a data model.</typeparam>
+        /// <param name="repository">The repository that saves or erases a data model.</param>
+        /// <param name="local">The sequence of data models to save on the data store.</param>
+        /// <param name="remote">The sequence of data models from the data store to compare with the <paramref name="local"/> sequence of models.</param>
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        /// <returns>A promise to save the <paramref name="local"/> sequence of a data models asynchronously to the data store.</returns>
+        /// <seealso cref="IWriteRepository{TKey, TModel}.SaveAllAsync(IEnumerable{TModel}, CancellationToken)"/> 
+        public static Task SaveAllAsync<TKey, TModel, TRepository>(
+            this TRepository repository,
+            IEnumerable<TModel> local,
+            IEnumerable<TModel> remote,
+            CancellationToken token = default(CancellationToken))
+            where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
+            where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        {
+            return repository.SaveAllAsync<TKey, TModel, TRepository>(local, remote, EqualityComparer<TModel>.Default, token);
+        }
+
+        /// <summary>
+        /// Saves the <paramref name="local"/> sequence of data models asynchronously to the data store after synchronizing changes with the <paramref name="remote"/> sequence of data elements.
+        /// <para/>1. The given <paramref name="local"/> sequence is non-empty: Erases elements of the <paramref name="remote"/> sequence of data models from the data store that are not found in the sequence of <paramref name="local"/> data models 
+        /// and saves all <paramref name="local"/> data models.
+        /// <para/>2. The given <paramref name="local"/> is empty: erases all elements of the <paramref name="remote"/> sequence of data models from the data store.
+        /// <para/> The given equality <paramref name="comparer"/> is used to compare elements of the <paramref name="local"/> sequence against elements of the <paramref name="remote"/> sequence.
+        /// <para/> It is recommended to call this method, if <paramref name="remote"/> sequence of data models is guranteed to be non-empty.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key to uniquely identify each data model.</typeparam>
+        /// <typeparam name="TModel">The type of data model to save or erase.</typeparam>
+        /// <typeparam name="TRepository">The type of repository that saves or erases a data model.</typeparam>
+        /// <param name="repository">The repository that saves or erases a data model.</param>
+        /// <param name="local">The sequence of data models to save on the data store.</param>
+        /// <param name="remote">The sequence of data models from the data store to compare with the <paramref name="local"/> sequence of models.</param>
+        /// <param name="comparer">The equality comparer that compares elements of the <paramref name="local"/> and <paramref name="remote"/> sequence of data models.</param>
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        /// <returns>A promise to save the <paramref name="local"/> sequence of a data models asynchronously to the data store.</returns>
+        /// <seealso cref="IWriteRepository{TKey, TModel}.SaveAllAsync(IEnumerable{TModel}, CancellationToken)"/> 
+        public async static Task SaveAllAsync<TKey, TModel, TRepository>(
+            this TRepository repository,
+            IEnumerable<TModel> local,
+            IEnumerable<TModel> remote,
+            IEqualityComparer<TModel> comparer,
+            CancellationToken token = default(CancellationToken))
+            where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
+            where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        {
+            if (remote.Any()) await repository.SaveAllImplAsync<TKey, TModel, TRepository>(local, remote, comparer, token);
+            else if (local.Any()) await repository.SaveAllAsync(local, token);
         }
     }
 }
