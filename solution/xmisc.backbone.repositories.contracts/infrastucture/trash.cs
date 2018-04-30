@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
 {
     /// <summary>
-    /// Specifies a repository that trashes models by excluding access to them, as well as
-    /// restores access to excluded models in the data store.
+    /// Specifies a repository that trashes models by marking them for deletion.
+    /// <para/> The marked models are excluded from access until the repository restores them by unmarking them.
     /// </summary>
     /// <typeparam name="TKey">The type of key that identifies the model to trash or restore.</typeparam>
     /// <typeparam name="TModel">The type of model to trash or restore.</typeparam>
@@ -15,131 +15,123 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
     {
         /// <summary>
-        /// Excludes access to a data model that is specified by the provided <paramref name="key"/> from the data store.
+        /// Soft-deletes the data model that is specified by the provided <paramref name="key"/>.
         /// </summary>
-        /// <param name="key">The identifier that specifies the data model to exclude.</param>
-        /// <returns>True if the data was trashed; otherwise false.</returns>
-        bool TrashByKey(TKey key);
+        /// <param name="key">The unique identifier that specifies the data model to soft-delete.</param>
+        void TrashByKey(TKey key);
 
         /// <summary>
-        /// Excludes access to data models that are specified by the provided <paramref name="keys"/> from the data store.
+        /// Soft-deletes the data models that are specified by the provided <paramref name="keys"/>.
         /// </summary>
-        /// <param name="keys">The identifiers that specify the data models to exclude.</param>
+        /// <param name="keys">The identifiers that specify the data models to soft-delete.</param>
+        /// <param name="offset">The number of unique identifiers to bypass.</param>
+        /// <param name="count">The numbers of unique identifiers to return.</param>
+        void TrashAllByKeys(IEnumerable<TKey> keys, int? offset = null, int? count = null);
+
+        /// <summary>
+        /// Soft-deletes the given data model.
+        /// </summary>
+        /// <param name="model">The data model to soft-delete.</param>
+        void Trash(TModel model);
+
+        /// <summary>
+        /// Soft-deletes the given data models.
+        /// </summary>
+        /// <param name="models">The data models to soft-delete.</param>
+        void TrashAll(IEnumerable<TModel> models);
+
+        /// <summary>
+        /// Restores a data model that is specified by the provided unique identifier.
+        /// </summary>
+        /// <param name="key">The unique identifier that specifies the data model to restore.</param>
+        void RestoreByKey(TKey key);
+
+        /// <summary>
+        /// Restores data models that are specified by the provided unique identifiers.
+        /// </summary>
+        /// <param name="keys">The unique identifiers that specify the data models to restore.</param>
+        /// <param name="offset">The number of unique identifiers to bypass.</param>
+        /// <param name="count">The numbers of unique identifiers to return.</param>
+        void RestoreAllByKeys(IEnumerable<TKey> keys, int? offset = null, int? count = null);
+
+        /// <summary>
+        /// Restores the specified data model.
+        /// </summary>
+        /// <param name="model">The data model to restore.</param>
+        void Restore(TModel model);
+
+        /// <summary>
+        /// Restores the specified data models.
+        /// </summary>
+        /// <param name="models">The data models to restore.</param>
+        void RestoreAll(IEnumerable<TModel> models);
+
+        /// <summary>
+        /// Soft-deletes asynchronously a data model that is specified by the provided unique identifier.
+        /// </summary>
+        /// <param name="key">The unique identifier that specifies the data model to soft-delete.</param>
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        /// <returns>A promise to soft-delete a data model that is specified by a provided <paramref name="key"/>.</returns>
+        Task TrashByKeyAsync(TKey key, CancellationToken token = default(CancellationToken));
+
+        /// <summary>
+        /// Soft-deletes asynchronously data models that are specified by the provided unique identifiers.
+        /// </summary>
+        /// <param name="keys">The unique identifiers that specify the data models to soft-delete.</param>
         /// <param name="offset">The number of data models to bypass.</param>
-        /// <param name="count">The numbers of data models to return.</param> 
-        /// <returns>The number of data models trashed.</returns>
-        int TrashAllByKeys(IEnumerable<TKey> keys, int? offset = null, int? count = null);
-
-        /// <summary>
-        /// Excludes access to the specified data model from the data store.
-        /// </summary>
-        /// <param name="model">The data model in the data store to exclude.</param>
-        /// <returns>True if the data was trashed; otherwise false.</returns>
-        bool Trash(TModel model);
-
-        /// <summary>
-        /// Excludes access to the specified data models from the data store.
-        /// </summary>
-        /// <param name="models">The data models in the data store to exclude.</param>
-        /// <returns>The number of data models trashed.</returns>
-        int TrashAll(IEnumerable<TModel> models);
-
-        /// <summary>
-        /// Restores a data model that is specified by the provided <paramref name="key"/> from the data store.
-        /// </summary>
-        /// <param name="key">The identifier that specifies the data model to exclude.</param>
-        /// <returns>True if the data was trashed; otherwise false.</returns>
-        bool RestoreByKey(TKey key);
-
-        /// <summary>
-        /// Restores data models that are specified by the provided <paramref name="keys"/> from the data store.
-        /// </summary>
-        /// <param name="keys">The identifiers that specify the data models to exclude.</param>
-        /// <param name="offset">The number of data models to bypass.</param>
-        /// <param name="count">The numbers of data models to return.</param> 
-        /// <returns>The number of data models trashed.</returns>
-        int RestoreAllByKeys(IEnumerable<TKey> keys, int? offset = null, int? count = null);
-
-        /// <summary>
-        /// Restores the specified data model from the data store.
-        /// </summary>
-        /// <param name="model">The data model in the data store to exclude.</param>
-        /// <returns>True if the data was trashed; otherwise false.</returns>
-        bool Restore(TModel model);
-
-        /// <summary>
-        /// Restores the specified data models from the data store.
-        /// </summary>
-        /// <param name="models">The data models in the data store to exclude.</param>
-        /// <returns>The number of data models trashed.</returns>
-        int RestoreAll(IEnumerable<TModel> models);
-
-        /// <summary>
-        /// Excludes asynchronously a data model that is specified by the provided <paramref name="key"/> from the data store.
-        /// </summary>
-        /// <param name="key">The identifier that specifies the data model to exclude.</param>
+        /// <param name="count">The numbers of data models to return.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
-        /// <returns>A promise to return true if the data was trashed; otherwise false.</returns>
-        Task<bool> TrashByKeyAsync(TKey key, CancellationToken token = default(CancellationToken));
+        /// <returns>A promise to soft-delete a data model that is specified by a provided unique identifier.</returns>
+        Task TrashAllByKeysAsync(IEnumerable<TKey> keys, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
 
         /// <summary>
-        /// Excludes asynchronously data models that are specified by the provided <paramref name="keys"/> from the data store.
+        /// Soft-deletes the specified data model asynchronously.
         /// </summary>
-        /// <param name="keys">The identifiers that specify the data models to exclude.</param>
-        /// <param name="offset">The number of data models to bypass.</param>
-        /// <param name="count">The numbers of data models to return.</param> 
+        /// <param name="model">The data model to soft-delete.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
-        /// <returns>A promise to return the number of data models trashed.</returns>
-        Task<int> TrashAllByKeysAsync(IEnumerable<TKey> keys, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
+        /// <returns>A promise to soft-delete the given data model.</returns>
+        Task TrashAsync(TModel model, CancellationToken token = default(CancellationToken));
 
         /// <summary>
-        /// Excludes asynchronously the specified data model from the datastore.
+        /// Soft-deletes the specified data models asynchronously.
         /// </summary>
-        /// <param name="model">The data model in the data store to exclude.</param>
+        /// <param name="models">The data models to soft-delete.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
-        /// <returns>A promise to return true if the data was trashed; otherwise false.</returns>
-        Task<bool> TrashAsync(TModel model, CancellationToken token = default(CancellationToken));
+        /// <returns>A promise to soft-delete the given data models.</returns>
+        Task TrashAllAsync(IEnumerable<TModel> models, CancellationToken token = default(CancellationToken));
 
         /// <summary>
-        /// Excludes asynchronously the specified data models from the data store.
-        /// </summary>
-        /// <param name="models">The data models to exclude from the data store.</param>
-        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
-        /// <returns>A promise to return the number of data models trashed.</returns>
-        Task<int> TrashAllAsync(IEnumerable<TModel> models, CancellationToken token = default(CancellationToken));
-
-        /// <summary>
-        /// Excludes asynchronously a data model that is specified by the provided <paramref name="key"/> from the data store.
+        /// Restores a data model that is specified by the provided <paramref name="key"/> asynchronously.
         /// </summary>
         /// <param name="key">The identifier that specifies the data model to exclude.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
-        /// <returns>A promise to return true if the data was trashed; otherwise false.</returns>
-        Task<bool> RestoreByKeyAsync(TKey key, CancellationToken token = default(CancellationToken));
+        /// <returns>A promise to soft-delete the given data model.</returns>
+        Task RestoreByKeyAsync(TKey key, CancellationToken token = default(CancellationToken));
 
         /// <summary>
-        /// Excludes asynchronously data models that are specified by the provided <paramref name="keys"/> from the data store.
+        /// Restores data models that are specified by the provided unique identifiers asynchronously.
         /// </summary>
-        /// <param name="keys">The identifiers that specify the data models to exclude.</param>
+        /// <param name="keys">The identifiers that specify the data models to restore.</param>
         /// <param name="offset">The number of data models to bypass.</param>
-        /// <param name="count">The numbers of data models to return.</param> 
+        /// <param name="count">The numbers of data models to return.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
-        /// <returns>A promise to return the number of data models trashed.</returns>
-        Task<int> RestoreAllByKeysAsync(IEnumerable<TKey> keys, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
+        /// <returns>A promise to restore data models specified by the provided unique identifiers, for deletion.</returns>
+        Task RestoreAllByKeysAsync(IEnumerable<TKey> keys, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
 
         /// <summary>
-        /// Excludes asynchronously the specified data model from the data store.
+        /// Restores the specified data model asynchronously.
         /// </summary>
-        /// <param name="model">The data model in the data store to exclude.</param>
+        /// <param name="model">The data model to restore.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
-        /// <returns>A promise to return true if the data was trashed; otherwise false.</returns>
-        Task<bool> RestoreAsync(TModel model, CancellationToken token = default(CancellationToken));
+        /// <returns>A promise to restore the given data model.</returns>
+        Task RestoreAsync(TModel model, CancellationToken token = default(CancellationToken));
 
         /// <summary>
-        /// Excludes asynchronously the specified data models from the data store.
+        /// Restores the specified data models asynchronously.
         /// </summary>
-        /// <param name="models">The data models to exclude from the data store.</param>
+        /// <param name="models">The data models to restore.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
-        /// <returns>A promise to return the number of data models trashed.</returns>
-        Task<int> RestoreAllAsync(IEnumerable<TModel> models, CancellationToken token = default(CancellationToken));
+        /// <returns>A promise to restore the given data models.</returns>
+        Task RestoreAllAsync(IEnumerable<TModel> models, CancellationToken token = default(CancellationToken));
     }
 }
