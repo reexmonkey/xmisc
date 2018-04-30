@@ -47,8 +47,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// Restores a data model that is specified by the provided unique identifier.
         /// </summary>
         /// <param name="key">The unique identifier that specifies the data model to restore.</param>
-        /// <param name="token">Propagates the notification that the operation should be cancelled.</param>
-        void RestoreByKey(TKey key, CancellationToken token = default(CancellationToken));
+        void RestoreByKey(TKey key);
 
         /// <summary>
         /// Restores data models that are specified by the provided unique identifiers.
