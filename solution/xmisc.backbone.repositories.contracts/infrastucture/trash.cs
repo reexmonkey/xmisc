@@ -18,7 +18,8 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// Soft-deletes the data model that is specified by the provided <paramref name="key"/>.
         /// </summary>
         /// <param name="key">The unique identifier that specifies the data model to soft-delete.</param>
-        void TrashByKey(TKey key);
+        /// <param name="token">Propagates the notification that the operation should be cancelled.</param>
+        void TrashByKey(TKey key, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Soft-deletes the data models that are specified by the provided <paramref name="keys"/>.
@@ -26,7 +27,8 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// <param name="keys">The identifiers that specify the data models to soft-delete.</param>
         /// <param name="offset">The number of unique identifiers to bypass.</param>
         /// <param name="count">The numbers of unique identifiers to return.</param>
-        void TrashAllByKeys(IEnumerable<TKey> keys, int? offset = null, int? count = null);
+        /// <param name="token">Propagates the notification that the operation should be cancelled.</param>
+        void TrashAllByKeys(IEnumerable<TKey> keys, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Soft-deletes the given data model.
@@ -38,13 +40,15 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// Soft-deletes the given data models.
         /// </summary>
         /// <param name="models">The data models to soft-delete.</param>
-        void TrashAll(IEnumerable<TModel> models);
+        /// <param name="token">Propagates the notification that the operation should be cancelled.</param>
+        void TrashAll(IEnumerable<TModel> models, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Restores a data model that is specified by the provided unique identifier.
         /// </summary>
         /// <param name="key">The unique identifier that specifies the data model to restore.</param>
-        void RestoreByKey(TKey key);
+        /// <param name="token">Propagates the notification that the operation should be cancelled.</param>
+        void RestoreByKey(TKey key, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Restores data models that are specified by the provided unique identifiers.
@@ -52,7 +56,8 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// <param name="keys">The unique identifiers that specify the data models to restore.</param>
         /// <param name="offset">The number of unique identifiers to bypass.</param>
         /// <param name="count">The numbers of unique identifiers to return.</param>
-        void RestoreAllByKeys(IEnumerable<TKey> keys, int? offset = null, int? count = null);
+        /// <param name="token">Propagates the notification that the operation should be cancelled.</param>
+        void RestoreAllByKeys(IEnumerable<TKey> keys, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Restores the specified data model.
@@ -64,7 +69,8 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// Restores the specified data models.
         /// </summary>
         /// <param name="models">The data models to restore.</param>
-        void RestoreAll(IEnumerable<TModel> models);
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        void RestoreAll(IEnumerable<TModel> models, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Soft-deletes asynchronously a data model that is specified by the provided unique identifier.
@@ -90,7 +96,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// <param name="model">The data model to soft-delete.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise to soft-delete the given data model.</returns>
-        Task TrashAsync(TModel model, CancellationToken token = default(CancellationToken));
+        Task TrashAsync(TModel model);
 
         /// <summary>
         /// Soft-deletes the specified data models asynchronously.
@@ -122,9 +128,8 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// Restores the specified data model asynchronously.
         /// </summary>
         /// <param name="model">The data model to restore.</param>
-        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise to restore the given data model.</returns>
-        Task RestoreAsync(TModel model, CancellationToken token = default(CancellationToken));
+        Task RestoreAsync(TModel model);
 
         /// <summary>
         /// Restores the specified data models asynchronously.
