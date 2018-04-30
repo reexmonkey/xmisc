@@ -94,7 +94,6 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// Soft-deletes the specified data model asynchronously.
         /// </summary>
         /// <param name="model">The data model to soft-delete.</param>
-        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise to soft-delete the given data model.</returns>
         Task TrashAsync(TModel model);
 
