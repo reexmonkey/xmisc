@@ -18,8 +18,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// Soft-deletes the data model that is specified by the provided <paramref name="key"/>.
         /// </summary>
         /// <param name="key">The unique identifier that specifies the data model to soft-delete.</param>
-        /// <param name="token">Propagates the notification that the operation should be cancelled.</param>
-        void TrashByKey(TKey key, CancellationToken token = default(CancellationToken));
+        void TrashByKey(TKey key);
 
         /// <summary>
         /// Soft-deletes the data models that are specified by the provided <paramref name="keys"/>.
