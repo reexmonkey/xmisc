@@ -108,9 +108,8 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.infrastucture
         /// Restores a data model that is specified by the provided <paramref name="key"/> asynchronously.
         /// </summary>
         /// <param name="key">The identifier that specifies the data model to exclude.</param>
-        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise to soft-delete the given data model.</returns>
-        Task RestoreByKeyAsync(TKey key, CancellationToken token = default(CancellationToken));
+        Task RestoreByKeyAsync(TKey key);
 
         /// <summary>
         /// Restores data models that are specified by the provided unique identifiers asynchronously.
