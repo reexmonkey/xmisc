@@ -113,5 +113,62 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="count">Specifies the number of data models to return.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise that returns retrieved data models; otherwise the default values of the data models.</returns>
-        Task<IEnumerable<TModel>> GetAsync(int? offset = null, bool references = true, int? count = null, CancellationToken token = default(CancellationToken));    }
+        Task<IEnumerable<TModel>> GetAsync(int? offset = null, bool references = true, int? count = null, CancellationToken token = default(CancellationToken));
+
+        /// <summary>
+        /// Retrieves the keys of data models from the data store.
+        /// <para /> Optionally the
+        /// </summary>
+        /// <param name="offset">Ignores the specified number of keys.</param>
+        /// <param name="count">Returns the the specified number of keys.</param>
+        /// <returns>The number of key of data models from the serach that may optionally have been filtered.</returns>
+        IEnumerable<TKey> GetKeys(int? offset = null, int? count = null);
+
+        /// <summary>
+        /// Retrieves asynchronously the keys of data models from the data store.
+        /// <para /> Optionally the
+        /// </summary>
+        /// <param name="offset">Ignores the specified number of keys.</param>
+        /// <param name="count">Returns the the specified number of keys.</param>
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        /// <returns>The number of key of data models from the serach that may optionally have been filtered.</returns>
+        Task<IEnumerable<TKey>> GetKeysAsync(int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
+
+        /// <summary>
+        /// Determines whether the data store contains the specified key.
+        /// </summary>
+        /// <param name="key">The key to search for.</param>
+        /// <returns>True if the data store contains the key; otherwise false.</returns>
+        bool ContainsKey(TKey key);
+
+        /// <summary>
+        /// Determines whether the data store contains the specified keys.
+        /// </summary>
+        /// <param name="keys">The keys to search for.</param>
+        /// <param name="strict">Specifies whether the search is successful if and only if all of the keys have been found.
+        /// True if all the keys must be found; otherwise false if only some of the keys have been found.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified keys contains keys; otherwise, <c>false</c>.
+        /// </returns>
+        bool ContainsKeys(IEnumerable<TKey> keys, bool strict = true);
+
+        /// <summary>
+        /// Determines asynchronously whether the data store contains the specified key.
+        /// </summary>
+        /// <param name="key">The key to search for.</param>
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        /// <returns>A promise that returns true if the data store contains the key; otherwise false.</returns>
+        Task<bool> ContainsKeyAsync(TKey key, CancellationToken token = default(CancellationToken));
+
+        /// <summary>
+        /// Determines asynchronously whether the data store contains the specified keys.
+        /// </summary>
+        /// <param name="keys">The keys to search for.</param>
+        /// <param name="strict">Specifies whether the search is successful if and only if all of the keys have been found.
+        /// True if all the keys must be found; otherwise false if only some of the keys have been found.</param>
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        /// <returns></returns>
+        Task<bool> ContainsKeysAsync(IEnumerable<TKey> keys, bool strict = true, CancellationToken token = default(CancellationToken));
+
+    }
 }
