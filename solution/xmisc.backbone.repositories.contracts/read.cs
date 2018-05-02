@@ -113,7 +113,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="count">Specifies the number of data models to return.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise that returns retrieved data models; otherwise the default values of the data models.</returns>
-        Task<IEnumerable<TModel>> GetAsync(int? offset = null, bool references = true, int? count = null, CancellationToken token = default(CancellationToken));
+        Task<IEnumerable<TModel>> GetAsync(bool references = true, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Retrieves the keys of data models from the data store.
