@@ -133,5 +133,23 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise to restore and return the trashed data models that are specified by <paramref name="keys"/>.</returns>
         Task<IEnumerable<TModel>> RestoreAllByKeysAsync(IEnumerable<TKey> keys, bool references = false, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
+
+        /// <summary>
+        /// Restores the specified data model asynchronously.
+        /// </summary>
+        /// <param name="model">The data model to restore.</param>
+        /// <param name="references">Should the references of the data model also be restored?</param>
+        /// <returns>A promise to restore the given data model.</returns>
+        Task RestoreAsync(TModel model, bool references = false);
+
+        /// <summary>
+        /// Restores the specified data models asynchronously.
+        /// </summary>
+        /// <param name="models">The data models to restore.</param>
+        /// <param name="references">Should the references of the data models also be restored?</param>
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        /// <returns>A promise to restore the given data models.</returns>
+        Task RestoreAllAsync(IEnumerable<TModel> models, bool references = false, CancellationToken token = default(CancellationToken));
+
     }
 }
