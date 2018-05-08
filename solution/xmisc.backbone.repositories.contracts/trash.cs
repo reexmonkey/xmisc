@@ -15,20 +15,22 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
     {
         /// <summary>
-        /// Trashes the data model that is specified by the provided <paramref name="key"/>.
+        /// Trashes the data model that is specified by a unique identifier.
         /// </summary>
         /// <param name="key">The unique identifier that specifies the data model to trash.</param>
         /// <param name="references">Should the references of the data model also be trashed?</param>
-        void TrashByKey(TKey key, bool references = false);
+        /// <returns>The data model that is specified by the provided <paramref name="key"/>.</returns>
+        TModel TrashByKey(TKey key, bool references = false);
 
         /// <summary>
-        /// Trashes the data models that are specified by the provided <paramref name="keys"/>.
+        /// Trashes the data models that are specified by unique identifiers.
         /// </summary>
-        /// <param name="keys">The identifiers that specify the data models to trash.</param>
+        /// <param name="keys">The unique identifiers that specify the data models to trash.</param>
         /// <param name="references">Should the references of located data models also be trashed?</param>
         /// <param name="offset">The number of unique identifiers to bypass.</param>
         /// <param name="count">The numbers of unique identifiers to return.</param>
-        void TrashAllByKeys(IEnumerable<TKey> keys, bool references = false, int? offset = null, int? count = null);
+        /// <returns>The data models specified by the provided <paramref name="keys"/>. </returns>
+        IEnumerable<TModel> TrashAllByKeys(IEnumerable<TKey> keys, bool references = false, int? offset = null, int? count = null);
 
         /// <summary>
         /// Trashes the given data model.
@@ -45,11 +47,12 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         void TrashAll(IEnumerable<TModel> models, bool references = false);
 
         /// <summary>
-        /// Restores a data model that is specified by the provided unique identifier.
+        /// Restores a data model that is specified by a unique identifier.
         /// </summary>
         /// <param name="key">The unique identifier that specifies the data model to restore.</param>
         /// <param name="references">Should the references of the restored data model also be restored?</param>
-        void RestoreByKey(TKey key, bool references = false);
+        /// <returns>The data model that is specified by the provided <paramref name="key"/>.</returns>
+        TModel RestoreByKey(TKey key, bool references = false);
 
         /// <summary>
         /// Restores data models that are specified by the provided unique identifiers.
@@ -58,7 +61,8 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="references">Should the references of restored data models also be restored?</param>
         /// <param name="offset">The number of unique identifiers to bypass.</param>
         /// <param name="count">The numbers of unique identifiers to return.</param>
-        void RestoreAllByKeys(IEnumerable<TKey> keys, bool references = false, int? offset = null, int? count = null);
+        /// <returns>The data models that are specified by the provided <paramref name="keys"/>. </returns>
+        IEnumerable<TModel> RestoreAllByKeys(IEnumerable<TKey> keys, bool references = false, int? offset = null, int? count = null);
 
         /// <summary>
         /// Restores the specified data model.
@@ -75,23 +79,23 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         void RestoreAll(IEnumerable<TModel> models, bool references = false);
 
         /// <summary>
-        /// Trashes asynchronously a data model that is specified by the provided unique identifier.
+        /// Trashes a data model asynchronously that is specified by a provided unique identifier.
         /// </summary>
         /// <param name="key">The unique identifier that specifies the data model to trash.</param>
         /// <param name="references">Should the references of the data model also be trashed?</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
-        /// <returns>A promise to trash a data model that is specified by a provided <paramref name="key"/>.</returns>
+        /// <returns>A promise to trash a data model that is specified by <paramref name="key"/>.</returns>
         Task<TModel> TrashByKeyAsync(TKey key, bool references = false, CancellationToken token = default(CancellationToken));
 
         /// <summary>
-        /// Trashes asynchronously data models that are specified by the provided unique identifiers.
+        /// Trashes data models asynchronously that are specified by the provided unique identifiers.
         /// </summary>
         /// <param name="keys">The unique identifiers that specify the data models to trash.</param>
         /// <param name="references">Should the references of located data models also be trashed?</param>
         /// <param name="offset">The number of data models to bypass.</param>
         /// <param name="count">The numbers of data models to return.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
-        /// <returns>A promise to trash and return the data model that is specified by the provided unique identifier.</returns>
+        /// <returns>A promise to trash and return data models that are specified by <paramref name="keys"/>.</returns>
         Task<IEnumerable<TModel>> TrashAllByKeysAsync(IEnumerable<TKey> keys, bool references = false, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
 
         /// <summary>
@@ -112,22 +116,22 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         Task TrashAllAsync(IEnumerable<TModel> models, bool references = false, CancellationToken token = default(CancellationToken));
 
         /// <summary>
-        /// Restores a data model that is specified by the provided <paramref name="key"/> asynchronously.
+        /// Restores a data model asynchronously that is specified by the provided <paramref name="key"/>.
         /// </summary>
         /// <param name="key">The identifier that specifies the data model to restore.</param>
         /// <param name="references">Should the references of the restored data model also be restored?</param>
-        /// <returns>A promise to restore and return the trashed data model that is specified by the the provided unique identifier.</returns>
+        /// <returns>A promise to restore and return the trashed data model that is specified by <paramref name="key"/>.</returns>
         Task<TModel> RestoreByKeyAsync(TKey key, bool references = false);
 
         /// <summary>
-        /// Restores data models that are specified by the provided unique identifiers asynchronously.
+        /// Restores data models asynchronously that are specified by unique identifiers .
         /// </summary>
         /// <param name="keys">The identifiers that specify the data models to restore.</param>
         /// <param name="references">Should the references of the restored data model also be restored?</param>
         /// <param name="offset">The number of data models to bypass.</param>
         /// <param name="count">The numbers of data models to return.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
-        /// <returns>A promise to restore and return the trashed data models that are specified by the the provided unique identifiers.</returns>
+        /// <returns>A promise to restore and return the trashed data models that are specified by <paramref name="keys"/>.</returns>
         Task<IEnumerable<TModel>> RestoreAllByKeysAsync(IEnumerable<TKey> keys, bool references = false, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
     }
 }
