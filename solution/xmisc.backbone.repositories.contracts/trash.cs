@@ -11,7 +11,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
     /// </summary>
     /// <typeparam name="TKey">The type of key that identifies the model to trash or restore.</typeparam>
     /// <typeparam name="TModel">The type of model to trash or restore.</typeparam>
-    public interface ITrashRepository<in TKey, in TModel>
+    public interface ITrashRepository<in TKey, TModel>
         where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
     {
         /// <summary>
@@ -81,7 +81,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="references">Should the references of the data model also be trashed?</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise to trash a data model that is specified by a provided <paramref name="key"/>.</returns>
-        Task TrashByKeyAsync(TKey key, bool references = false, CancellationToken token = default(CancellationToken));
+        Task<TModel> TrashByKeyAsync(TKey key, bool references = false, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Trashes asynchronously data models that are specified by the provided unique identifiers.
@@ -91,8 +91,8 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="offset">The number of data models to bypass.</param>
         /// <param name="count">The numbers of data models to return.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
-        /// <returns>A promise to trash a data model that is specified by a provided unique identifier.</returns>
-        Task TrashAllByKeysAsync(IEnumerable<TKey> keys, bool references = false, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
+        /// <returns>A promise to trash and return the data model that is specified by the provided unique identifier.</returns>
+        Task<IEnumerable<TModel>> TrashAllByKeysAsync(IEnumerable<TKey> keys, bool references = false, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Trashes the specified data model asynchronously.
@@ -116,8 +116,8 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// </summary>
         /// <param name="key">The identifier that specifies the data model to restore.</param>
         /// <param name="references">Should the references of the restored data model also be restored?</param>
-        /// <returns>A promise to trash the given data model.</returns>
-        Task RestoreByKeyAsync(TKey key, bool references = false);
+        /// <returns>A promise to restore and return the trashed data model that is specified by the the provided unique identifier.</returns>
+        Task<TModel> RestoreByKeyAsync(TKey key, bool references = false);
 
         /// <summary>
         /// Restores data models that are specified by the provided unique identifiers asynchronously.
@@ -127,24 +127,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="offset">The number of data models to bypass.</param>
         /// <param name="count">The numbers of data models to return.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
-        /// <returns>A promise to restore data models specified by the provided unique identifiers, for deletion.</returns>
-        Task RestoreAllByKeysAsync(IEnumerable<TKey> keys, bool references = false, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
-
-        /// <summary>
-        /// Restores the specified data model asynchronously.
-        /// </summary>
-        /// <param name="model">The data model to restore.</param>
-        /// <param name="references">Should the references of the restored data model also be restored?</param>
-        /// <returns>A promise to restore the given data model.</returns>
-        Task RestoreAsync(TModel model, bool references = false);
-
-        /// <summary>
-        /// Restores the specified data models asynchronously.
-        /// </summary>
-        /// <param name="models">The data models to restore.</param>
-        /// <param name="references">Should the references of the restored data model also be restored?</param>
-        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
-        /// <returns>A promise to restore the given data models.</returns>
-        Task RestoreAllAsync(IEnumerable<TModel> models, bool references = false, CancellationToken token = default(CancellationToken));
+        /// <returns>A promise to restore and return the trashed data models that are specified by the the provided unique identifiers.</returns>
+        Task<IEnumerable<TModel>> RestoreAllByKeysAsync(IEnumerable<TKey> keys, bool references = false, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
     }
 }
