@@ -48,8 +48,12 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// otherwise, false.
         /// </returns>
         public static bool SequenceEqual<TSource, TKey>(this IEnumerable<TSource> first, IEnumerable<TSource> second, Func<TSource, TKey> keySelector, IEqualityComparer<TSource> comparer = null)
-            where TKey : IComparer<TKey>
-            => comparer != null ? first.OrderBy(keySelector).SequenceEqual(second.OrderBy(keySelector), comparer) : first.OrderBy(keySelector).SequenceEqual(second.OrderBy(keySelector));
+            where TKey : IComparable<TKey>
+        {
+            return comparer != null
+                       ? first.OrderBy(keySelector).SequenceEqual(second.OrderBy(keySelector), comparer)
+                       : first.OrderBy(keySelector).SequenceEqual(second.OrderBy(keySelector));
+        }
 
         /// <summary>
         /// Checks whether a sequence is a set. That is, if the sequence contains ONLY distinct elements
