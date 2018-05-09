@@ -34,13 +34,32 @@ namespace reexmonkey.xmisc.core.linq.extensions
         public static bool NullOrEmpty<TSource>(this IEnumerable<TSource> source) => !(source != null && source.Any());
 
         /// <summary>
+        /// Determines whether two sequences are equal by comparing the elements by using the default comparer if the given comparer is null;
+        /// otherwise by using the provided comparer.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of the input sequences.</typeparam>
+        /// <typeparam name="TKey">The type of the key returned by <paramref name="keySelector"/>.</typeparam>
+        /// <param name="first">An <see cref="IEnumerable{T}"/> to compare to second.</param>
+        /// <param name="second">An <see cref="IEnumerable{T}"/> to compare to the first sequence.</param>
+        /// <param name="keySelector">A function to extract a key from an element.</param>
+        /// <param name="comparer">Optional: An <see cref="IEqualityComparer{T}"/> to use to compare elements.</param>
+        /// <returns>
+        /// true if the two source sequences are of equal length and their corresponding elements are equal according to the default equality comparer for their type;
+        /// otherwise, false.
+        /// </returns>
+        public static bool SequenceEqual<TSource, TKey>(this IEnumerable<TSource> first, IEnumerable<TSource> second, Func<TSource, TKey> keySelector, IEqualityComparer<TSource> comparer = null)
+            where TKey : IComparer<TKey>
+            => comparer != null ? first.OrderBy(keySelector).SequenceEqual(second.OrderBy(keySelector), comparer) : first.OrderBy(keySelector).SequenceEqual(second.OrderBy(keySelector));
+
+        /// <summary>
         /// Checks whether a sequence is a set. That is, if the sequence contains ONLY distinct elements
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of the input sequence</typeparam>
         /// <param name="source">A sequence that contains elements to be tested and counted</param>
         /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
         /// <returns>True, if the sequence is a set; otherwise false.</returns>
-        public static bool IsSet<TSource>(this IEnumerable<TSource> source, IEqualityComparer<TSource> comparer = null) => source.Distinct(comparer).Count() == source.Count();
+        public static bool IsSet<TSource>(this IEnumerable<TSource> source, IEqualityComparer<TSource> comparer = null)
+            => comparer != null ? source.Distinct(comparer).Count() == source.Count() : source.Distinct().Count() == source.Count();
 
         /// <summary>
         /// Checks whether a sequence is equal to another sequence.
@@ -51,7 +70,7 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
         /// <returns>True, if the sequence is a set; otherwise false</returns>
         public static bool IsEquivalentOf<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null)
-            => first.Intersect(second, comparer).Count() == first.Count();
+            => comparer != null ? first.Intersect(second, comparer).Count() == first.Count() : first.Intersect(second).Count() == first.Count();
 
         /// <summary>
         /// Checks whether a sequence is a super sequence of another seeuence
@@ -62,7 +81,7 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
         /// <returns>True, if the sequence is a sequence; otherwise false</returns>
         public static bool IsSuperSequenceOf<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null)
-            => first.Except(second, comparer).Any();
+            => comparer != null ? first.Except(second, comparer).Any() : first.Except(second).Any();
 
         /// <summary>
         /// Checks whthere a sequence is a proper super sequence of another sequence.
@@ -73,7 +92,7 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
         /// <returns>True, if the sequence is a proper super sequence of the other; otherwise false</returns>
         public static bool IsProperSuperSequenceOf<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null)
-            => !first.IsEquivalentOf(second, comparer) && first.Except(second, comparer).Any();
+            => comparer != null ? !first.IsEquivalentOf(second, comparer) && first.Except(second, comparer).Any() : !first.IsEquivalentOf(second) && first.Except(second).Any();
 
         /// <summary>
         /// Checks whether a sequence is a sub sequence of another sequence.
@@ -84,7 +103,7 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
         /// <returns>True, if the sequence is a  sub sequence of the other; otherwise false</returns>
         public static bool IsSubSequenceOf<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null)
-            => !second.Except(first, comparer).Any();
+            => comparer != null ? !second.Except(first, comparer).Any() : !second.Except(first).Any();
 
         /// <summary>
         /// Checks whether a sequence is a proper sub sequence of another sequence.
@@ -96,7 +115,9 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
         /// <returns>True, if the sequence is a proper sub sequence of the other; otherwise false</returns>
         public static bool IsProperSubSequenceOf<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null)
-            => first.IsEquivalentOf(second, comparer) && !second.Except(first, comparer).Any();
+            => comparer != null
+            ? first.IsEquivalentOf(second, comparer) && !second.Except(first, comparer).Any()
+            : first.IsEquivalentOf(second) && !second.Except(first).Any();
 
         /// <summary>
         /// Checks whether a sequence does not intersect another sequence.
@@ -107,7 +128,7 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
         /// <returns>True, if the sequence does not intersect the other; otherwise false</returns>
         public static bool IsDisjointOf<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null)
-            => !first.Intersect(second, comparer).Any();
+            => comparer != null ? !first.Intersect(second, comparer).Any() : !first.Intersect(second).Any();
 
         /// <summary>
         /// Checks whether a sequence does not intersect another sequence.
@@ -117,7 +138,8 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <param name="second">Another sequence that contains elements to be tested</param>
         /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
         /// <returns>True, if the sequence does not intersect the other; otherwise false</returns>
-        public static bool Intersects<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null) => first.Intersect(second, comparer).Any();
+        public static bool Intersects<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null)
+            => comparer != null ? first.Intersect(second, comparer).Any() : first.Intersect(second).Any();
 
         /// <summary>
         /// Produces a symmetric difference between two sequences
@@ -128,7 +150,9 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
         /// <returns>The symmetric difference of the two sequences</returns>
         public static IEnumerable<TSource> SymmetricExcept<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null)
-            => first.Union(second, comparer).Except(first.Intersect(second, comparer), comparer);
+            => comparer != null
+            ? first.Union(second, comparer).Except(first.Intersect(second, comparer), comparer)
+            : first.Union(second).Except(first.Intersect(second));
 
         /// <summary>
         /// Produces the set intersection of two sequences by using the specified IEqualityComparer{T} to compare values.
@@ -139,9 +163,9 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <param name="comparer">An System.Collections.Generic.IEqualityComparer{T} to compare values</param>
         /// <returns>A sequence that contains the elements that form the set intersection of two sequences</returns>
         public static IEnumerable<TSource> NonIntersect<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, IEqualityComparer<TSource> comparer = null)
-            => second
-            .Union(first, comparer)
-            .Except(second.Intersect(first, comparer), comparer);
+            => comparer != null
+            ? second.Union(first, comparer).Except(second.Intersect(first, comparer), comparer)
+            : second.Union(first).Except(second.Intersect(first));
 
         /// <summary>
         /// Produces the union of two sequences, where the elements of the second sequence are filtered based on a predicate.
@@ -153,7 +177,9 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <param name="comparer">An IEqualityComparer to compare values. If it is null, the default equality comparer is used</param>
         /// <returns>The union of the two sequences after filtration of the second sequence</returns>
         public static IEnumerable<TSource> Union<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second, Func<TSource, bool> predicate, IEqualityComparer<TSource> comparer = null)
-            => !second.NullOrEmpty() ? first.Union(second.Where(predicate), comparer) : first;
+            => comparer != null
+            ? (!second.NullOrEmpty() ? first.Union(second.Where(predicate), comparer) : first)
+            : (!second.NullOrEmpty() ? first.Union(second.Where(predicate)) : first);
 
         /// <summary>
         /// Produces the union of two sequences, where the elements of the second sequence are selected based on a predicate.
@@ -176,10 +202,7 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <returns>The retrieved or added value for the key in the dictionary.</returns>
         public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, TValue value)
         {
-            if (!source.TryGetValue(key, out TValue val))
-            {
-                source.Add(key, val = value);
-            }
+            if (!source.TryGetValue(key, out TValue val)) source.Add(key, val = value);
             return val;
         }
 
@@ -194,10 +217,7 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <returns>The retrieved or added value for the key in the dictionary.</returns>
         public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, Func<TKey, TValue> func)
         {
-            if (!source.TryGetValue(key, out TValue value))
-            {
-                source.Add(key, value = func(key));
-            }
+            if (!source.TryGetValue(key, out TValue value)) source.Add(key, value = func(key));
             return value;
         }
 
@@ -209,12 +229,7 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <param name="source">The current <see cref="IDictionary{TKey, TValue}"/> instance.</param>
         /// <param name="key">The key used to either retrieve the value from the dictionary.</param>
         /// <returns>The retrieved value in the dictionary if it exists; otherwise the default value of <typeparamref name="TValue"/> is retrieved.</returns>
-        public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key)
-        {
-            return !source.TryGetValue(key, out TValue value)
-    ? value
-    : default(TValue);
-        }
+        public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key) => !source.TryGetValue(key, out TValue value) ? value : default(TValue);
 
         /// <summary>
         /// Produces a concatenation of a sequence and a singleton based on a precondition.
@@ -265,14 +280,12 @@ namespace reexmonkey.xmisc.core.linq.extensions
             }
             yield break;
         }
-        private static IEnumerable<TSource> OptimizedTake<TSource>(this List<TSource> source, int offset, int count)
-        {
-            return source.GetRange(offset, count);
-        }
+
+        private static IEnumerable<TSource> OptimizedTake<TSource>(this List<TSource> source, int offset, int count) => source.GetRange(offset, count);
 
         /// <summary>
         /// Bypasses a specified number of elements in a sequence and then returns the remaining elements.
-        /// <para/> This method is an optimzation of the <see cref="IEnumerable{T}"/>.Skip(int) method. 
+        /// <para/> This method is an optimzation of the <see cref="IEnumerable{T}"/>.Skip(int) method.
         /// <para/> Use this method if the <paramref name="source"/> sequence is a potential <see cref="IList{T}"/>.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of source.</typeparam>
@@ -282,8 +295,7 @@ namespace reexmonkey.xmisc.core.linq.extensions
         public static IEnumerable<TSource> FastSkip<TSource>(this IEnumerable<TSource> source, int count)
         {
             if (count <= 0) return source;
-            var list = source as IList<TSource>;
-            return list != null ? list.OptimizedSkip(count) : source.Skip(count);
+            return source is IList<TSource> list ? list.OptimizedSkip(count) : source.Skip(count);
         }
 
         /// <summary>
@@ -299,10 +311,7 @@ namespace reexmonkey.xmisc.core.linq.extensions
         {
             if (count <= 0) return Enumerable.Empty<TSource>();
             if (count >= source.Count()) return source;
-            var list = source as List<TSource>;
-            return list != null ? list.GetRange(0, count) : source.Take(count);
+            return source is List<TSource> list ? list.GetRange(0, count) : source.Take(count);
         }
-
-
     }
 }
