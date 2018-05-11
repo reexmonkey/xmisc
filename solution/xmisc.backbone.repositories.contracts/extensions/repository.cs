@@ -210,7 +210,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         /// <param name="repository">The repository that saves or erases a data model.</param>
         /// <param name="local">The data model to save on the data store.</param>
         /// <param name="remote">Data model from the data store to compare with with <paramref name="local"/> model.</param>
-        /// <param name="default">The default value of a data model.</param>
+        /// <param name="default">The custom default value of the model type.</param>
         /// <param name="references">Should the references of the model also be saved?</param>
         /// <seealso cref="IWriteRepository{TKey, TModel}.Save(TModel, bool)"/>
         public static void Save<TKey, TModel, TRepository>(
@@ -237,7 +237,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         /// <param name="repository">The repository that saves or erases a data model.</param>
         /// <param name="local">The data model to save asynchronously on the data store.</param>
         /// <param name="remote">TData model from the data store to compare with with <paramref name="local"/> model.</param>
-        /// <param name="default">The default value of a data model.</param>
+        /// <param name="default">The custom default value of the model type.</param>
         /// <param name="references">Should the references of the model also be saved?</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <seealso cref="IWriteRepository{TKey, TModel}.SaveAsync(TModel, bool, CancellationToken)"/>
@@ -266,7 +266,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         /// <param name="repository">The repository that saves or erases a data model.</param>
         /// <param name="local">The data model to save on the data store.</param>
         /// <param name="remote">Data model from the data store to compare with with <paramref name="local"/> model.</param>
-        /// <param name="default">The default value of a data model.</param>
+        /// <param name="default">The custom default value of the model type.</param>
         /// <param name="comparer">The equality comparer that compares the <paramref name="local"/> version of a data model to a given <paramref name="default"/> value.</param>
         /// <param name="references">Should the references of the model also be saved?</param>
         /// <seealso cref="IWriteRepository{TKey, TModel}.Save(TModel, bool)"/>
@@ -280,8 +280,8 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
             where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
             where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
         {
-            if (remote != null) repository.SaveImpl<TKey, TModel, TRepository>(local, remote, @default, comparer, references);
-            else if (local != null) repository.Save(local, references);
+            if (!comparer.Equals(remote, @default)) repository.SaveImpl<TKey, TModel, TRepository>(local, remote, @default, comparer, references);
+            else if (!comparer.Equals(local, @default)) repository.Save(local, references);
         }
 
         /// <summary>
@@ -296,7 +296,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         /// <param name="repository">The repository that saves or erases a data model.</param>
         /// <param name="local">The data model to save on the data store.</param>
         /// <param name="remote">Data model from the data store to compare with with <paramref name="local"/> model.</param>
-        /// <param name="default">The default value of a data model.</param>
+        /// <param name="default">The custom default value of the model type.</param>
         /// <param name="comparer">The equality comparer that compares the <paramref name="local"/> version of a data model to a given <paramref name="default"/> value.</param>
         /// <param name="references">Should the references of the model also be saved?</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
@@ -312,8 +312,8 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
             where TRepository : IWriteRepository<TKey, TModel>, IEraseRepository<TKey, TModel>
             where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
         {
-            if (remote != null) await repository.SaveImplAsync<TKey, TModel, TRepository>(local, remote, @default, comparer, references, token);
-            else if (local != null) await repository.SaveAsync(local, references, token);
+            if (!comparer.Equals(remote, @default)) await repository.SaveImplAsync<TKey, TModel, TRepository>(local, remote, @default, comparer, references, token);
+            else if (!comparer.Equals(local, @default)) await repository.SaveAsync(local, references, token);
         }
 
         /// <summary>
