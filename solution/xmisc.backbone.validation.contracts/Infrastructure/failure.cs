@@ -25,8 +25,8 @@ namespace xmisc.backbone.validation.contracts.Infrastructure
         /// <summary> Creates a new instance of the <see cref="AbstractValidationFailure"/> class.
         /// </summary> <param name="propertyName">The name of the property that caused the
         /// failure.</param> <param name="error">The error message.</param> <param
-        /// name="attemptedValue">The property value that caused the failure.</param> <param
-        /// name="parent">Optional: the <see cref="AbstractValidationResult"/> that owns this failure.<</param>
+        /// <param name="attemptedValue">The property value that caused the failure.</param> <param
+        /// <param name="parent">Optional: the <see cref="AbstractValidationResult"/> that owns this failure.<</param>
         protected AbstractValidationFailure(string propertyName, string error, object attemptedValue, AbstractValidationResult parent = null)
             : base(propertyName, error, attemptedValue)
         {
