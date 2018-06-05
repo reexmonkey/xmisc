@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Target Name="AutoVersion" AfterTargets="AfterBuild">
+  <PropertyGroup>
+    <PackageVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)$(GitSemVerDashLabel)</PackageVersion>	
+  </PropertyGroup>	 
+  </Target>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+	<RootNamespace>reexmonkey.xmisc.core.system.net</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+   <PackageReference Include="GitInfo" Version="2.0.11">
+	 <PrivateAssets>All</PrivateAssets>
+	</PackageReference>
+    <PackageReference Include="System.Net.Http" Version="4.3.3" />
+  </ItemGroup>
+
+</Project>
