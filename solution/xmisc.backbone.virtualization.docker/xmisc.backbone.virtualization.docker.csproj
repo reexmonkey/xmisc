@@ -9,6 +9,7 @@
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	<RootNamespace>reexmonkey.xmisc.backbone.virtualization.docker</RootNamespace>
+	<Authors>reexmonkey</Authors>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +17,6 @@
    <PackageReference Include="GitInfo" Version="2.0.11">
 	 <PrivateAssets>All</PrivateAssets>
 	</PackageReference>
-    <PackageReference Include="System.Net.Http" Version="4.3.3" />
     <PackageReference Include="xmisc.core.system.net" Version="4.0.59-alpha" />
   </ItemGroup>
 
