@@ -51,8 +51,9 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// </summary>
         /// <param name="model">The model to register.</param>
         /// <param name="references">Decides to unregister related references of the model as well.</param>
+        /// <param name="cancellation">Propagates the notification that the operation should be cancelled.</param>
         /// <returns>The promise to register the model.</returns>
-        Task RegisterAsync(TModel model, bool references = false);
+        Task RegisterAsync(TModel model, bool references = false, CancellationToken cancellation = default(CancellationToken));
 
         /// <summary>
         /// Registers the given models asynchronously by assigning each a unique identifier.
@@ -61,17 +62,18 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="references">Decides to register related references of the model as well.</param>
         /// <param name="offset">How many models to skip.</param>
         /// <param name="count">How many models to return.</param>
-        /// <param name="token">Propagates the notification that the operation should be cancelled.</param>
+        /// <param name="cancellation">Propagates the notification that the operation should be cancelled.</param>
         /// <returns>The promise to register the models.</returns>
-        Task RegisterAllAsync(IEnumerable<TModel> models, bool references = false, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
+        Task RegisterAllAsync(IEnumerable<TModel> models, bool references = false, int? offset = null, int? count = null, CancellationToken cancellation = default(CancellationToken));
 
         /// <summary>
         /// Unregisters the model asynchronously by assigning a default identifier to it.
         /// </summary>
         /// <param name="model">The model to unregister.</param>
         /// <param name="references">Decides to unregister related references of the model as well.</param>
+        /// <param name="cancellation">Propagates the notification that the operation should be cancelled.</param>
         /// <returns>The promise to unregister the models.</returns>
-        Task UnregisterAsync(TModel model, bool references = false);
+        Task UnregisterAsync(TModel model, bool references = false, CancellationToken cancellation = default(CancellationToken));
 
         /// <summary>
         /// Unregisters the given models asynchronously by assigning each a default identifier.
@@ -80,8 +82,8 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="references">Decides to unregister related references of the models as well.</param>
         /// <param name="offset">How many models to skip.</param>
         /// <param name="count">How many models to return.</param>
-        /// <param name="token">Propagates the notification that the operation should be cancelled.</param>
+        /// <param name="cancellation">Propagates the notification that the operation should be cancelled.</param>
         /// <returns>The promise to unregister the models.</returns>
-        Task UnregisterAllAsync(IEnumerable<TModel> models, bool references = false, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
+        Task UnregisterAllAsync(IEnumerable<TModel> models, bool references = false, int? offset = null, int? count = null, CancellationToken cancellation = default(CancellationToken));
     }
 }
