@@ -12,11 +12,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="2.0.8">
+    <PackageReference Include="GitInfo" Version="2.0.11">
 	 <PrivateAssets>All</PrivateAssets>
 	</PackageReference>
-    <PackageReference Include="Jil" Version="2.15.4" />
-    <PackageReference Include="xmisc.core.io" Version="4.0.1-alpha" />
+    <PackageReference Include="Jil" Version="2.16.0" />
+    <PackageReference Include="xmisc.core.io" Version="4.0.68-alpha" />
   </ItemGroup>
 
 </Project>
