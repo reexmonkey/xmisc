@@ -1,4 +1,5 @@
-﻿using System;
+﻿using reexmonkey.xmisc.backbone.identifiers.contracts.models;
+using System;
 
 namespace reexmonkey.xmisc.backbone.identifiers.contracts.extensions
 {
@@ -54,7 +55,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.extensions
         /// <param name="guid">The GUID, whose version is verified.</param>
         /// <returns>true if it is a name-based GUID that uses SHA1 hashing; otherwise false.</returns>
         public static bool IsVersion5Variant(this Guid guid) => guid.IsValidVersion(5);
-        
+
         /// <summary>
         /// Checks if this GUID is an invalid GUID as defined in RFC 4122.
         /// </summary>
@@ -65,14 +66,13 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.extensions
             var version = guid.GetVersion();
             return version < 1 && version > 5;
         }
-        
 
         /// <summary>
-        /// Converts the GUID to its equivalent Little-Endian format.
+        /// Encodes the specified RFC 4122 compliant <see cref="SequentialGuid"/> to its equivalent SQL Server <see cref="SequentialGuid"/>.
         /// </summary>
-        /// <param name="guid">The GUID to convert.</param>
-        /// <returns>The equivalent Little-Endian format </returns>
-        public static Guid AsLittleEndian(this Guid guid)
+        /// <param name="guid">The RFC 4122 <see cref="SequentialGuid"/> to encode.</param>
+        /// <returns>The equivalent SQL Server encoded <see cref="SequentialGuid"/>.</returns>
+        public static SequentialGuid AsSqlServerSequentialGuid(this SequentialGuid guid)
         {
             var source = guid.ToByteArray();
             var destination = new byte[16];
@@ -97,13 +97,13 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.extensions
         }
 
         /// <summary>
-        /// Converts the GUID to its equivalent Big-Endian format.
+        /// Decodes the specified SQL Server <see cref="SequentialGuid"/> to its equivalent RFC 4122 compliant <see cref="SequentialGuid"/>.
         /// </summary>
-        /// <param name="guid">The GUID to convert.</param>
-        /// <returns>The equivalent Big-Endian format </returns>
-        public static Guid AsBigEndian(this Guid guid)
+        /// <param name="sqlserverSequentialGuid">The SQL Server <see cref="SequentialGuid"/> to decode.</param>
+        /// <returns>The equivalent RFC 4122 compliant <see cref="SequentialGuid"/> from the conversion.</returns>
+        public static SequentialGuid AsRfc4122SequentialGuid(this SequentialGuid sqlserverSequentialGuid)
         {
-            var source = guid.ToByteArray();
+            var source = sqlserverSequentialGuid.ToByteArray();
             var destination = new byte[16];
             Buffer.BlockCopy(source, 0, destination, 0, source.Length);
 

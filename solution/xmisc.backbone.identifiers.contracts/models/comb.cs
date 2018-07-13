@@ -1,6 +1,7 @@
 using reexmonkey.xmisc.backbone.identifiers.contracts.extensions;
 using reexmonkey.xmisc.core.cryptography.extensions;
 using System;
+using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 
@@ -152,7 +153,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
 
         private static ulong GetTimestamp()
         {
-            var timestamp = (ulong)(DateTime.UtcNow - new DateTime(1582, 10, 15)).Ticks;
+            var timestamp = (ulong)(DateTime.UtcNow - new DateTime(1582, 10, 15).ToUniversalTime()).Ticks;
             lock (mutex)
             {
                 if (last == timestamp) sequence++;
@@ -198,13 +199,27 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SequentialGuid"/> structure.
+        /// Initializes a new instance of the <see cref="SequentialGuid"/> structure using an internal randomly or pseudo-randomly generated value.
         /// </summary>
         /// <returns>A new <see cref="SequentialGuid"/> object</returns>
         public static SequentialGuid NewGuid()
         {
             var node = RandomNumberGenerator.Create().Generate(6);
             node[0] |= 1; //multicast bit set to one, in order to avoid conflict with IEEE 802 network cards
+            return Create(GetTimestamp(), sequence, node[0], node[1], node[2], node[3], node[4], node[5]);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SequentialGuid"/> structure
+        /// using the IEEE 802 MAC address assigned to the specified network interface controller (NIC).
+        /// </summary>
+        /// <param name="nic">The network interface controller whose assigned IEEE 802 MAC address shall be used in the generation of the GUID.</param>
+        /// <returns>A new <see cref="SequentialGuid"/> object</returns>
+        public static SequentialGuid NewGuid(NetworkInterface nic)
+        {
+            if (nic == null) throw new ArgumentNullException(nameof(nic));
+
+            var node = nic.GetPhysicalAddress().GetAddressBytes();
             return Create(GetTimestamp(), sequence, node[0], node[1], node[2], node[3], node[4], node[5]);
         }
 

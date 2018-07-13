@@ -20,4 +20,5 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure
         /// </summary>
         None = 0xf
     }
+
 }
