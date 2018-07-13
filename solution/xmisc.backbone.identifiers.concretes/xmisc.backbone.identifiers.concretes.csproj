@@ -22,7 +22,7 @@
     <DocumentationFile>bin\Debug\netstandard2.0\xmisc.backbone.identitifiers.concretes.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard1.4\.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\netstandard2.0\xmisc.backbone.identitifiers.concretes.xml</DocumentationFile>
   </PropertyGroup>
       <ItemGroup>
     <PackageReference Include="FluentValidation" Version="7.6.104" />
