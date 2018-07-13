@@ -1,4 +1,4 @@
-﻿using reexmonkey.xmisc.backbone.identifiers.concretes.infrastructure;
+﻿using reexmonkey.xmisc.backbone.identifiers.concretes.models;
 
 namespace reexmonkey.xmisc.backbone.identifiers.concretes.extensions
 {
@@ -20,6 +20,5 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.extensions
         /// <param name="fpi"></param>
         /// <returns>The equivalent Formal Public Identifier (FPI) from the conversion.</returns>
         public static string AsUrn(this Fpi fpi) => $"urn:{fpi.ToString().Replace("//", ":")}";
-
     }
 }

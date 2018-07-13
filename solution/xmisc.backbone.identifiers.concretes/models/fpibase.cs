@@ -1,20 +1,58 @@
-﻿using System;
-using System.Text;
 using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
+using System;
+using System.Text;
 
-namespace reexmonkey.xmisc.backbone.identifiers.concretes.infrastructure
+namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
 {
+    /// <summary>
+    /// Represents a base class for a Formal Public Identifier (FPI) as defined in RFC 3151
+    /// </summary>
     public abstract class FpiBase : IFpiOwner, IFpiText
     {
+        /// <summary>
+        /// Gets the approval status of the FPI.
+        /// </summary>
         public ApprovalStatus Status { get; protected set; }
+
+        /// <summary>
+        /// Gets the owner of the FPI
+        /// </summary>
         public string Author { get; protected set; }
+
+        /// <summary>
+        /// Gets the reference to the standard authority that approved the FPI.
+        /// </summary>
         public string Reference { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the product class of the FPI
+        /// </summary>
         public string Product { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the description of the FPI
+        /// </summary>
         public string Description { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the langauage of the FPI according to ISO 639
+        /// </summary>
         public string Language { get; protected set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FpiBase"/> class.
+        /// </summary>
         protected FpiBase() { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FpiBase"/> class with details.
+        /// </summary>
+        /// <param name="status">The approval status of the FPI.</param>
+        /// <param name="author">The owner of the FPI</param>
+        /// <param name="product">The reference to the standard authority that approved the FPI.</param>
+        /// <param name="description">The product class of the FPI</param>
+        /// <param name="language">The langauage of the FPI according to ISO 639</param>
+        /// <param name="reference">The reference to the standard authority that approved the FPI.</param>
         protected FpiBase(ApprovalStatus status, string author, string product, string description, string language, string reference)
         {
             if (string.IsNullOrEmpty(author))
@@ -42,7 +80,10 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.infrastructure
             Reference = reference;
         }
 
-
+        /// <summary>
+        /// Returns a string representation of this instance.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             var sb = new StringBuilder();
