@@ -280,7 +280,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// <para/>where the value of the GUID is represented as a series of lowercase hexadecimal digits in groups of 8, 4, 4,
         /// 4, and 12 digits and separated by hyphens.
         /// <para/>An example of a return value is "382c74c3-721d-4f34-80e5-57657b6cbc27".
-        /// <para/>To convert the hexadecimal digits from a through f to uppercase, call the <see cref="String.ToUpper"/>
+        /// <para/>To convert the hexadecimal digits from a through f to uppercase, call the <see cref="String.ToUpper()"/>
         /// method on the returned string.
         /// </returns>
         public override string ToString() => AsGuid().ToString();
