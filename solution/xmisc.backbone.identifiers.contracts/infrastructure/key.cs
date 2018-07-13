@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure
 {
