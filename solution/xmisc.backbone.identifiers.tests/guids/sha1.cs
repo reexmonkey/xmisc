@@ -1,11 +1,19 @@
-﻿using System.Text;
-using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
+﻿using reexmonkey.xmisc.backbone.identifiers.contracts.models;
+using reexmonkey.xmisc.backbone.identifiers.tests.fixtures;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace xmisc.backbone.identity.tests.guids
 {
     public class Sha1GuidTests
     {
+        private readonly ITestOutputHelper console;
+
+        public Sha1GuidTests(ITestOutputHelper console)
+        {
+            this.console = console ?? throw new System.ArgumentNullException(nameof(console));
+        }
+
         [Theory]
         [InlineData("test", "test")]
         [InlineData("unique", "unique")]
@@ -14,8 +22,8 @@ namespace xmisc.backbone.identity.tests.guids
         public void TestUniqueness(string x, string y)
         {
             //act
-            var first = Sha1Guid.NewGuid(Encoding.Unicode.GetBytes(x));
-            var second = Sha1Guid.NewGuid(Encoding.Unicode.GetBytes(y));
+            var first = Sha1Guid.NewGuid(Fixture.DNsNamespace, x, Fixture.Encoding);
+            var second = Sha1Guid.NewGuid(Fixture.DNsNamespace, y, Fixture.Encoding);
 
             //assert
             Assert.Equal(first, second);
@@ -29,7 +37,7 @@ namespace xmisc.backbone.identity.tests.guids
         public void TestVersionNumber(string name)
         {
             //arrange
-            var guid = Sha1Guid.NewGuid(Encoding.Unicode.GetBytes(name));
+            var guid = Sha1Guid.NewGuid(Fixture.Encoding.GetBytes(Fixture.DNsNamespace), Fixture.Encoding.GetBytes(name));
             var bytes = guid.ToByteArray();
             //act
             var version = (ushort)(bytes[7] >> 4);

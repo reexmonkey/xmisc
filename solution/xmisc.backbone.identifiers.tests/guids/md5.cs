@@ -1,5 +1,6 @@
-﻿using System.Text;
-using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
+﻿using reexmonkey.xmisc.backbone.identifiers.contracts.models;
+using reexmonkey.xmisc.backbone.identifiers.tests.fixtures;
+using System.Text;
 using Xunit;
 
 namespace xmisc.backbone.identity.tests.guids
@@ -14,8 +15,8 @@ namespace xmisc.backbone.identity.tests.guids
         public void TestUniqueness(string x, string y)
         {
             //act
-            var first = Md5Guid.NewGuid(Encoding.Unicode.GetBytes(x));
-            var second = Md5Guid.NewGuid(Encoding.Unicode.GetBytes(y));
+            var first = Md5Guid.NewGuid(Fixture.Encoding.GetBytes(Fixture.DNsNamespace), Fixture.Encoding.GetBytes(x));
+            var second = Md5Guid.NewGuid(Fixture.Encoding.GetBytes(Fixture.DNsNamespace), Encoding.Unicode.GetBytes(y));
 
             //assert
             Assert.Equal(first, second);
@@ -29,7 +30,7 @@ namespace xmisc.backbone.identity.tests.guids
         public void TestVersionNumber(string name)
         {
             //arrange
-            var guid = Md5Guid.NewGuid(Encoding.Unicode.GetBytes(name));
+            var guid = Md5Guid.NewGuid(Fixture.DNsNamespace, name, Fixture.Encoding);
             var bytes = guid.ToByteArray();
             //act
             var version = (ushort)(bytes[7] >> 4);

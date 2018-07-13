@@ -1,99 +1,39 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{432742BC-BE6E-4AB9-B37E-9943B1FE8188}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+
     <RootNamespace>reexmonkey.xmisc.backbone.identifiers.tests</RootNamespace>
-    <AssemblyName>xmisc.backbone.identifiers.tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
+    <PackageReference Include="ServiceStack.OrmLite.SqlServer.Core" Version="5.1.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.5.1" />
+    <PackageReference Include="xmisc.backbone.io.formatter" Version="4.0.77-alpha" />
+    <PackageReference Include="xmisc.backbone.io.jil" Version="4.0.77-alpha" />
+    <PackageReference Include="xmisc.backbone.io.messagepack" Version="4.0.77-alpha" />
+    <PackageReference Include="xmisc.backbone.io.protobuf" Version="4.0.77-alpha" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="generators\fingerprint.cs" />
-    <Compile Include="guids\comb.cs" />
-    <Compile Include="guids\md5.cs" />
-    <Compile Include="guids\sha1.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="MsgPack.Cli">
-      <Version>0.9.2</Version>
-    </PackageReference>
-    <PackageReference Include="protobuf-net">
-      <Version>2.3.5</Version>
-    </PackageReference>
-    <PackageReference Include="xmisc.backbone.identifiers.contracts">
-      <Version>4.0.4-alpha</Version>
-    </PackageReference>
-    <PackageReference Include="xmisc.backbone.identitifiers.concretes">
-      <Version>4.0.5-alpha</Version>
-    </PackageReference>
-    <PackageReference Include="xmisc.backbone.io.formatter">
-      <Version>4.0.2-alpha</Version>
-    </PackageReference>
-    <PackageReference Include="xmisc.backbone.io.messagepack">
-      <Version>4.0.2-alpha</Version>
-    </PackageReference>
-    <PackageReference Include="xmisc.backbone.io.protobuf">
-      <Version>4.0.2-alpha</Version>
-    </PackageReference>
-    <PackageReference Include="xmisc.core.cryptography">
-      <Version>4.0.3-alpha</Version>
-    </PackageReference>
-    <PackageReference Include="xmisc.core.io">
-      <Version>4.0.1-alpha</Version>
-    </PackageReference>
-    <PackageReference Include="xunit">
-      <Version>2.3.1</Version>
-    </PackageReference>
-    <PackageReference Include="xunit.runner.console">
-      <Version>2.3.1</Version>
-    </PackageReference>
-    <PackageReference Include="xunit.runner.visualstudio">
-      <Version>2.3.1</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
+
+      <ItemGroup>
+    <None Update="xunit.runner.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+      <ItemGroup>
+        <Folder Include="Properties\" />
+      </ItemGroup>
+
+      <ItemGroup>
+        <ProjectReference Include="..\xmisc.backbone.identifiers.concretes\xmisc.backbone.identifiers.concretes.csproj" />
+      </ItemGroup>
 </Project>
+
