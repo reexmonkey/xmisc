@@ -1,7 +1,7 @@
 using System;
 using reexmonkey.xmisc.backbone.identifiers.contracts.models;
 
-namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
+namespace reexmonkey.xmisc.backbone.identifiers.concretes.infrastructure
 {
     /// <summary>
     /// Represents a provider that produces unique numeric identifiers.

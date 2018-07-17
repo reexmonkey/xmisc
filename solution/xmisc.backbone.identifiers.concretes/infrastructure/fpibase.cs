@@ -2,7 +2,7 @@ using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
 using System;
 using System.Text;
 
-namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
+namespace reexmonkey.xmisc.backbone.identifiers.concretes.infrastructure
 {
     /// <summary>
     /// Represents a base class for a Formal Public Identifier (FPI) as defined in RFC 3151
