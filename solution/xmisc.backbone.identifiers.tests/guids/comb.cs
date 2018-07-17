@@ -1,4 +1,5 @@
-﻿using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
+﻿using reexmonkey.xmisc.backbone.identifiers.contracts.extensions;
+using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
 using reexmonkey.xmisc.backbone.identifiers.contracts.models;
 using Xunit;
 
@@ -34,11 +35,10 @@ namespace xmisc.backbone.identity.tests.guids
         public void TestVersionNumber()
         {
             //arrange
-            var guid = SequentialGuid.NewGuid();
-            var bytes = guid.ToByteArray();
+            var comb = SequentialGuid.NewGuid();
 
             //act
-            var version = (ushort)(bytes[7] >> 4);
+            var version = comb.AsGuid().GetVersion();
 
             //Assert
             Assert.Equal(1, version);

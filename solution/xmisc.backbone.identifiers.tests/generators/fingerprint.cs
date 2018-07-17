@@ -15,7 +15,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.tests.generators
         public void TestSimpleFingerprintGeneration(string model)
         {
             //arrange
-            var generator = new Md5FingerprintGenerator(Fixture.DNsNamespace, Fixture.Encoding, new MessagePackSerializer());
+            var generator = new Md5FingerprintGenerator(Fixture.NamespaceId, Fixture.Encoding, new MessagePackSerializer());
 
             //act
             var fingerprint = generator.GetFingerprint(model);
@@ -30,7 +30,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.tests.generators
         public void TestMd5FingerprintUniqueness(string model)
         {
             //arrange
-            var generator = new Md5FingerprintGenerator(Fixture.DNsNamespace, Fixture.Encoding, new ProtoBufSerializer());
+            var generator = new Md5FingerprintGenerator(Fixture.NamespaceId, Fixture.Encoding, new ProtoBufSerializer());
 
             //act
             var fingerprint = generator.GetFingerprint(model);
@@ -44,7 +44,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.tests.generators
         public void TestSha1FingerprintUniqueness()
         {
             //arrange
-            var generator = new Sha1FingerprintGenerator(Fixture.DNsNamespace, Fixture.Encoding, new BinaryFormatSerializer());
+            var generator = new Sha1FingerprintGenerator(Fixture.NamespaceId, Fixture.Encoding, new BinaryFormatSerializer());
 
             //act
             var fingerprint = generator.GetFingerprint(123456);
