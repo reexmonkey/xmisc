@@ -8,7 +8,7 @@ using System.Security.Cryptography;
 namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
 {
     /// <summary>
-    /// Represents a time-based (version 1) globally unique identifier (GUID) that uses <see cref="MD5"/> hashing as defined in RFC 4122 (https://tools.ietf.org/html/rfc4122)
+    /// Represents a time-based (version 1) globally unique identifier (GUID) as defined in RFC 4122 (https://tools.ietf.org/html/rfc4122)
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     [Serializable]
