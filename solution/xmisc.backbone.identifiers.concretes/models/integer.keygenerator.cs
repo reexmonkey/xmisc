@@ -55,7 +55,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
         /// <summary>
         /// Initializes a new instance of the <see cref="SequentialntegerKeyGenerator"/> with a seed value;
         /// </summary>
-        public SequentialntegerKeyGenerator(int seed) => this.counter = seed;
+        public SequentialntegerKeyGenerator(int seed) => counter = seed;
 
         /// <summary>
         /// Generates the next unique numeric identifier.
@@ -64,7 +64,16 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
         public override int GetNext() => ++counter;
 
         /// <summary>
+        /// Reseeds the key generator.
+        /// <para/> Use with caution: reseeding the counter changes sequence of generated numbers and this may be undesired in certain cases.
+        /// <para/> However calling this method is beneficial when the sequence generator needs to be initialized from an external source.
+        /// </summary>
+        /// <param name="seed"></param>
+        public void Reseed(int seed) => counter = seed;
+
+        /// <summary>
         /// Resets the counter of the generator.
+        /// <para/> Use with caution: reseeding the counter changes sequence of generated numbers and this may be undesired in certain cases.
         /// </summary>
         public void Reset() => counter = 0;
     }

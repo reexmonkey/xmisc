@@ -67,7 +67,16 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
         public override long GetNext() => ++counter;
 
         /// <summary>
+        /// Reseeds the key generator.
+        /// <para/> Use with caution: reseeding the counter changes sequence of generated numbers and this may be undesired in certain cases.
+        /// <para/> However calling this method is beneficial when the sequence generator needs to be initialized from an external source.
+        /// </summary>
+        /// <param name="seed"></param>
+        public void Reseed(long seed) => counter = seed;
+
+        /// <summary>
         /// Resets the counter of the generator.
+        /// <para/> Use with caution: reseeding the counter changes sequence of generated numbers and this may be undesired in certain cases.
         /// </summary>
         public void Reset() => counter = 0;
     }
