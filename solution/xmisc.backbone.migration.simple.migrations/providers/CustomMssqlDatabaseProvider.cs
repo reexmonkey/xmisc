@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 
 namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
 {
@@ -11,7 +12,7 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
     /// <para /> Please see Simple.Migrations (https://github.com/canton7/Simple.Migrations)
     /// <para /> Credits and acknowledgments to canton7 (https://github.com/canton7/Simple.Migrations)
     /// </remarks>
-    public class SqlServerDatabaseProvider : CustomDatabaseProviderBase
+    public class CustomMssqlDatabaseProvider : CustomDatabaseProviderBase
     {
         /// <summary>
         /// Gets or sets the schema name used to store the version table.
@@ -35,10 +36,10 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
         public bool CreateSchema { get; set; } = true;
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="SqlServerDatabaseProvider"/> class
+        /// Initialises a new instance of the <see cref="CustomMssqlDatabaseProvider"/> class
         /// </summary>
         /// <param name="connection">Connection to use to run migrations. The caller is responsible for closing this.</param>
-        public SqlServerDatabaseProvider(IDbConnection connection) : base(connection)
+        public CustomMssqlDatabaseProvider(DbConnection connection) : base(connection)
         {
             MaxDescriptionLength = 256;
         }

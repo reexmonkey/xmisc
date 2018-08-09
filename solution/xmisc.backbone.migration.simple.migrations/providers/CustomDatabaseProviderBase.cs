@@ -1,6 +1,7 @@
 ﻿using SimpleMigrations;
 using System;
 using System.Data;
+using System.Data.Common;
 
 namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
 {
@@ -25,18 +26,18 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
     /// Although MSSQL supports advisory locks, this provider is useful in simple scenarios where concurrent migrators are not needed.
     /// <para /> Credits and acknowledgments to canton7 (https://github.com/canton7/Simple.Migrations/blob/master/src/Simple.Migrations/DatabaseProvider/DatabaseProviderBase.cs)
     /// </remarks>
-    public abstract class CustomDatabaseProviderBase : IDatabaseProvider<IDbConnection>
+    public abstract class CustomDatabaseProviderBase : IDatabaseProvider<DbConnection>
     {
         /// <summary>
         /// Gets the connection used for all database operations
         /// </summary>
-        protected IDbConnection Connection { get; }
+        protected DbConnection Connection { get; }
 
         /// <summary>
         /// Initialises a new instance of the <see cref="CustomDatabaseProviderBase"/> class
         /// </summary>
         /// <param name="connection">Database connection to use for all operations.</param>
-        protected CustomDatabaseProviderBase(IDbConnection connection)
+        protected CustomDatabaseProviderBase(DbConnection connection)
         {
             Connection = connection ?? throw new ArgumentNullException(nameof(connection));
         }
@@ -47,7 +48,7 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
         /// and return the connection for the migrations to use.
         /// </summary>
         /// <returns>Connection for the migrations to use</returns>
-        public IDbConnection BeginOperation()
+        public DbConnection BeginOperation()
         {
             if (Connection.State != ConnectionState.Open) Connection.Open();
             return Connection;
@@ -109,7 +110,7 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
         /// <param name="connection">Connection to use</param>
         /// <param name="transaction">Transaction to use</param>
         /// <returns>The current version, or 0</returns>
-        protected long EnsurePrerequisitesCreatedAndGetCurrentVersion(IDbConnection connection, IDbTransaction transaction = null)
+        protected long EnsurePrerequisitesCreatedAndGetCurrentVersion(DbConnection connection, DbTransaction transaction = null)
         {
             var sql = CreateSchemaSql();
             if (!string.IsNullOrEmpty(sql) && !string.IsNullOrWhiteSpace(sql))
@@ -142,7 +143,7 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
         /// If the version table is empty, this should return 0.
         /// </remarks>
         /// <returns>The current version, or 0</returns>
-        protected virtual long GetCurrentVersion(IDbConnection connection, IDbTransaction transaction = null)
+        protected virtual long GetCurrentVersion(DbConnection connection, DbTransaction transaction = null)
         {
             long version = 0;
             try
@@ -209,7 +210,7 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
         /// <param name="newDescription">The description of the migration which was applied</param>
         /// <param name="connection">Connection to use</param>
         /// <param name="transaction">Transaction to use, may be null</param>
-        protected virtual void UpdateVersion(long oldVersion, long newVersion, string newDescription, IDbConnection connection, IDbTransaction transaction = null)
+        protected virtual void UpdateVersion(long oldVersion, long newVersion, string newDescription, DbConnection connection, DbTransaction transaction = null)
         {
             if (MaxDescriptionLength > 0 && newDescription.Length > MaxDescriptionLength)
             {
