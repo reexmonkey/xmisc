@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xmisc.backbone.io.formatter
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4E5E84A6-BF4F-4685-8F70-4D6424DBA171}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xmisc.backbone.identifiers.tests", "xmisc.backbone.identifiers.tests\xmisc.backbone.identifiers.tests.csproj", "{432742BC-BE6E-4AB9-B37E-9943B1FE8188}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xmisc.backbone.identifiers.tests", "xmisc.backbone.identifiers.tests\xmisc.backbone.identifiers.tests.csproj", "{432742BC-BE6E-4AB9-B37E-9943B1FE8188}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identifiers", "identifiers", "{6C5D0D50-E2F8-4484-85BC-E3152623E893}"
 EndProject
@@ -60,6 +60,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "virtualization", "virtualization", "{173170B8-D4B0-4503-AA78-90DA48CEBD4E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xmisc.backbone.virtualization.docker", "xmisc.backbone.virtualization.docker\xmisc.backbone.virtualization.docker.csproj", "{0B5CBFA5-06D2-428F-8748-9C3D38E07DC0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "migration", "migration", "{DFFC8CC4-72D8-4A55-A15E-3026E316427D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xmisc.backbone.migration.simple.migrations", "xmisc.backbone.migration.simple.migrations\xmisc.backbone.migration.simple.migrations.csproj", "{5F0689C9-5354-4D16-8C96-EED1A16D2B30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -151,6 +155,10 @@ Global
 		{0B5CBFA5-06D2-428F-8748-9C3D38E07DC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B5CBFA5-06D2-428F-8748-9C3D38E07DC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B5CBFA5-06D2-428F-8748-9C3D38E07DC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F0689C9-5354-4D16-8C96-EED1A16D2B30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F0689C9-5354-4D16-8C96-EED1A16D2B30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F0689C9-5354-4D16-8C96-EED1A16D2B30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F0689C9-5354-4D16-8C96-EED1A16D2B30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -182,6 +190,8 @@ Global
 		{190776E5-1E6F-4287-BB78-DC14C4F63C9C} = {DBEFFF0A-1EDF-4083-80C4-BCC33CD92353}
 		{173170B8-D4B0-4503-AA78-90DA48CEBD4E} = {3F102311-4557-4DD9-B2E5-977FB9232D6F}
 		{0B5CBFA5-06D2-428F-8748-9C3D38E07DC0} = {173170B8-D4B0-4503-AA78-90DA48CEBD4E}
+		{DFFC8CC4-72D8-4A55-A15E-3026E316427D} = {3F102311-4557-4DD9-B2E5-977FB9232D6F}
+		{5F0689C9-5354-4D16-8C96-EED1A16D2B30} = {DFFC8CC4-72D8-4A55-A15E-3026E316427D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {776D82FA-CF53-410F-9114-54BE92B3B50D}
