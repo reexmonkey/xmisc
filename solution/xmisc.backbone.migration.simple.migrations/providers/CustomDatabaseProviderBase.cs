@@ -40,6 +40,8 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
         protected CustomDatabaseProviderBase(DbConnection connection)
         {
             Connection = connection ?? throw new ArgumentNullException(nameof(connection));
+            if (Connection.State != ConnectionState.Open) Connection.Open();
+
         }
 
         /// <summary>
@@ -50,7 +52,6 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
         /// <returns>Connection for the migrations to use</returns>
         public DbConnection BeginOperation()
         {
-            if (Connection.State != ConnectionState.Open) Connection.Open();
             return Connection;
         }
 
@@ -71,7 +72,7 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
         /// </remarks>
         public void EndOperation()
         {
-            if (Connection.State == ConnectionState.Open) Connection.Close();
+            //Do nothing
         }
 
         /// <summary>
