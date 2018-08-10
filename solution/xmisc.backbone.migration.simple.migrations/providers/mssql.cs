@@ -17,7 +17,7 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
         /// <summary>
         /// Gets or sets the schema name used to store the version table.
         /// </summary>
-        public string SchemaName { get; set; }
+        public string SchemaName { get; set; } = "dbo";
 
         /// <summary>
         /// Controls whether or not to try and create the schema if it does not exist.
