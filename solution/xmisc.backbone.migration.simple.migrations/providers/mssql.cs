@@ -12,17 +12,12 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
     /// <para /> Please see Simple.Migrations (https://github.com/canton7/Simple.Migrations)
     /// <para /> Credits and acknowledgments to canton7 (https://github.com/canton7/Simple.Migrations)
     /// </remarks>
-    public class CustomMssqlDatabaseProvider : CustomDatabaseProviderBase
+    public class SqlServerDatabaseProvider : DatabaseProviderBase
     {
         /// <summary>
         /// Gets or sets the schema name used to store the version table.
         /// </summary>
-        public string SchemaName { get; set; } = "dbo";
-
-        /// <summary>
-        /// Table name used to store version info. Defaults to 'VersionInfo'
-        /// </summary>
-        public string TableName { get; set; } = "VersionInfo";
+        public string SchemaName { get; set; }
 
         /// <summary>
         /// Controls whether or not to try and create the schema if it does not exist.
@@ -36,10 +31,10 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
         public bool CreateSchema { get; set; } = true;
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="CustomMssqlDatabaseProvider"/> class
+        /// Initialises a new instance of the <see cref="SqlServerDatabaseProvider"/> class
         /// </summary>
         /// <param name="connection">Connection to use to run migrations. The caller is responsible for closing this.</param>
-        public CustomMssqlDatabaseProvider(DbConnection connection) : base(connection)
+        public SqlServerDatabaseProvider(DbConnection connection) : base(connection)
         {
             MaxDescriptionLength = 256;
         }

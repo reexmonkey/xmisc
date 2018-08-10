@@ -10,23 +10,23 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
     /// </summary>
     /// <remarks>
     /// Methods on this class are called according to a strict sequence.
-    /// 
+    ///
     /// When <see cref="SimpleMigrator{TConnection, TMigrationBase}.Load"/> is called:
     ///     1. <see cref="EnsurePrerequisitesCreatedAndGetCurrentVersion()"/> is invoked
-    /// 
-    /// 
-    /// When <see cref="SimpleMigrator{TConnection, TMigrationBase}.MigrateTo(long)"/> or 
+    ///
+    ///
+    /// When <see cref="SimpleMigrator{TConnection, TMigrationBase}.MigrateTo(long)"/> or
     /// <see cref="SimpleMigrator{TConnection, TMigrationBase}.Baseline(long)"/> is called:
     ///     1. <see cref="BeginOperation"/>  is called.
     ///     2. <see cref="GetCurrentVersion()"/> is called.
     ///     3. <see cref="UpdateVersion(long, long, string)"/>is called (potentially multiple times)
     ///     4. <see cref="GetCurrentVersion()"/> is called.
     ///     5. <see cref="EndOperation"/>is called.
-    ///        
+    ///
     /// Although MSSQL supports advisory locks, this provider is useful in simple scenarios where concurrent migrators are not needed.
     /// <para /> Credits and acknowledgments to canton7 (https://github.com/canton7/Simple.Migrations/blob/master/src/Simple.Migrations/DatabaseProvider/DatabaseProviderBase.cs)
     /// </remarks>
-    public abstract class CustomDatabaseProviderBase : IDatabaseProvider<DbConnection>
+    public abstract class DatabaseProviderBase : IDatabaseProvider<DbConnection>
     {
         /// <summary>
         /// Gets the connection used for all database operations
@@ -34,14 +34,18 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
         protected DbConnection Connection { get; }
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="CustomDatabaseProviderBase"/> class
+        /// Table name used to store version info. Defaults to 'VersionInfo'
+        /// </summary>
+        public string TableName { get; set; } = "VersionInfo";
+
+        /// <summary>
+        /// Initialises a new instance of the <see cref="DatabaseProviderBase"/> class
         /// </summary>
         /// <param name="connection">Database connection to use for all operations.</param>
-        protected CustomDatabaseProviderBase(DbConnection connection)
+        protected DatabaseProviderBase(DbConnection connection)
         {
             Connection = connection ?? throw new ArgumentNullException(nameof(connection));
             if (Connection.State != ConnectionState.Open) Connection.Open();
-
         }
 
         /// <summary>
@@ -50,10 +54,7 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
         /// and return the connection for the migrations to use.
         /// </summary>
         /// <returns>Connection for the migrations to use</returns>
-        public DbConnection BeginOperation()
-        {
-            return Connection;
-        }
+        public DbConnection BeginOperation() => Connection;
 
         /// <summary>
         /// If > 0, specifies the maximum length of the 'Description' field. Descriptions longer will be truncated
@@ -113,25 +114,25 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
         /// <returns>The current version, or 0</returns>
         protected long EnsurePrerequisitesCreatedAndGetCurrentVersion(DbConnection connection, DbTransaction transaction = null)
         {
-            var sql = CreateSchemaSql();
-            if (!string.IsNullOrEmpty(sql) && !string.IsNullOrWhiteSpace(sql))
-            {
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = sql;
-                    command.Transaction = transaction;
-                    command.ExecuteNonQuery();
-                }
-            }
+            var schemaSql = CreateSchemaSql();
+            if (!string.IsNullOrEmpty(schemaSql) && !string.IsNullOrWhiteSpace(schemaSql))
+                RunSqlCommand(schemaSql, connection, transaction);
 
-            using (var command = connection.CreateCommand())
-            {
-                command.CommandText = CreateVersionTableSql();
-                command.Transaction = transaction;
-                command.ExecuteNonQuery();
-            }
+            var versionTableSql = CreateVersionTableSql();
+            if (!string.IsNullOrEmpty(versionTableSql) && !string.IsNullOrWhiteSpace(versionTableSql))
+                RunSqlCommand(versionTableSql, connection, transaction);
 
             return GetCurrentVersion(connection, transaction);
+        }
+
+        private static void RunSqlCommand(string sql, DbConnection connection, DbTransaction transaction = null)
+        {
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = sql;
+                if (transaction != null) command.Transaction = transaction;
+                command.ExecuteNonQuery();
+            }
         }
 
         /// <summary>
