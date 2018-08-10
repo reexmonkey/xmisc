@@ -158,9 +158,17 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.providers
                     if (result != null) version = Convert.ToInt64(result);
                 }
             }
-            catch (Exception)
+            catch (FormatException ex)
             {
-                throw new MigrationException("Database Provider returns a value for the current version which isn't a long");
+                throw new MigrationException("Database Provider returns a value for the current version which isn't a long", ex);
+            }
+            catch (InvalidCastException ex)
+            {
+                throw new MigrationException("Database Provider returns a value for the current version which isn't a long", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new MigrationException("Database Provider caught an unknown exception", ex);
             }
 
             return version;
