@@ -30,12 +30,12 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.migrations
         /// <summary>
         /// Invoked when this migration should migrate up
         /// </summary>
-        public abstract void Down();
+        protected abstract void Down();
 
         /// <summary>
         /// Invoked when this migration should migrate down
         /// </summary>
-        public abstract void Up();
+        protected abstract void Up();
 
         /// <summary>
         /// Execute and log an SQL query (which returns no data)
