@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace reexmonkey.xmisc.backbone.repositories.contracts
@@ -11,80 +12,77 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
     public interface IMinMaxRepository<TModel>
     {
         /// <summary>
-        /// Evaluates a scalar expression and returns the smallest value for a specified attribute.
+        /// Evaluates an internal scalar expression and returns the smallest value.
+        /// <para /> The internal scalar expression is to be defined at the implementation of this method.
         /// </summary>
         /// <typeparam name="T">The type of scalar result.</typeparam>
-        /// <param name="field">The attribute in the scalar expression, for which the smallest value shall be evaluated.</param>
-        /// <returns>The smallest value of the selected attribute.</returns>
-        T Min<T>(Expression<Func<TModel, object>> field)
-            where T : IEquatable<T>, IComparable, IComparable<T>;
+        /// <returns>The smallest value from the internal evaluation of the scalar expression.</returns>
+        T Min<T>() where T : IEquatable<T>, IComparable, IComparable<T>;
 
         /// <summary>
-        /// Evaluates a scalar expression and returns the smallest value for a specified attribute for a filtered set of data models.
-        /// </summary>
-        /// <typeparam name="T">The type of scalar result</typeparam>
-        /// <param name="field">The attribute in the scalar expression, for which the smallest value shall be evaluated.</param>
-        /// <param name="predicate">Filters the set of data models for which the scalar expression shall be evaluated.</param>
-        /// <returns>The smallest value of the selected attribute.</returns>
-        T Min<T>(Expression<Func<TModel, object>> field, Expression<Func<TModel, bool>> predicate)
-            where T : IEquatable<T>, IComparable, IComparable<T>;
-
-        /// <summary>
-        /// Evaluates a scalar expression and returns the largest value for a specified attribute.
+        /// Evaluates an internal scalar expression and returns the smallest value for a set of data models that satisfy the specified predicate.
         /// </summary>
         /// <typeparam name="T">The type of scalar result.</typeparam>
-        /// <param name="field">The attribute in the scalar expression, for which the largest value shall be evaluated.</param>
-        /// <returns>The largest value of the selected attribute.</returns>
-        T Max<T>(Expression<Func<TModel, object>> field)
-            where T : IEquatable<T>, IComparable, IComparable<T>;
-
-        /// <summary>
-        /// Evaluates a scalar expression and returns the largest value for a specified attribute for a filtered set of data models.
-        /// </summary>
-        /// <typeparam name="T">The type of scalar result</typeparam>
-        /// <param name="field">The attribute in the scalar expression, for which the largest value shall be evaluated.</param>
         /// <param name="predicate">Filters the set of data models for which the scalar expression shall be evaluated.</param>
-        /// <returns>The largest value of the selected attribute.</returns>
-        T Max<T>(Expression<Func<TModel, object>> field, Expression<Func<TModel, bool>> predicate)
+        /// <returns>The smallest value from the internal evaluation of the scalar expression.</returns>
+        T Min<T>(Expression<Func<TModel, bool>> predicate)
             where T : IEquatable<T>, IComparable, IComparable<T>;
 
         /// <summary>
-        /// Evaluates a scalar expression asynchronously and returns the smallest value for a specified attribute.
+        /// Evaluates an internal scalar expression and returns the largest value.
+        /// <para /> The internal scalar expression is to be defined at the implementation of this method.
         /// </summary>
         /// <typeparam name="T">The type of scalar result.</typeparam>
-        /// <param name="field">The attribute in the scalar expression, for which the smallest value shall be evaluated.</param>
-        /// <returns>The smallest value of the selected attribute.</returns>
-
-        Task<T> MinAsync<T>(Expression<Func<TModel, object>> field)
-            where T : IEquatable<T>, IComparable, IComparable<T>;
+        /// <returns>The largest value from the internal evaluation of the scalar expression.</returns>
+        T Max<T>() where T : IEquatable<T>, IComparable, IComparable<T>;
 
         /// <summary>
-        /// Evaluates a scalar expression asynchronously and returns the smallest value for a specified attribute for a filtered set of data models.
-        /// </summary>
-        /// <typeparam name="T">The type of scalar result</typeparam>
-        /// <param name="field">The attribute in the scalar expression, for which the smallest value shall be evaluated.</param>
-        /// <param name="predicate">Filters the set of data models for which the scalar expression shall be evaluated.</param>
-        /// <returns>The smallest value of the selected attribute.</returns>
-        Task<T> MinAsync<T>(Expression<Func<TModel, object>> field, Expression<Func<TModel, bool>> predicate)
-            where T : IEquatable<T>, IComparable, IComparable<T>;
-
-        /// <summary>
-        /// Evaluates a scalar expression asynchronously and returns the largest value for a specified attribute.
+        /// Evaluates an internal scalar expression and returns the largest value for a set of data models that satisfy the specified predicate.
         /// </summary>
         /// <typeparam name="T">The type of scalar result.</typeparam>
-        /// <param name="field">The attribute in the scalar expression, for which the largest value shall be evaluated.</param>
-        /// <returns>The largest value of the selected attribute.</returns>
-        Task<T> MaxAsync<T>(Expression<Func<TModel, object>> field)
+        /// <param name="predicate">Filters the set of data models for which the scalar expression shall be evaluated.</param>
+        /// <returns>The largest value from the internal evaluation of the scalar expression.</returns>
+        T Max<T>(Expression<Func<TModel, bool>> predicate)
             where T : IEquatable<T>, IComparable, IComparable<T>;
 
         /// <summary>
-        /// Evaluates a scalar expression asynchronously and returns the largest value for a specified attribute for a filtered set of data models.
+        /// Evaluates an internal scalar expression asynchronously and returns the smallest value.
+        /// <para /> The internal scalar expression is to be defined at the implementation of this method.
         /// </summary>
-        /// <typeparam name="T">The type of scalar result</typeparam>
-        /// <param name="field">The attribute in the scalar expression, for which the largest value shall be evaluated.</param>
+        /// <typeparam name="T">The type of scalar result.</typeparam>
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        /// <returns>A promise to return the smallest value from the internal evaluation of the scalar expression.</returns>
+        Task<T> MinAsync<T>(CancellationToken token = default(CancellationToken))
+            where T : IEquatable<T>, IComparable, IComparable<T>;
+
+        /// <summary>
+        /// Evaluates an internal scalar expression asynchronously and returns the smallest value for a set of data models that satisfy the specified predicate.
+        /// </summary>
+        /// <typeparam name="T">The type of scalar result.</typeparam>
         /// <param name="predicate">Filters the set of data models for which the scalar expression shall be evaluated.</param>
-        /// <returns>The largest value of the selected attribute.</returns>
-        Task<T> MaxAsync<T>(Expression<Func<TModel, object>> field, Expression<Func<TModel, bool>> predicate)
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        /// <returns>A promise to return the smallest value from the internal evaluation of the scalar expression.</returns>
+        Task<T> MinAsync<T>(Expression<Func<TModel, bool>> predicate, CancellationToken token = default(CancellationToken))
+            where T : IEquatable<T>, IComparable, IComparable<T>;
+
+        /// <summary>
+        /// Evaluates an internal scalar expression asynchronously and returns the largest value.
+        /// <para /> The internal scalar expression is to be defined at the implementation of this method.
+        /// </summary>
+        /// <typeparam name="T">The type of scalar result.</typeparam>
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        /// <returns>A promise to return the largest value from the internal evaluation of the scalar expression.</returns>
+        Task<T> MaxAsync<T>(CancellationToken token = default(CancellationToken))
+            where T : IEquatable<T>, IComparable, IComparable<T>;
+
+        /// <summary>
+        /// Evaluates an internal scalar expression asynchronously and returns the largest value for a set of data models that satisfy the specified predicate.
+        /// </summary>
+        /// <typeparam name="T">The type of scalar result.</typeparam>
+        /// <param name="predicate">Filters the set of data models for which the scalar expression shall be evaluated.</param>
+        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        /// <returns>A promise to return the largest value from the internal evaluation of the scalar expression.</returns>
+        Task<T> MaxAsync<T>(Expression<Func<TModel, bool>> predicate, CancellationToken token = default(CancellationToken))
             where T : IEquatable<T>, IComparable, IComparable<T>;
     }
 }
