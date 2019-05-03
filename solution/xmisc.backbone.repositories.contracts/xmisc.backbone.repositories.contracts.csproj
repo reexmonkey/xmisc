@@ -10,9 +10,9 @@
     <Company>reexjungle</Company>
     <Authors>reexmonkey</Authors>
     <Description>Provides domain service (repository) specifications.</Description>
-	<Copyright>Copyright (c) 2015 -2019, reexjungle</Copyright>
+	  <Copyright>Copyright (c) 2015 -2019, reexjungle</Copyright>
+    <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>    
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
 	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	<AssemblyName>xmisc.backbone.repositories.contracts</AssemblyName>
   </PropertyGroup>
@@ -22,6 +22,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\netstandard1.4\xmisc.backbone.repositories.contracts.xml</DocumentationFile>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="./../../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)"/>
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GitInfo" Version="2.0.20">
 	<PrivateAssets>All</PrivateAssets>
