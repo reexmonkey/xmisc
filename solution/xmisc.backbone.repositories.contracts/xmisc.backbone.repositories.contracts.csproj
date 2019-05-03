@@ -7,14 +7,12 @@
   <PropertyGroup>
 	<TargetFramework>netstandard1.4</TargetFramework>
     <RootNamespace>reexmonkey.xmisc.backbone.repositories.contracts</RootNamespace>
-    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>reexjungle</Company>
     <Authors>reexmonkey</Authors>
     <Description>"Common contracts of domain services (repository interfaces).</Description>
-	<Copyright>Copyright (c) 2015 -2017, reexjungle</Copyright>
+	<Copyright>Copyright (c) 2015 -2019, reexjungle</Copyright>
     <PackageLicenseUrl>https://github.com/reexmonkey/xmisc/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	<AssemblyName>xmisc.backbone.repositories.contracts</AssemblyName>
   </PropertyGroup>
@@ -25,7 +23,7 @@
     <DocumentationFile>bin\Release\netstandard1.4\xmisc.backbone.repositories.contracts.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="2.0.11">
+    <PackageReference Include="GitInfo" Version="2.0.20">
 	<PrivateAssets>All</PrivateAssets>
 	</PackageReference>
   </ItemGroup>
