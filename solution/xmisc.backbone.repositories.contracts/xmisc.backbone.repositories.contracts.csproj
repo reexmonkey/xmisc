@@ -11,7 +11,7 @@
     <Authors>reexmonkey</Authors>
     <Description>Provides domain service (repository) specifications.</Description>
 	<Copyright>Copyright (c) 2015 -2019, reexjungle</Copyright>
-    <PackageLicenseFile>../LICENSE.md</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
 	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	<AssemblyName>xmisc.backbone.repositories.contracts</AssemblyName>
