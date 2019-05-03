@@ -9,9 +9,9 @@
     <RootNamespace>reexmonkey.xmisc.backbone.repositories.contracts</RootNamespace>
     <Company>reexjungle</Company>
     <Authors>reexmonkey</Authors>
-    <Description>"Common contracts of domain services (repository interfaces).</Description>
+    <Description>Provides domain service (repository) specifications.</Description>
 	<Copyright>Copyright (c) 2015 -2019, reexjungle</Copyright>
-    <PackageLicenseUrl>https://github.com/reexmonkey/xmisc/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseFile>../LICENSE.md</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
 	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	<AssemblyName>xmisc.backbone.repositories.contracts</AssemblyName>
