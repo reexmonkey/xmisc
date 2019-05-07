@@ -20,7 +20,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="key">The key that uniquely identifies the data model.</param>
         /// <param name="references">Decides whether to load the related references of the data model as well.</param>
         /// <returns>The found data model; otherwise the default value of the data model.</returns>
-        TModel Find(TKey key, bool? references = null);
+        TModel FindByKey(TKey key, bool? references = null);
 
         /// <summary>
         /// Finds data models that are specified by the given keys and optionally paginates the results.
@@ -31,7 +31,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="offset">Specifies the number of data models to bypass.</param>
         /// <param name="count">Specifies the number of data models to return.</param>
         /// <returns>The found data models.</returns>
-        IEnumerable<TModel> FindAll(IEnumerable<TKey> keys, bool? references = null, int? offset = null, int? count = null);
+        IEnumerable<TModel> FindAllByKeys(IEnumerable<TKey> keys, bool? references = null, int? offset = null, int? count = null);
 
         /// <summary>
         /// Finds all data models that satisfy the given predicate and optionally paginates the results.
@@ -61,7 +61,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="references">Decides whether to load the related references of the data model as well.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise that returns the found data model; otherwise a default value of the data model.</returns>
-        Task<TModel> FindAsync(TKey key, bool? references = null, CancellationToken token = default(CancellationToken));
+        Task<TModel> FindByKeyAsync(TKey key, bool? references = null, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Finds data models asynchronously that are specified by the given keys and optionally paginates the results.
@@ -73,7 +73,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="count">Specifies the number of data models to return.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise that returns found data models; otherwise the default values of the data models.</returns>
-        Task<IEnumerable<TModel>> FindAllAsync(IEnumerable<TKey> keys, bool? references = null, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
+        Task<IEnumerable<TModel>> FindAllByKeysAsync(IEnumerable<TKey> keys, bool? references = null, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Find all data models asynchronously that satisfy the given predicate and optionally paginates the results.
