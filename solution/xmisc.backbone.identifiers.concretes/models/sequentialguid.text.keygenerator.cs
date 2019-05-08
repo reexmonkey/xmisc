@@ -4,7 +4,7 @@ using System;
 namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
 {
     /// <summary>
-    /// Represents Represents a provider that produces the string-represenatation of the time-based global unique identifiers (version 1) as defined in RFC 4122.
+    /// Represents Represents a provider that produces the equivalent string-represenatation of the time-based global unique identifiers (version 1) as defined in RFC 4122.
     /// </summary>
     public class SequentialGuidTextKeyGenerator : IKeyGenerator<string>
     {
