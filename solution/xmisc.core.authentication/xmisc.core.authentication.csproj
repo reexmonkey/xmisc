@@ -1,5 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
+  <Target Name="AutoVersion" AfterTargets="AfterBuild">
+    <PropertyGroup>
+      <PackageVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)$(GitSemVerDashLabel)</PackageVersion>
+    </PropertyGroup>
+  </Target>
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>reexmonkey.xmisc.core.authentication</RootNamespace>
