@@ -53,9 +53,7 @@ namespace reexmonkey.xmisc.core.authentication.keys
         /// <summary>
         /// X.509 Certificate Chain
         /// <para />The key in the first  certificate MUST match the public key represented by other members of the JWK.
-        /// <para /> The key in the first certificate MUST match the public key represented by other members of the JWK.
         ///<para /> The PKIX certificate containing the key value MUST be the first certificate.This MAY be followed by additional certificates, with each subsequent certificate being the one used to certify the previous one.
-        /// <para />The key in the first certificate MUST match the public key represented by other members of the JWK.
         /// </summary>
         public List<string> X5c { get; set; }
 

@@ -8,7 +8,7 @@ using System.Linq;
 namespace reexmonkey.xmisc.core.authentication.keys
 {
     /// <summary>
-    ///
+    /// Represents a JSON Web Key Set
     /// </summary>
     public sealed class JwkSet
     {
