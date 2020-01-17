@@ -47,7 +47,7 @@ namespace reexmonkey.xmisc.core.authentication.keys
         {
             if (string.IsNullOrEmpty(value))
             {
-                throw new ArgumentException("message", nameof(value));
+                throw new ArgumentException($"{nameof(value)} can neither be null nor empty", nameof(value));
             }
             return Parse(JsonObject.Parse(value));
         }
@@ -74,9 +74,9 @@ namespace reexmonkey.xmisc.core.authentication.keys
             var x5cjson = o.Get<string>("x5c");
             if (!string.IsNullOrEmpty(x5cjson))
             {
+                jwk.X5c = new List<string>();
                 var certs = x5cjson.FromJson<string[]>();
-                foreach (var cert in certs)
-                    jwk.X5c.Add(cert);
+                if (certs.Any()) jwk.X5c.AddRange(certs);
             }
 
             var k = o.Get<string>("k");

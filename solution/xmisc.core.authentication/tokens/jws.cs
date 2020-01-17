@@ -4,6 +4,7 @@ using ServiceStack;
 using ServiceStack.Text;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace reexmonkey.xmisc.core.authentication.tokens
 {
@@ -60,9 +61,9 @@ namespace reexmonkey.xmisc.core.authentication.tokens
             var x5cjson = o.Get<string>("x5c");
             if (!string.IsNullOrEmpty(x5cjson))
             {
+                header.X5c = new List<string>();
                 var certs = x5cjson.FromJson<string[]>();
-                foreach (var cert in certs)
-                    header.X5c.Add(cert);
+                if(certs.Any()) header.X5c.AddRange(certs);
             }
 
             return header;

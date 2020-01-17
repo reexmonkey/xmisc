@@ -74,7 +74,6 @@ namespace reexmonkey.xmisc.core.authentication.keys
         /// </summary>
         protected Jwk()
         {
-            X5c = new List<string>();
         }
 
         /// <summary>
@@ -92,9 +91,9 @@ namespace reexmonkey.xmisc.core.authentication.keys
             X5u = other.X5u;
             X5t = other.X5t;
             X5t256 = other.X5t256;
-            X5c = other.X5c != null && other.X5c.Any()
-                ? new List<string>(other.X5c)
-                : new List<string>();
+            if (other.X5c != null && other.X5c.Any()) 
+                X5c = new List<string>(other.X5c);
+
         }
     }
 }

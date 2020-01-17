@@ -22,7 +22,6 @@ namespace reexmonkey.xmisc.core.authentication.keys
         /// </summary>
         public JwkSet()
         {
-            Keys = new List<Jwk>();
         }
 
         /// <summary>
@@ -32,7 +31,7 @@ namespace reexmonkey.xmisc.core.authentication.keys
         public JwkSet(IEnumerable<Jwk> keys)
         {
             if (keys is null) throw new ArgumentNullException(nameof(keys));
-            Keys = new List<Jwk>(keys);
+            if(keys.Any()) Keys = new List<Jwk>(keys);
         }
 
         /// <summary>
@@ -59,7 +58,7 @@ namespace reexmonkey.xmisc.core.authentication.keys
         {
             if (string.IsNullOrEmpty(value))
             {
-                throw new ArgumentException("message", nameof(value));
+                throw new ArgumentException($"{nameof(value)} can neither be null nor empty", nameof(value));
             }
 
             var set = new JwkSet();
@@ -69,6 +68,7 @@ namespace reexmonkey.xmisc.core.authentication.keys
 
             if (map.TryGetValue("keys", out value))
             {
+                set.Keys = new List<Jwk>();
                 var kmaps = JsonObject.ParseArray(value);
                 foreach (var kmap in kmaps)
                 {
@@ -97,9 +97,7 @@ namespace reexmonkey.xmisc.core.authentication.keys
 
         private static Jwk ParseEcJwk(JsonObject map)
         {
-            if (map.TryGetValue("d", out string d)
-                && !string.IsNullOrEmpty(d)
-                )
+            if (map.TryGetValue("d", out string d) && !string.IsNullOrEmpty(d))
                 return RsaPrivateJwk.Parse(map);
 
             if (map.TryGetValue("crv", out string crv)

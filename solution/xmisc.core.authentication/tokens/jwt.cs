@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace reexmonkey.xmisc.core.authentication.tokens
 {
@@ -86,7 +87,6 @@ namespace reexmonkey.xmisc.core.authentication.tokens
         /// </summary>
         protected JoseHeader()
         {
-            X5c = new List<string>();
         }
 
         /// <summary>
@@ -100,12 +100,13 @@ namespace reexmonkey.xmisc.core.authentication.tokens
             Jwk = other.Jwk;
             Kid = other.Kid;
             X5u = other.X5u;
-            X5c = new List<string>();
             X5t = other.X5t;
             X5t256 = other.X5t256;
             Typ = other.Typ;
             Cty = other.Cty;
             Crit = other.Crit;
+            if (other.X5c != null && other.X5c.Any())
+                X5c = new List<string>(other.X5c);
         }
     }
 
