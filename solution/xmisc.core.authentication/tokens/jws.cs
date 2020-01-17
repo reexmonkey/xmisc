@@ -151,7 +151,7 @@ namespace reexmonkey.xmisc.core.authentication.tokens
             {
                 throw new ArgumentException($"{nameof(value)} can neither be null nor empty.", nameof(value));
             }
-            var content = value.FromBase64UrlSafe().FromUtf8Bytes();
+            var content = value.FromBase64UrlSafe().FromAsciiBytes();
             var o = JsonObject.Parse(content);
 
             return new Payload
