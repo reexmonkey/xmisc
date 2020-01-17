@@ -1,5 +1,7 @@
 ﻿using reexmonkey.xmisc.core.authentication.tokens;
 using reexmonkey.xmisc.core.authentication.types;
+using ServiceStack;
+using ServiceStack.Text;
 using xmisc.core.authentication.tests.fixtures;
 using Xunit;
 using Xunit.Abstractions;
@@ -35,10 +37,13 @@ namespace xmisc.core.authentication.tests.units.serialization
             Assert.Null(jws.Header.Kid);
             Assert.Null(jws.Header.X5t);
 
-            Assert.NotNull(jws.Payload.Claims);
-            Assert.Equal("joe", jws.Payload.Claims[Payload.Iss]);
-            Assert.Equal("1300819380", jws.Payload.Claims[Payload.Exp]);
-            Assert.Equal("true", jws.Payload.Claims["http://example.com/is_root"]);
+            var json = jws.Payload.FromAsciiBytes();
+            var map = JsonObject.Parse(json);
+
+            Assert.NotEmpty(jws.Payload);
+            Assert.Equal("joe", map["iss"]);
+            Assert.Equal(1300819380, map["exp"].ConvertTo<int>());
+            Assert.True(map["http://example.com/is_root"].ConvertTo<bool>());
 
             Assert.NotNull(jws.Signature);
             Assert.Equal(new byte[] { 116, 24, 223, 180, 151, 153, 224, 37, 79, 250, 96, 125, 216, 173, 187, 186, 22, 212, 37, 77, 105, 214, 
