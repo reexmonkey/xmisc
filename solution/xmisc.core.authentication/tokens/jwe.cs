@@ -30,13 +30,6 @@ namespace reexmonkey.xmisc.core.authentication.tokens
         public string Enc { get; set; }
 
         /// <summary>
-        /// Compression Algorithm
-        /// <para/>The "zip" (compression algorithm) applied to the plaintext before encryption, if any.
-        /// <para /> Use of this Header Parameter is OPTIONAL.
-        /// </summary>
-        public string Zip { get; set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="JweHeader"/> class.
         /// </summary>
         public JweHeader()
@@ -51,7 +44,6 @@ namespace reexmonkey.xmisc.core.authentication.tokens
         {
             Alg = other.Alg;
             Enc = other.Enc;
-            Zip = other.Zip;
         }
 
         /// <summary>

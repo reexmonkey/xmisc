@@ -55,7 +55,8 @@ namespace reexmonkey.xmisc.core.authentication.tokens
                 X5t256 = o.Get<string>("x5t#256"),
                 Typ = o.Get<string>("typ"),
                 Cty = o.Get<string>("cty"),
-                Crit = o.Get<string>("crit")
+                Crit = o.Get<string>("crit"),
+                Zip = o.Get<string>("zip"),
             };
 
             var x5cjson = o.Get<string>("x5c");
@@ -63,13 +64,12 @@ namespace reexmonkey.xmisc.core.authentication.tokens
             {
                 header.X5c = new List<string>();
                 var certs = x5cjson.FromJson<string[]>();
-                if(certs.Any()) header.X5c.AddRange(certs);
+                if (certs.Any()) header.X5c.AddRange(certs);
             }
 
             return header;
         }
     }
-
 
     /// <summary>
     /// Represents a JSON Web Signature (JWS).

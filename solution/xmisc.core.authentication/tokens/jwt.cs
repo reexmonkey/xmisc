@@ -83,6 +83,13 @@ namespace reexmonkey.xmisc.core.authentication.tokens
         public string Crit { get; set; }
 
         /// <summary>
+        /// Compression Algorithm
+        /// <para/>The "zip" (compression algorithm) applied to the plaintext before encryption, if any.
+        /// <para /> Use of this Header Parameter is OPTIONAL.
+        /// </summary>
+        public string Zip { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="JoseHeader"/> class.
         /// </summary>
         protected JoseHeader()
@@ -105,6 +112,7 @@ namespace reexmonkey.xmisc.core.authentication.tokens
             Typ = other.Typ;
             Cty = other.Cty;
             Crit = other.Crit;
+            Zip = other.Zip;
             if (other.X5c != null && other.X5c.Any())
                 X5c = new List<string>(other.X5c);
         }
