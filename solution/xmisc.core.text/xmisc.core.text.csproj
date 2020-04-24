@@ -1,32 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Target Name="AutoVersion" AfterTargets="AfterBuild">
-  <PropertyGroup>
-    <PackageVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)$(GitSemVerDashLabel)</PackageVersion>	
-  </PropertyGroup>	 
+    <PropertyGroup>
+      <PackageVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)$(GitSemVerDashLabel)</PackageVersion>
+    </PropertyGroup>
   </Target>
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
     <RootNamespace>reexmonkey.xmisc.core.text</RootNamespace>
-	<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
-    <Company>reexjungle</Company>
+    <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
     <Description>Input/Output utilities and extensions.</Description>
-	<Copyright>Copyright (c) 2015 -2017, reexjungle</Copyright>
-    <PackageLicenseUrl>https://github.com/reexmonkey/xmisc/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <Company>Reflektiv</Company>
+    <Authors>reexmonkey</Authors>
+    <Description>Input/Output utilities and extensions.</Description>
+    <Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard1.4\xmisc.core.text.xml</DocumentationFile>
+    <DocumentationFile>xmisc.core.text.xml</DocumentationFile>
+    <OutputPath>bin\Debug\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard1.4\xmisc.core.text.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\xmisc.core.text.xml</DocumentationFile>
+    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="2.0.11" />
+    <PackageReference Include="GitInfo" Version="2.0.26">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
-
 </Project>
