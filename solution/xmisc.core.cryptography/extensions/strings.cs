@@ -31,7 +31,7 @@ namespace reexmonkey.xmisc.core.cryptography.extensions
         public static string Getbase64SaltedHash(this string value, RandomNumberGenerator sprinkler, int saltLength, HashAlgorithm cipher)
             => Convert.FromBase64String(value).GetSaltedHash(sprinkler, saltLength, cipher).GetBase64Checksum();
 
-        public static string GetBase64SaltedHash(this string value, int startIndex, int length, HashAlgorithm cipher, RandomNumberGenerator sprinkler, int saltLength)
+        public static string GetBase64SaltedHash(this string value, HashAlgorithm cipher, RandomNumberGenerator sprinkler, int saltLength)
             => Convert.FromBase64String(value).GetSaltedHash(sprinkler, saltLength, cipher).GetBase64Checksum();
     }
 }
