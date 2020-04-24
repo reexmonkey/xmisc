@@ -1,20 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Target Name="AutoVersion" AfterTargets="AfterBuild">
-  <PropertyGroup>
-    <PackageVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)$(GitSemVerDashLabel)</PackageVersion>	
-  </PropertyGroup>	 
+    <PropertyGroup>
+      <PackageVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)$(GitSemVerDashLabel)</PackageVersion>
+    </PropertyGroup>
   </Target>
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>reexmonkey.xmisc.core.reflection</RootNamespace>
-	<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
     <Description>Reflection utilities and extensions.</Description>
-	<Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
+    <Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>xmisc.core.reflection.xml</DocumentationFile>
@@ -25,13 +23,12 @@
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
 
-  <ItemGroup>	
+  <ItemGroup>
     <PackageReference Include="GitInfo" Version="2.0.26">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-    <PackageReference Include="xmisc.core.linq" Version="1.0.11" />
+    <PackageReference Include="xmisc.core.linq" Version="6.0.2" />
   </ItemGroup>
-
 </Project>
