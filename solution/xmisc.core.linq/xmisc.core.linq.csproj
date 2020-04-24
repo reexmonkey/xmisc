@@ -7,27 +7,28 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
     <RootNamespace>reexmonkey.xmisc.core.linq</RootNamespace>
-	<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
-    <Company>reexjungle</Company>
+    <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
-	<Copyright>Copyright (c) 2015 -2017, reexjungle</Copyright>
+	<Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
     <Description>Input/Output utilities and extensions.</Description>
-    <PackageLicenseUrl>https://github.com/reexmonkey/xmisc/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard1.4\xmisc.core.linq.xml</DocumentationFile>
+    <DocumentationFile>xmisc.core.linq.xml</DocumentationFile>
+    <OutputPath>bin\Debug\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard1.4\xmisc.core.linq.xml</DocumentationFile>
+    <DocumentationFile>xmisc.core.linq.xml</DocumentationFile>
+    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="2.0.11">
-	<PrivateAssets>All</PrivateAssets>
-	</PackageReference>	
+    <PackageReference Include="GitInfo" Version="2.0.26">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>
