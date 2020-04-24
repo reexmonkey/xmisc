@@ -10,7 +10,7 @@
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
 	<Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
-    <Description>Input/Output utilities and extensions.</Description>
+    <Description>LINQ utilities and extensions.</Description>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -14,7 +14,7 @@
 
   <ItemGroup>
    <PackageReference Include="Docker.DotNet" Version="3.125.2" />
-   <PackageReference Include="GitInfo" Version="2.0.11">
+   <PackageReference Include="GitInfo" Version="2.0.26">
 	 <PrivateAssets>All</PrivateAssets>
 	</PackageReference>
     <PackageReference Include="xmisc.core.system.net" Version="4.0.64-alpha" />

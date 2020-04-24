@@ -8,10 +8,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>reexmonkey.xmisc.backbone.io.formatter</RootNamespace>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
-    <Company>reexjungle</Company>
+    <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
     <Description>Binary Formatter Serialization Adapter.</Description>
-    <Copyright>Copyright (c) 2015 -2017, reexjungle</Copyright>
+    <Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
     <PackageLicenseUrl>https://github.com/reexmonkey/xmisc/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -25,7 +25,7 @@
     <DocumentationFile>bin\Release\netstandard2.0\.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="2.0.11">
+    <PackageReference Include="GitInfo" Version="2.0.26">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />

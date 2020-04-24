@@ -11,9 +11,9 @@ using System.Reflection;
 #else
 [assembly: AssemblyConfiguration("Release")]
 #endif
-[assembly: AssemblyCompany("reexjungle")]
+[assembly: AssemblyCompany("Reflektiv")]
 [assembly: AssemblyProduct("xmisc.backbone.io.formatter")]
-[assembly: AssemblyCopyright("Copyright (c) 2015 -2017, reexjungle")]
+[assembly: AssemblyCopyright("Copyright (c) 2015 - 2020, Reflektiv")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

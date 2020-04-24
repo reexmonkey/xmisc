@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
     <PackageReference Include="xmisc.backbone.io.formatter" Version="4.0.2-alpha" />
     <PackageReference Include="xmisc.backbone.io.jil" Version="4.0.2-alpha" />

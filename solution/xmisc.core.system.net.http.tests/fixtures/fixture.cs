@@ -100,20 +100,22 @@ namespace xmisc.core.system.net.http.tests.fixtures
 
     public static class Fixture
     {
-        public static string BaseUrl = "http://polls.apiblueprint.org/";
-
-        public static HttpClient Client = new HttpClient()
+        public static HttpClient PostmanClient = new HttpClient()
         {
-            BaseAddress = BaseUrl.ToUri()
+            BaseAddress = "https://postman-echo.com".ToUri()
+        };
+
+        public static HttpClient ApiBlueprintClient = new HttpClient()
+        {
+            BaseAddress = "http://polls.apiblueprint.org/".ToUri()
         };
 
         public static JilTextSerializer JilTextSerializer = new JilTextSerializer();
 
-        public static JilStreamSerializer JilStreamSerializer = new JilStreamSerializer(new UTF8Encoding(false), 16 * 1024);
+        public static JilStreamSerializer JilStreamSerializer = new JilStreamSerializer(new UTF8Encoding(false, false), 16 * 1024);
 
         public static Uri ToUri(this string url) => new Uri(url, UriKind.RelativeOrAbsolute);
 
-        public static Uri Combine(this Uri @base, Uri relative) => new Uri(@base, relative);
 
         public static Poll FavoriteTvSeries = new Poll
         {

@@ -8,10 +8,10 @@
 	<TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>reexmonkey.xmisc.backbone.identifiers.concretes</RootNamespace>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
-    <Company>reexjungle</Company>
+    <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
     <Description>Backbone contracts of identity.</Description>
-	<Copyright>Copyright (c) 2015 -2017, reexjungle</Copyright>
+	<Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
     <PackageLicenseUrl>https://github.com/reexmonkey/xmisc/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -24,11 +24,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\netstandard2.0\xmisc.backbone.identitifiers.concretes.xml</DocumentationFile>
   </PropertyGroup>
-      <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="7.6.104" />
-    <PackageReference Include="GitInfo" Version="2.0.11">
-	<PrivateAssets>All</PrivateAssets>
-	</PackageReference>
-    <PackageReference Include="xmisc.backbone.identifiers.contracts" Version="4.1.11-beta" />
+  <ItemGroup>
+    <PackageReference Include="GitInfo" Version="2.0.26">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xmisc.backbone.identifiers.contracts" Version="1.0.24" />
   </ItemGroup>
 </Project>

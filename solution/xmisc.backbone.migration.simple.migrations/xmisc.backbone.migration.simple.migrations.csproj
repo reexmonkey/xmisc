@@ -7,14 +7,12 @@
   <PropertyGroup>
     <RootNamespace>reexmonkey.xmisc.backbone.migration.simple.migrations</RootNamespace>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
-    <Company>reexjungle</Company>
+    <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
     <Description>MessagePack Serialization Adapter.</Description>
-	<Copyright>Copyright (c) 2015-2018, reexjungle</Copyright>
+	<Copyright>Copyright (c) 2015-2018, Reflektiv</Copyright>
     <PackageLicenseUrl>https://github.com/reexmonkey/xmisc/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
@@ -27,7 +25,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="2.0.14">
+    <PackageReference Include="GitInfo" Version="2.0.26">
 	<PrivateAssets>All</PrivateAssets>
 	</PackageReference>
     <PackageReference Include="Simple.Migrations" Version="0.9.19" />

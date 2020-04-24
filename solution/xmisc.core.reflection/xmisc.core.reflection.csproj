@@ -10,7 +10,7 @@
 	<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
-    <Description>Input/Output utilities and extensions.</Description>
+    <Description>Reflection utilities and extensions.</Description>
 	<Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>

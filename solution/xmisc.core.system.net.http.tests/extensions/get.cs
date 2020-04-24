@@ -17,7 +17,7 @@ namespace xmisc.core.system.net.http.tests.extensions
             var address = "questions".ToUri();
 
             //act
-            var polls = Fixture.Client.Get<List<Poll>>(address, Fixture.JilTextSerializer);
+            var polls = Fixture.ApiBlueprintClient.Get<List<Poll>>(address, Fixture.JilTextSerializer);
 
             //assert
             Assert.NotEmpty(polls);
@@ -30,7 +30,7 @@ namespace xmisc.core.system.net.http.tests.extensions
             var address = "questions".ToUri();
 
             //act
-            var polls = Fixture.Client.Get<List<Poll>>(address, Fixture.JilStreamSerializer);
+            var polls = Fixture.ApiBlueprintClient.Get<List<Poll>>(address, Fixture.JilStreamSerializer);
 
             //assert
             Assert.NotEmpty(polls);
@@ -43,7 +43,7 @@ namespace xmisc.core.system.net.http.tests.extensions
             var address = "questions".ToUri();
             
             //act
-            var polls = await Fixture.Client.GetAsync<List<Poll>>(address, Fixture.JilTextSerializer);
+            var polls = await Fixture.ApiBlueprintClient.GetAsync<List<Poll>>(address, Fixture.JilTextSerializer);
 
             //assert
             Assert.NotEmpty(polls);
@@ -56,7 +56,7 @@ namespace xmisc.core.system.net.http.tests.extensions
             var address = "questions".ToUri();
 
             //act
-            var polls = await Fixture.Client.GetAsync<List<Poll>>(address, Fixture.JilStreamSerializer);
+            var polls = await Fixture.ApiBlueprintClient.GetAsync<List<Poll>>(address, Fixture.JilStreamSerializer);
 
             //assert
             Assert.NotEmpty(polls);

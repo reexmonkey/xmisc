@@ -12,10 +12,10 @@ namespace reexmonkey.xmisc.core.system.net.http.tests.extensions
         public void TestJsonClientPost()
         {
             //arrange
-            var address = "questions".ToUri();
+            var address = "post".ToUri();
 
             //act
-            var response = Fixture.Client.Post(address, Fixture.FavoriteTvSeries, Fixture.JilTextSerializer);
+            var response = Fixture.PostmanClient.Post(address, Fixture.FavoriteTvSeries, Fixture.JilTextSerializer);
 
             //assert
             Assert.True(response.IsSuccessStatusCode);
@@ -25,36 +25,37 @@ namespace reexmonkey.xmisc.core.system.net.http.tests.extensions
         public async Task TestJsonClientPostAsync()
         {
             //arrange
-            var address = "questions".ToUri();
+            var address = "post".ToUri();
 
             //act
-            var response = await Fixture.Client.PostAsync(address, Fixture.FavoriteTvSeries, Fixture.JilTextSerializer);
+            var response = await Fixture.PostmanClient.PostAsync(address, Fixture.FavoriteTvSeries, Fixture.JilTextSerializer);
 
             //assert
             Assert.True(response.IsSuccessStatusCode);
         }
 
-        
+        [Fact]
         public void TestJsonStreamClientPost()
         {
             //arrange
-            var address = "questions".ToUri();
+            var address = "post".ToUri();
 
             //act
-            var response = Fixture.Client.Post(address, Fixture.FavoriteTvSeries, Fixture.JilStreamSerializer);
+            var response = Fixture.PostmanClient.Post(address, Fixture.FavoriteTvSeries, Fixture.JilStreamSerializer);
 
             //assert
             Assert.True(response.IsSuccessStatusCode);
         }
 
-       
+
+        [Fact]
         public async Task TestJsonStreamClientPostAsync()
         {
             //arrange
-            var address = "questions".ToUri();
+            var address = "post".ToUri();
 
             //act
-            var response = await Fixture.Client.PostAsync(address, Fixture.FavoriteTvSeries, Fixture.JilStreamSerializer);
+            var response = await Fixture.PostmanClient.PostAsync(address, Fixture.FavoriteTvSeries, Fixture.JilStreamSerializer);
 
             //assert
             Assert.True(response.IsSuccessStatusCode);
