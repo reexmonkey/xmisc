@@ -29,6 +29,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="xmisc.backbone.identifiers.contracts" Version="1.0.24" />
+    <PackageReference Include="xmisc.backbone.identifiers.contracts" Version="6.0.7" />
   </ItemGroup>
 </Project>
