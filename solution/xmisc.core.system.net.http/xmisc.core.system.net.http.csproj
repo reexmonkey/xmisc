@@ -9,7 +9,7 @@
     <RootNamespace>reexmonkey.xmisc.core.system.net.http</RootNamespace>
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
-    <Description>Input/Output utilities and extensions.</Description>
+    <Description>HTTP utilities and extensions.</Description>
     <Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
