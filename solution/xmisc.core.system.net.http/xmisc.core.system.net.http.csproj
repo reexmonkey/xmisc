@@ -12,10 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-   <PackageReference Include="GitInfo" Version="2.0.11">
+   <PackageReference Include="GitInfo" Version="2.0.26">
 	 <PrivateAssets>All</PrivateAssets>
 	</PackageReference>
-    <PackageReference Include="System.Net.Http" Version="4.3.3" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="xmisc.core.io" Version="4.0.68-alpha" />
   </ItemGroup>
 

@@ -25,17 +25,17 @@ namespace reexmonkey.xmisc.core.system.net.http.extensions
             }
         }
 
-        internal static async Task<StringContent> AsContentAsync<T>(this TextSerializerBase serializer, T instance)
+        internal static async Task<StringContent> AsStringContentAsync<T>(this TextSerializerBase serializer, T instance)
         {
             return new StringContent(await serializer.SerializeAsync(instance));
         }
 
-        internal static async Task<ByteArrayContent> AsContentAsync<T>(this BinarySerializerBase serializer, T content)
+        internal static async Task<ByteArrayContent> AsStringContentAsync<T>(this BinarySerializerBase serializer, T content)
         {
             return new ByteArrayContent(await serializer.SerializeAsync(content));
         }
 
-        internal static async Task<StreamContent> AsContentAsync<T>(this StreamSerializerBase serializer, T content)
+        internal static async Task<StreamContent> AsStringContentAsync<T>(this StreamSerializerBase serializer, T content)
         {
             return new StreamContent(await serializer.SerializeAsync(content));
         }

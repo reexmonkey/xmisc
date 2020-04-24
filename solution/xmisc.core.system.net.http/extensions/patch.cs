@@ -60,12 +60,12 @@ namespace reexmonkey.xmisc.core.system.net.http.extensions
 
         public static async Task<HttpResponseMessage> PatchAsync<T>(this HttpClient client, Uri requestUri, T content, TextSerializerBase serializer)
         {
-            return await client.PatchAsync(requestUri, await serializer.AsContentAsync(content));
+            return await client.PatchAsync(requestUri, await serializer.AsStringContentAsync(content));
         }
 
         public static async Task<HttpResponseMessage> PatchAsync<T>(this HttpClient client, Uri requestUri, T content, TextSerializerBase serializer, CancellationToken token)
         {
-            return await client.PatchAsync(requestUri, await serializer.AsContentAsync(content), token);
+            return await client.PatchAsync(requestUri, await serializer.AsStringContentAsync(content), token);
         }
 
         public static HttpResponseMessage Patch<T>(this HttpClient client, string requestUri, T content, TextSerializerBase serializer)
@@ -75,12 +75,12 @@ namespace reexmonkey.xmisc.core.system.net.http.extensions
 
         public static async Task<HttpResponseMessage> PatchAsync<T>(this HttpClient client, string requestUri, T content, TextSerializerBase serializer)
         {
-            return await client.PatchAsync(requestUri, await serializer.AsContentAsync(content));
+            return await client.PatchAsync(requestUri, await serializer.AsStringContentAsync(content));
         }
 
         public static async Task<HttpResponseMessage> PatchAsync<T>(this HttpClient client, string requestUri, T content, TextSerializerBase serializer, CancellationToken token)
         {
-            return await client.PatchAsync(requestUri, await serializer.AsContentAsync(content), token);
+            return await client.PatchAsync(requestUri, await serializer.AsStringContentAsync(content), token);
         }
 
         //Patch <T> Methods (binary serialization)
@@ -97,22 +97,22 @@ namespace reexmonkey.xmisc.core.system.net.http.extensions
 
         public static async Task<HttpResponseMessage> PatchAsync<T>(this HttpClient client, Uri requestUri, T content, BinarySerializerBase serializer)
         {
-            return await client.PatchAsync(requestUri, await serializer.AsContentAsync(content));
+            return await client.PatchAsync(requestUri, await serializer.AsStringContentAsync(content));
         }
 
         public static async Task<HttpResponseMessage> PatchAsync<T>(this HttpClient client, Uri requestUri, T content, BinarySerializerBase serializer, CancellationToken token)
         {
-            return await client.PatchAsync(requestUri, await serializer.AsContentAsync(content), token);
+            return await client.PatchAsync(requestUri, await serializer.AsStringContentAsync(content), token);
         }
 
         public static async Task<HttpResponseMessage> PatchAsync<T>(this HttpClient client, string requestUri, T content, BinarySerializerBase serializer)
         {
-            return await client.PatchAsync(requestUri, await serializer.AsContentAsync(content));
+            return await client.PatchAsync(requestUri, await serializer.AsStringContentAsync(content));
         }
 
         public static async Task<HttpResponseMessage> PatchAsync<T>(this HttpClient client, string requestUri, T content, BinarySerializerBase serializer, CancellationToken token)
         {
-            return await client.PatchAsync(requestUri, await serializer.AsContentAsync(content), token);
+            return await client.PatchAsync(requestUri, await serializer.AsStringContentAsync(content), token);
         }
 
         //Patch Methods (stream serialization)
@@ -129,7 +129,7 @@ namespace reexmonkey.xmisc.core.system.net.http.extensions
 
         public static async Task<HttpResponseMessage> PatchAsync<T>(this HttpClient client, Uri requestUri, T content, StreamSerializerBase serializer)
         {
-            using (var stream = await serializer.AsContentAsync(content))
+            using (var stream = await serializer.AsStringContentAsync(content))
             {
                 return await client.PatchAsync(requestUri, stream);
             }
@@ -137,7 +137,7 @@ namespace reexmonkey.xmisc.core.system.net.http.extensions
 
         public static async Task<HttpResponseMessage> PatchAsync<T>(this HttpClient client, Uri requestUri, T content, StreamSerializerBase serializer, CancellationToken token)
         {
-            using (var stream = await serializer.AsContentAsync(content))
+            using (var stream = await serializer.AsStringContentAsync(content))
             {
                 return await client.PatchAsync(requestUri, stream, token);
             }
@@ -145,7 +145,7 @@ namespace reexmonkey.xmisc.core.system.net.http.extensions
 
         public static async Task<HttpResponseMessage> PatchAsync<T>(this HttpClient client, string requestUri, T content, StreamSerializerBase serializer)
         {
-            using (var stream = await serializer.AsContentAsync(content))
+            using (var stream = await serializer.AsStringContentAsync(content))
             {
                 return await client.PatchAsync(requestUri, stream);
             }
@@ -153,7 +153,7 @@ namespace reexmonkey.xmisc.core.system.net.http.extensions
 
         public static async Task<HttpResponseMessage> PatchAsync<T>(this HttpClient client, string requestUri, T content, StreamSerializerBase serializer, CancellationToken token)
         {
-            using (var stream = await serializer.AsContentAsync(content))
+            using (var stream = await serializer.AsStringContentAsync(content))
             {
                 return await client.PatchAsync(requestUri, stream, token);
             }
