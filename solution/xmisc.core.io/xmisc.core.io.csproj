@@ -15,11 +15,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>xmisc.core.io.xml</DocumentationFile>
-    <OutputPath>bin\Debug\netstandard1.4\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>xmisc.core.io.xml</DocumentationFile>
-    <OutputPath>bin\Release\netstandard1.4\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
