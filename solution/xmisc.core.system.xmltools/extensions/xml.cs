@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace reexmonkey.xmisc.core.system.xml.extensions
+namespace reexmonkey.xmisc.core.system.xmltools.extensions
 {
     public static class XmlExtensions
     {

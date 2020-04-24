@@ -6,7 +6,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
-namespace reexmonkey.xmisc.core.system.xml.extensions
+namespace reexmonkey.xmisc.core.system.xmltools.extensions
 {
     public static class XmlWriterExtensions
     {

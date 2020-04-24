@@ -7,7 +7,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Reflection;
 
-namespace reexmonkey.xmisc.core.system.xml.extensions
+namespace reexmonkey.xmisc.core.system.xmltools.extensions
 {
     public static class XmlReaderExtensions
     {
