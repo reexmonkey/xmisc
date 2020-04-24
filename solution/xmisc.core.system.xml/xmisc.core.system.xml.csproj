@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Target Name="AutoVersion" AfterTargets="AfterBuild">
   <PropertyGroup>
     <PackageVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)$(GitSemVerDashLabel)</PackageVersion>	
@@ -7,14 +7,25 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
     <RootNamespace>reexmonkey.xmisc.core.system.xml</RootNamespace>
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <Company>Reflektiv</Company>
+    <Authors>reexmonkey</Authors>
+    <Description>XML utilities and extensions.</Description>
+    <Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>xmisc.core.system.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>xmisc.core.system.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-   <PackageReference Include="GitInfo" Version="2.0.11">
-	 <PrivateAssets>All</PrivateAssets>
-	</PackageReference>
+   <PackageReference Include="GitInfo" Version="2.0.26">
+     <PrivateAssets>all</PrivateAssets>
+     <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+   </PackageReference>
    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
    <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
   </ItemGroup>
