@@ -12,6 +12,8 @@
     <Description>XML utilities and extensions.</Description>
     <Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
     <AssemblyName>xmisc.core.system.xmltools</AssemblyName>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>bin\Debug\</OutputPath>
@@ -29,5 +31,8 @@
    </PackageReference>
    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
    <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="./../../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
   </ItemGroup>
 </Project>

@@ -11,6 +11,7 @@
     <Authors>reexmonkey</Authors>
     <Description>Implements custom identifiers.</Description>
 	<Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
 	<AssemblyName>xmisc.backbone.identitifiers.concretes</AssemblyName>
   </PropertyGroup>
@@ -26,5 +27,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="xmisc.backbone.identifiers.contracts" Version="6.0.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="./../../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
   </ItemGroup>
 </Project>
