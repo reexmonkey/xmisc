@@ -6,18 +6,22 @@
   </Target>
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-	<RootNamespace>reexmonkey.xmisc.backbone.virtualization.docker</RootNamespace>
-	<Authors>reexmonkey</Authors>
+    <Company>Reflektiv</Company>
+    <Authors>reexmonkey</Authors>
+    <Description>Specifies validation interfaces.</Description>
+    <Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
    <PackageReference Include="Docker.DotNet" Version="3.125.2" />
    <PackageReference Include="GitInfo" Version="2.0.26">
-	 <PrivateAssets>All</PrivateAssets>
-	</PackageReference>
-    <PackageReference Include="xmisc.core.system.net" Version="4.0.64-alpha" />
+     <PrivateAssets>all</PrivateAssets>
+     <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+   </PackageReference>
+    <PackageReference Include="xmisc.core.system.net" Version="6.0.3" />
   </ItemGroup>
-
+  <ItemGroup>
+    <None Include="./../../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
+  </ItemGroup>
 </Project>
