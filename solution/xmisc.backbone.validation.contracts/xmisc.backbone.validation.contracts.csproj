@@ -9,12 +9,10 @@
     <RootNamespace>reexmonkey.xmisc.backbone.validation.contracts</RootNamespace>
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
-    <Description>Validation Contracts.</Description>
+    <Description>Specifies validation interfaces.</Description>
 	<Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	<AssemblyName>xmisc.backbone.validation.contracts</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
