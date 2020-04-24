@@ -7,27 +7,26 @@
   <PropertyGroup>
 	<TargetFramework>netstandard1.4</TargetFramework>
     <RootNamespace>reexmonkey.xmisc.backbone.io.protobuf</RootNamespace>
-    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
     <Description>ProtoBufs Serialization Adapter.</Description>
 	<Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
-    <PackageLicenseUrl>https://github.com/reexmonkey/xmisc/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	<AssemblyName>xmisc.backbone.io.protobuf</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard1.4\.xml</DocumentationFile>
+    <DocumentationFile>xmisc.backbone.io.protobuf.xml</DocumentationFile>
+    <OutputPath>bin\Debug\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard1.4\.xml</DocumentationFile>
+    <DocumentationFile>xmisc.backbone.io.protobuf.xml</DocumentationFile>
+    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="GitInfo" Version="2.0.26">
-	<PrivateAssets>All</PrivateAssets>
-	</PackageReference>
-    <PackageReference Include="protobuf-net" Version="2.3.13" />
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="protobuf-net" Version="2.4.6" />
   </ItemGroup>
 </Project>
