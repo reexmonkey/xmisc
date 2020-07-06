@@ -5,7 +5,7 @@
   </PropertyGroup>	 
   </Target>
   <PropertyGroup>
-	<TargetFramework>netstandard1.4</TargetFramework>
+	<TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>reexmonkey.xmisc.backbone.repositories.contracts</RootNamespace>
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>

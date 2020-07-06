@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
 {
@@ -64,6 +65,41 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
             return (await repository
                 .FindAllAsync(predicate, references, offset, count, token))
                 .GroupBy(keySelector).ToDictionary(g => g.Key, g => g.ToList());
+        }
+
+        /// <summary>
+        /// Creates a transaction scope from the given option details.
+        /// </summary>
+        /// <param name="scopeOption">Additional options for creating a transaction scope.</param>
+        /// <param name="isolation">The isolation level of a transaction.</param>
+        /// <param name="timeout">The timeout period for the transaction.</param>
+        /// <returns>A transaction scope that makes a block code transactional.</returns>
+        public static TransactionScope AsTransactionScope(this TransactionScopeOption scopeOption, IsolationLevel isolation = IsolationLevel.Serializable, TimeSpan? timeout = null)
+        {
+            var options = new TransactionOptions
+            {
+                IsolationLevel = isolation,
+                Timeout = timeout ?? TransactionManager.DefaultTimeout
+            };
+            return new TransactionScope(scopeOption, options);
+        }
+
+        /// <summary>
+        /// Creates a transaction scope flow from the given option details.
+        /// <para /> Recommended for transaction code blocks involved in asynchronous operations.
+        /// </summary>
+        /// <param name="scopeOption">Additional options for creating a transaction scope.</param>
+        /// <param name="isolation">The isolation level of a transaction.</param>
+        /// <param name="timeout">The timeout period for the transaction.</param>
+        /// <returns>A transaction scope that makes a block code transactional.</returns>
+        public static TransactionScope AsTransactionScopeFlow(this TransactionScopeOption scopeOption, IsolationLevel isolation = IsolationLevel.Serializable, TimeSpan? timeout = null)
+        {
+            var options = new TransactionOptions
+            {
+                IsolationLevel = isolation,
+                Timeout = timeout ?? TransactionManager.DefaultTimeout
+            };
+            return new TransactionScope(scopeOption, options, TransactionScopeAsyncFlowOption.Enabled);
         }
 
     }
