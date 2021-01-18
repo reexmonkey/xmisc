@@ -9,19 +9,19 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
     {
         public static void SafeWriteElementString(this XmlWriter writer, string localName, string value)
         {
-            if (!string.IsNullOrEmpty(value)) 
+            if (!string.IsNullOrEmpty(value))
                 writer.WriteElementString(localName, value);
         }
 
         public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, string value)
         {
-            if (!string.IsNullOrEmpty(value)) 
+            if (!string.IsNullOrEmpty(value))
                 writer.WriteElementString(localName, ns, value);
         }
 
         public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, string value)
         {
-            if (!string.IsNullOrEmpty(value)) 
+            if (!string.IsNullOrEmpty(value))
                 writer.WriteElementString(prefix, localName, ns, value);
         }
 
@@ -135,21 +135,17 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             return false;
         }
 
-        private static bool TryWriteEnumValue<T>(this XmlWriter writer, T value)
-        {
-            if (!(value is Enum)) return false;
-            var @enum = value as Enum;
-            writer.WriteValue(@enum.ToString("F"));
-            return true;
-        }
-
         private static bool TryWriteStringValue<T>(this XmlWriter writer, T value)
         {
-            if (!(value is string)) return false;
-            var str = value.ToString();
-            if (str != null && string.IsNullOrWhiteSpace(str)) writer.WriteWhitespace(str); //str is whitespace
-            if (!string.IsNullOrWhiteSpace(str)) writer.WriteValue(str);
-            return true;
+            if (value is string)
+            {
+                var str = value as string;
+                if (str != null && string.IsNullOrWhiteSpace(str)) writer.WriteWhitespace(str); //str is whitespace
+                if (!string.IsNullOrWhiteSpace(str)) writer.WriteValue(str);
+                return true;
+            }
+
+            return false;
         }
 
         private static bool TryWriteXmlSerializableValue<T>(this XmlWriter writer, T value)
@@ -164,9 +160,9 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
 
         public static void WriteValue<T>(this XmlWriter writer, T value)
         {
-            if (writer.TryWritePrimitiveValue(value)) return;
-            if (writer.TryWriteStringValue(value)) return;
             if (writer.TryWriteXmlSerializableValue(value)) return;
+            if (writer.TryWriteStringValue(value)) return;
+            if (writer.TryWritePrimitiveValue(value)) return;
         }
 
         public static void SafeWriteElementString<T>(this XmlWriter writer, string localName, T value)
