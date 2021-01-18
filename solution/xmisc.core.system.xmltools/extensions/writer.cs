@@ -131,7 +131,6 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
                 writer.WriteValue(value);
                 return true;
             }
-
             return false;
         }
 
@@ -144,7 +143,6 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
                 if (!string.IsNullOrWhiteSpace(str)) writer.WriteValue(str);
                 return true;
             }
-
             return false;
         }
 
@@ -171,7 +169,7 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             else
             {
                 writer.WriteStartElement(localName);
-                writer.WriteValue(value);
+                writer.WriteValue<T>(value);
                 writer.WriteEndElement();
             }
         }
@@ -182,7 +180,7 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             else
             {
                 writer.WriteStartElement(localName, ns);
-                writer.WriteValue(value);
+                writer.WriteValue<T>(value);
                 writer.WriteEndElement();
             }
         }
@@ -193,7 +191,7 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             else
             {
                 writer.WriteStartElement(prefix, localName, ns);
-                writer.WriteValue(value);
+                writer.WriteValue<T>(value);
                 writer.WriteEndElement();
             }
         }
@@ -206,7 +204,7 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
                 writer.WriteStartElement(localName);
                 foreach (var attribute in attributes)
                     writer.SafeWriteAttributeString(attribute.localName, attribute.value);
-                writer.WriteValue(value);
+                writer.WriteValue<T>(value);
                 writer.WriteEndElement();
             }
         }
@@ -219,7 +217,7 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
                 writer.WriteStartElement(localName, ns);
                 foreach (var attribute in attributes)
                     writer.SafeWriteAttributeString(attribute.localName, attribute.value);
-                writer.WriteValue(value);
+                writer.WriteValue<T>(value);
                 writer.WriteEndElement();
             }
         }
@@ -232,7 +230,7 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
                 writer.WriteStartElement(prefix, localName, ns);
                 foreach (var attribute in attributes)
                     writer.SafeWriteAttributeString(attribute.localName, attribute.value);
-                writer.WriteValue(value);
+                writer.WriteValue<T>(value);
                 writer.WriteEndElement();
             }
         }
@@ -314,9 +312,10 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
 
         public static async Task WriteValueAsync<T>(this XmlWriter writer, T value)
         {
-            if (writer.TryWritePrimitiveValue(value)) return;
-            if (await writer.TryWriteStringValueAsync(value)) return;
             if (writer.TryWriteXmlSerializableValue(value)) return;
+            if (await writer.TryWriteStringValueAsync(value)) return;
+            if (writer.TryWritePrimitiveValue(value)) return;
+
         }
 
         public static async Task SafeWriteElementStringAsync<T>(this XmlWriter writer, string localName, T value)
