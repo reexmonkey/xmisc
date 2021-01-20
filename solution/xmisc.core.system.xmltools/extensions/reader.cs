@@ -116,7 +116,6 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
         public static T SafeReadElementContentAs<T>(this XmlReader reader, Func<T> ctor)
             where T : IXmlSerializable
         {
-            if (reader.IsEmptyElement && !reader.HasAttributes ) return default;
             var value = ctor();
             value.ReadXml(reader);
             return value;
