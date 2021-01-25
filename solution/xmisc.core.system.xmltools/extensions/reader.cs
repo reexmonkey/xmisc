@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
@@ -31,6 +32,20 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             return !string.IsNullOrEmpty(value) ? XmlConvert.ToInt16(value) : default;
         }
 
+        public static short SafeReadElementContentAsInt16(this XmlReader reader, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? short.Parse(value, NumberStyles.Integer, provider) : default;
+        }
+
+        public static short SafeReadElementContentAsInt16(this XmlReader reader, string localName, string ns, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? short.Parse(value, NumberStyles.Integer, provider) : default;
+        }
+
         public static short? SafeReadElementContentAsNullableInt16(this XmlReader reader)
         {
             if (reader.IsEmptyElement) return default;
@@ -45,6 +60,20 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             return !string.IsNullOrEmpty(value) ? value.ToNullableInt16() : default;
         }
 
+        public static short? SafeReadElementContentAsNullableInt16(this XmlReader reader, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? value.ToNullableInt16(provider) : default;
+        }
+
+        public static short? SafeReadElementContentAsNullableInt16(this XmlReader reader, string localName, string ns, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? value.ToNullableInt16(provider) : default;
+        }
+
         public static int SafeReadElementContentAsInt32(this XmlReader reader) => !reader.IsEmptyElement
             ? reader.ReadElementContentAsInt()
             : default;
@@ -53,6 +82,20 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             => !reader.IsEmptyElement
             ? reader.ReadElementContentAsInt(localName, ns)
             : default;
+
+        public static int SafeReadElementContentAsInt32(this XmlReader reader, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? int.Parse(value, NumberStyles.Integer, provider) : default;
+        }
+
+        public static int SafeReadElementContentAsInt32(this XmlReader reader, string localName, string ns, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? int.Parse(value, NumberStyles.Integer, provider) : default;
+        }
 
         public static int? SafeReadElementContentAsNullableInt32(this XmlReader reader)
         {
@@ -68,6 +111,20 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             return !string.IsNullOrEmpty(value) ? value.ToNullableInt32() : default;
         }
 
+        public static int? SafeReadElementContentAsNullableInt32(this XmlReader reader, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? value.ToNullableInt32(provider) : default;
+        }
+
+        public static int? SafeReadElementContentAsNullableInt32(this XmlReader reader, string localName, string ns, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? value.ToNullableInt32(provider) : default;
+        }
+
         public static long SafeReadElementContentAsInt64(this XmlReader reader)
             => !reader.IsEmptyElement
             ? reader.ReadElementContentAsLong()
@@ -77,6 +134,20 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             => !reader.IsEmptyElement
             ? reader.ReadElementContentAsLong(localName, ns)
             : default;
+
+        public static long SafeReadElementContentAsInt64(this XmlReader reader, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? long.Parse(value, NumberStyles.Integer, provider) : default;
+        }
+
+        public static long SafeReadElementContentAsInt64(this XmlReader reader, string localName, string ns, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? long.Parse(value, NumberStyles.Integer, provider) : default;
+        }
 
         public static long? SafeReadElementContentAsNullableInt64(this XmlReader reader)
         {
@@ -90,6 +161,20 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             if (reader.IsEmptyElement) return default;
             var value = reader.ReadElementContentAsString(localName, ns);
             return !string.IsNullOrEmpty(value) ? value.ToNullableInt64() : default;
+        }
+
+        public static long? SafeReadElementContentAsNullableInt64(this XmlReader reader, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? value.ToNullableInt64(provider) : default;
+        }
+
+        public static long? SafeReadElementContentAsNullableInt64(this XmlReader reader, string localName, string ns, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? value.ToNullableInt64(provider) : default;
         }
 
         public static byte SafeReadElementContentAsByte(this XmlReader reader)
@@ -218,6 +303,20 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             return !string.IsNullOrEmpty(value) ? XmlConvert.ToDateTime(value, option) : default;
         }
 
+        public static DateTime SafeReadElementContentAsDateTime(this XmlReader reader, IFormatProvider provider, DateTimeStyles styles)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? DateTime.Parse(value, provider, styles) : default;
+        }
+
+        public static DateTime SafeReadElementContentAsDateTime(this XmlReader reader, string localName, string ns, IFormatProvider provider, DateTimeStyles styles)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? DateTime.Parse(value, provider, styles) : default;
+        }
+
         public static DateTime? SafeReadElementContentAsNullableDateTime(this XmlReader reader, XmlDateTimeSerializationMode option)
         {
             if (reader.IsEmptyElement) return default;
@@ -230,6 +329,20 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             if (reader.IsEmptyElement) return default;
             var value = reader.ReadElementContentAsString(localName, ns);
             return !string.IsNullOrEmpty(value) ? value.ToNullableDateTime(option) : default;
+        }
+
+        public static DateTime? SafeReadElementContentAsNullableDateTime(this XmlReader reader, IFormatProvider provider, DateTimeStyles styles)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? value.ToNullableDateTime(provider, styles) : default;
+        }
+
+        public static DateTime? SafeReadElementContentAsNullableDateTime(this XmlReader reader, string localName, string ns, IFormatProvider provider, DateTimeStyles styles)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? value.ToNullableDateTime(provider, styles) : default;
         }
 
         public static DateTimeOffset SafeReadElementContentAsDateTimeOffset(this XmlReader reader)
@@ -298,6 +411,24 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             ? reader.ReadElementContentAsDouble(localName, ns)
             : default;
 
+        public static double SafeReadElementContentAsDouble(this XmlReader reader, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value)
+                ? double.Parse(value, NumberStyles.Float, provider)
+                : default;
+        }
+
+        public static double SafeReadElementContentAsDouble(this XmlReader reader, string localName, string ns, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value)
+                ? double.Parse(value, NumberStyles.Float, provider)
+                : default;
+        }
+
         public static double? SafeReadElementContentAsNullableDouble(this XmlReader reader)
         {
             if (reader.IsEmptyElement) return default;
@@ -312,6 +443,20 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             return !string.IsNullOrEmpty(value) ? value.ToNullableDouble() : default;
         }
 
+        public static double? SafeReadElementContentAsNullableDouble(this XmlReader reader, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? value.ToNullableDouble(provider) : default;
+        }
+
+        public static double? SafeReadElementContentAsNullableDouble(this XmlReader reader, string localName, string ns, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? value.ToNullableDouble(provider) : default;
+        }
+
         public static float SafeReadElementContentAsFloat(this XmlReader reader)
             => !reader.IsEmptyElement
             ? reader.ReadElementContentAsFloat() : default;
@@ -320,6 +465,24 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             => !reader.IsEmptyElement
             ? reader.ReadElementContentAsFloat(localName, ns)
             : default;
+
+        public static float SafeReadElementContentAsFloat(this XmlReader reader, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value)
+                ? float.Parse(value, NumberStyles.Float, provider)
+                : default;
+        }
+
+        public static float SafeReadElementContentAsFloat(this XmlReader reader, string localName, string ns, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value)
+                ? float.Parse(value, NumberStyles.Float, provider)
+                : default;
+        }
 
         public static float? SafeReadElementContentAsNullableFloat(this XmlReader reader)
         {
@@ -335,6 +498,20 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             return !string.IsNullOrEmpty(value) ? value.ToNullableFloat() : default;
         }
 
+        public static float? SafeReadElementContentAsNullableFloat(this XmlReader reader, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? value.ToNullableFloat(provider) : default;
+        }
+
+        public static float? SafeReadElementContentAsNullableFloat(this XmlReader reader, string localName, string ns, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? value.ToNullableFloat(provider) : default;
+        }
+
         public static decimal SafeReadElementContentAsDecimal(this XmlReader reader)
             => !reader.IsEmptyElement
             ? reader.ReadElementContentAsDecimal()
@@ -344,6 +521,24 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             => !reader.IsEmptyElement
             ? reader.ReadElementContentAsDecimal(localName, ns)
             : default;
+
+        public static decimal SafeReadElementContentAsDecimal(this XmlReader reader, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value)
+                ? decimal.Parse(value, NumberStyles.Float, provider)
+                : default;
+        }
+
+        public static decimal SafeReadElementContentAsDecimal(this XmlReader reader, string localName, string ns, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value)
+                ? decimal.Parse(value, NumberStyles.Float, provider)
+                : default;
+        }
 
         public static decimal? SafeReadElementContentAsNullableDecimal(this XmlReader reader)
         {
@@ -357,6 +552,20 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             if (reader.IsEmptyElement) return default;
             var value = reader.ReadElementContentAsString(localName, ns);
             return !string.IsNullOrEmpty(value) ? value.ToNullableDecimal() : default;
+        }
+
+        public static decimal? SafeReadElementContentAsNullableDecimal(this XmlReader reader, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? value.ToNullableDecimal(provider) : default;
+        }
+
+        public static decimal? SafeReadElementContentAsNullableDecimal(this XmlReader reader, string localName, string ns, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? value.ToNullableDecimal(provider) : default;
         }
 
         public static bool SafeReadElementContentAsBoolean(this XmlReader reader) => !reader.IsEmptyElement && reader.ReadElementContentAsBoolean();
@@ -403,6 +612,192 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             if (reader.IsEmptyElement) return default;
             var value = reader.ReadElementContentAsString(localName, ns);
             return !string.IsNullOrEmpty(value) ? value.ToNullableTimeSpan() : default;
+        }
+
+        public static ushort SafeReadElementContentAsUInt16(this XmlReader reader)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? XmlConvert.ToUInt16(value) : default;
+        }
+
+        public static ushort SafeReadElementContentAsUInt16(this XmlReader reader, string localName, string ns)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? XmlConvert.ToUInt16(value) : default;
+        }
+
+        public static ushort SafeReadElementContentAsUInt16(this XmlReader reader, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? ushort.Parse(value, NumberStyles.AllowLeadingWhite
+                | NumberStyles.AllowTrailingWhite
+                | NumberStyles.AllowTrailingSign
+                | NumberStyles.AllowThousands, provider) : default;
+        }
+
+        public static ushort SafeReadElementContentAsUInt16(this XmlReader reader, string localName, string ns, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? ushort.Parse(value, NumberStyles.AllowLeadingWhite
+                | NumberStyles.AllowTrailingWhite
+                | NumberStyles.AllowTrailingSign
+                | NumberStyles.AllowThousands, provider) : default;
+        }
+
+        public static ushort? SafeReadElementContentAsNullableUInt16(this XmlReader reader)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? value.ToNullableUInt16() : default;
+        }
+
+        public static ushort? SafeReadElementContentAsNullableUInt16(this XmlReader reader, string localName, string ns)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? value.ToNullableUInt16() : default;
+        }
+
+        public static ushort? SafeReadElementContentAsNullableUInt16(this XmlReader reader, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? value.ToNullableUInt16(provider) : default;
+        }
+
+        public static ushort? SafeReadElementContentAsNullableUInt16(this XmlReader reader, string localName, string ns, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? value.ToNullableUInt16(provider) : default;
+        }
+
+        public static uint SafeReadElementContentAsUInt32(this XmlReader reader)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? XmlConvert.ToUInt32(value) : default;
+        }
+
+        public static uint SafeReadElementContentAsUInt32(this XmlReader reader, string localName, string ns)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? XmlConvert.ToUInt32(value) : default;
+        }
+
+        public static uint SafeReadElementContentAsUInt32(this XmlReader reader, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? uint.Parse(value, NumberStyles.AllowLeadingWhite
+                | NumberStyles.AllowTrailingWhite
+                | NumberStyles.AllowTrailingSign
+                | NumberStyles.AllowThousands, provider) : default;
+        }
+
+        public static uint SafeReadElementContentAsUInt32(this XmlReader reader, string localName, string ns, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? uint.Parse(value, NumberStyles.AllowLeadingWhite
+                | NumberStyles.AllowTrailingWhite
+                | NumberStyles.AllowTrailingSign
+                | NumberStyles.AllowThousands, provider) : default;
+        }
+
+        public static uint? SafeReadElementContentAsNullableUInt32(this XmlReader reader)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? value.ToNullableUInt32() : default;
+        }
+
+        public static uint? SafeReadElementContentAsNullableUInt32(this XmlReader reader, string localName, string ns)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? value.ToNullableUInt32() : default;
+        }
+
+        public static uint? SafeReadElementContentAsNullableUInt32(this XmlReader reader, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? value.ToNullableUInt32(provider) : default;
+        }
+
+        public static uint? SafeReadElementContentAsNullableUInt32(this XmlReader reader, string localName, string ns, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? value.ToNullableUInt32(provider) : default;
+        }
+
+        public static ulong SafeReadElementContentAsUInt64(this XmlReader reader)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? XmlConvert.ToUInt64(value) : default;
+        }
+
+        public static ulong SafeReadElementContentAsUInt64(this XmlReader reader, string localName, string ns)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? XmlConvert.ToUInt64(value) : default;
+        }
+
+        public static ulong SafeReadElementContentAsUInt64(this XmlReader reader, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? ulong.Parse(value, NumberStyles.AllowLeadingWhite
+                | NumberStyles.AllowTrailingWhite
+                | NumberStyles.AllowTrailingSign
+                | NumberStyles.AllowThousands, provider) : default;
+        }
+
+        public static ulong SafeReadElementContentAsUInt64(this XmlReader reader, string localName, string ns, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? ulong.Parse(value, NumberStyles.AllowLeadingWhite
+                | NumberStyles.AllowTrailingWhite
+                | NumberStyles.AllowTrailingSign
+                | NumberStyles.AllowThousands, provider) : default;
+        }
+
+        public static ulong? SafeReadElementContentAsNullableUInt64(this XmlReader reader)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? value.ToNullableUInt64() : default;
+        }
+
+        public static ulong? SafeReadElementContentAsNullableUInt64(this XmlReader reader, string localName, string ns)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? value.ToNullableUInt64() : default;
+        }
+
+        public static ulong? SafeReadElementContentAsNullableUInt64(this XmlReader reader, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString();
+            return !string.IsNullOrEmpty(value) ? value.ToNullableUInt64(provider) : default;
+        }
+
+        public static ulong? SafeReadElementContentAsNullableUInt64(this XmlReader reader, string localName, string ns, IFormatProvider provider)
+        {
+            if (reader.IsEmptyElement) return default;
+            var value = reader.ReadElementContentAsString(localName, ns);
+            return !string.IsNullOrEmpty(value) ? value.ToNullableUInt64(provider) : default;
         }
 
         public static int SafeReadElementContentAsBase64(this XmlReader reader, byte[] buffer, int index, int count)

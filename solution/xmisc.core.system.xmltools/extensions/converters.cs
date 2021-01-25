@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Xml;
 
 namespace reexmonkey.xmisc.core.system.xmltools.extensions
@@ -125,6 +126,11 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             }
         }
 
+        public static DateTime? ToNullableDateTime(this string value, IFormatProvider provider, DateTimeStyles styles)
+        {
+            return DateTime.TryParse(value, provider, styles, out DateTime result) ? result : default;
+        }
+
         public static DateTimeOffset? ToNullableDateTimeOffset(this string value, string format = null)
         {
             try
@@ -132,30 +138,6 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
                 return !string.IsNullOrEmpty(format)
                     ? XmlConvert.ToDateTimeOffset(value, format)
                     : XmlConvert.ToDateTimeOffset(value);
-            }
-            catch (ArgumentNullException)
-            {
-                return default;
-            }
-            catch (FormatException)
-            {
-                return default;
-            }
-            catch (OverflowException)
-            {
-                return default;
-            }
-            catch (Exception)
-            {
-                return default;
-            }
-        }
-
-        public static decimal? ToNullableDecimal(this string value)
-        {
-            try
-            {
-                return XmlConvert.ToDecimal(value);
             }
             catch (ArgumentNullException)
             {
@@ -199,6 +181,11 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             }
         }
 
+        public static double? ToNullableDouble(this string value, IFormatProvider provider)
+        {
+            return double.TryParse(value, NumberStyles.Float, provider, out double result) ? result : default;
+        }
+
         public static float? ToNullableFloat(this string value)
         {
             try
@@ -221,6 +208,40 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             {
                 return default;
             }
+        }
+
+        public static float? ToNullableFloat(this string value, IFormatProvider provider)
+        {
+            return float.TryParse(value, NumberStyles.Float, provider, out float result) ? result : default;
+        }
+
+        public static decimal? ToNullableDecimal(this string value)
+        {
+            try
+            {
+                return XmlConvert.ToDecimal(value);
+            }
+            catch (ArgumentNullException)
+            {
+                return default;
+            }
+            catch (FormatException)
+            {
+                return default;
+            }
+            catch (OverflowException)
+            {
+                return default;
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
+        public static decimal? ToNullableDecimal(this string value, IFormatProvider provider)
+        {
+            return decimal.TryParse(value, NumberStyles.Float, provider, out decimal result) ? result : default;
         }
 
         public static short? ToNullableInt16(this string value)
@@ -247,6 +268,11 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             }
         }
 
+        public static short? ToNullableInt16(this string value, IFormatProvider provider)
+        {
+            return short.TryParse(value, NumberStyles.Integer, provider, out short result) ? result : default;
+        }
+
         public static int? ToNullableInt32(this string value)
         {
             try
@@ -271,6 +297,11 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             }
         }
 
+        public static int? ToNullableInt32(this string value, IFormatProvider provider)
+        {
+            return int.TryParse(value, NumberStyles.Integer, provider, out int result) ? result : default;
+        }
+
         public static long? ToNullableInt64(this string value)
         {
             try
@@ -293,6 +324,11 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             {
                 return default;
             }
+        }
+
+        public static long? ToNullableInt64(this string value, IFormatProvider provider)
+        {
+            return long.TryParse(value, NumberStyles.Integer, provider, out long result) ? result : default;
         }
 
         public static TimeSpan? ToNullableTimeSpan(this string value)
@@ -367,6 +403,16 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             }
         }
 
+        public static ushort? ToNullableUInt16(this string value, IFormatProvider provider)
+        {
+            return ushort.TryParse(value, 
+                NumberStyles.AllowLeadingWhite 
+                | NumberStyles.AllowTrailingWhite 
+                | NumberStyles.AllowTrailingSign 
+                | NumberStyles.AllowThousands, 
+                provider, out ushort result) ? result : default;
+        }
+
         public static uint? ToNullableUInt32(this string value)
         {
             try
@@ -389,6 +435,16 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             {
                 return default;
             }
+        }
+
+        public static uint? ToNullableUInt32(this string value, IFormatProvider provider)
+        {
+            return uint.TryParse(value,
+                NumberStyles.AllowLeadingWhite
+                | NumberStyles.AllowTrailingWhite
+                | NumberStyles.AllowTrailingSign
+                | NumberStyles.AllowThousands,
+                provider, out uint result) ? result : default;
         }
 
         public static ulong? ToNullableUInt64(this string value)
@@ -414,58 +470,27 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
                 return default;
             }
         }
-    
-        public static T? ToNullableEnum<T>(this string value, bool ignoreCase) where T: struct, Enum
-        {
-            try
-            {
-                var success = Enum.TryParse(value, ignoreCase, out T result);
-                return success ? result : default;
 
-            }
-            catch (ArgumentNullException)
-            {
-                return default;
-            }
-            catch (FormatException)
-            {
-                return default;
-            }
-            catch (OverflowException)
-            {
-                return default;
-            }
-            catch (Exception)
-            {
-                return default;
-            }
-        }
-    
-        public static T ToEnum<T>(this string value, bool ignoreCase) where T: struct, Enum
+        public static ulong? ToNullableUInt64(this string value, IFormatProvider provider)
         {
-            try
-            {
-                var success = Enum.TryParse(value, ignoreCase, out T result);
-                return success ? result : default;
-
-            }
-            catch (ArgumentNullException)
-            {
-                return default;
-            }
-            catch (FormatException)
-            {
-                return default;
-            }
-            catch (OverflowException)
-            {
-                return default;
-            }
-            catch (Exception)
-            {
-                return default;
-            }
+            return ulong.TryParse(value,
+                NumberStyles.AllowLeadingWhite
+                | NumberStyles.AllowTrailingWhite
+                | NumberStyles.AllowTrailingSign
+                | NumberStyles.AllowThousands,
+                provider, out ulong result) ? result : default;
         }
-    
+
+        public static T? ToNullableEnum<T>(this string value, bool ignoreCase = true) where T : struct, Enum
+        {
+            var success = Enum.TryParse(value, ignoreCase, out T result);
+            return success ? result : default;
+        }
+
+        public static T ToEnum<T>(this string value, bool ignoreCase = true) where T : struct, Enum
+        {
+            var success = Enum.TryParse(value, ignoreCase, out T result);
+            return success ? result : default;
+        }
     }
 }
