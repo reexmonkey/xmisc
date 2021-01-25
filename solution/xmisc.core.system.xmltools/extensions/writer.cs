@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -7,6 +6,271 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
 {
     public static class XmlWriterExtensions
     {
+        #region Values
+
+        public static void WriteInt16Value(this XmlWriter writer, short value) => writer.WriteValue(XmlConvert.ToString(value));
+
+        public static void WriteUInt16Value(this XmlWriter writer, ushort value) => writer.WriteValue(XmlConvert.ToString(value));
+
+        public static void WriteUInt32Value(this XmlWriter writer, uint value) => writer.WriteValue(XmlConvert.ToString(value));
+
+        public static void WriteUInt64Value(this XmlWriter writer, ulong value) => writer.WriteValue(XmlConvert.ToString(value));
+
+        public static void WriteGuidValue(this XmlWriter writer, Guid value) => writer.WriteValue(XmlConvert.ToString(value));
+
+        public static void WriteValue(this XmlWriter writer, DateTime value, XmlDateTimeSerializationMode mode)
+            => writer.WriteValue(XmlConvert.ToString(value, mode));
+
+        public static void WriteDateTimeOffsetValue(this XmlWriter writer, DateTimeOffset value) => writer.WriteValue(XmlConvert.ToString(value));
+
+        public static void WriteValue(this XmlWriter writer, DateTimeOffset value, string format) => writer.WriteValue(XmlConvert.ToString(value, format));
+
+        public static void WriteTimeSpanValue(this XmlWriter writer, TimeSpan value) => writer.WriteValue(XmlConvert.ToString(value));
+
+        public static void WriteByteValue(this XmlWriter writer, byte value) => writer.WriteValue(XmlConvert.ToString(value));
+
+        public static void WriteSByteValue(this XmlWriter writer, sbyte value) => writer.WriteValue(XmlConvert.ToString(value));
+
+        public static void WriteCharValue(this XmlWriter writer, char value) => writer.WriteValue(XmlConvert.ToString(value));
+
+        public static void WriteBytes(this XmlWriter writer, byte[] value) => writer.WriteValue(Convert.ToBase64String(value));
+
+        public static void WriteEnumValue<T>(this XmlWriter writer, T value, string format) where T : struct, Enum
+            => writer.WriteValue(value.ToString(format));
+
+        public static void WriteValue<T>(this XmlWriter writer, T value) where T : IXmlSerializable
+        {
+            value.WriteXml(writer);
+        }
+
+        #endregion Values
+
+        #region Attributes
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string value)
+            => writer.WriteAttributeString(localName, value);
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, string value)
+            => writer.WriteAttributeString(localName, ns, value);
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, string value)
+            => writer.WriteAttributeString(prefix, localName, ns, value);
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, bool value)
+    => writer.WriteAttributeString(localName, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, bool value)
+            => writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, bool value)
+            => writer.WriteAttributeString(localName, prefix, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, short value)
+            => writer.WriteAttributeString(localName, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, short value)
+            => writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, short value)
+            => writer.WriteAttributeString(localName, prefix, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, int value)
+            => writer.WriteAttributeString(localName, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, int value)
+            => writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, int value)
+            => writer.WriteAttributeString(localName, prefix, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, long value)
+            => writer.WriteAttributeString(localName, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, long value)
+            => writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, long value)
+            => writer.WriteAttributeString(localName, prefix, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, float value)
+            => writer.WriteAttributeString(localName, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, float value)
+            => writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, float value)
+            => writer.WriteAttributeString(localName, prefix, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, double value)
+            => writer.WriteAttributeString(localName, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, double value)
+            => writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, double value)
+            => writer.WriteAttributeString(localName, prefix, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, decimal value)
+            => writer.WriteAttributeString(localName, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, decimal value)
+            => writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, decimal value)
+            => writer.WriteAttributeString(localName, prefix, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, DateTime value, XmlDateTimeSerializationMode? mode = null)
+        {
+            if (mode.HasValue) writer.WriteAttributeString(localName, XmlConvert.ToString(value, mode.Value));
+            else writer.WriteAttributeString(localName, XmlConvert.ToString(value, mode.Value));
+        }
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, DateTime value, XmlDateTimeSerializationMode? mode = null)
+        {
+            if (mode.HasValue) writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value));
+            else writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value, mode.Value));
+        }
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, DateTime value, XmlDateTimeSerializationMode? mode = null)
+        {
+            if (mode.HasValue) writer.WriteAttributeString(prefix, localName, ns, XmlConvert.ToString(value));
+            else writer.WriteAttributeString(prefix, localName, ns, XmlConvert.ToString(value));
+        }
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, DateTimeOffset value, string format = null)
+        {
+            if (string.IsNullOrEmpty(format)) writer.WriteAttributeString(localName, XmlConvert.ToString(value, format));
+            else writer.WriteAttributeString(localName, XmlConvert.ToString(value));
+        }
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, DateTimeOffset value, string format = null)
+        {
+            if (string.IsNullOrEmpty(format)) writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value, format));
+            else writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value));
+        }
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, DateTimeOffset value, string format = null)
+        {
+            if (string.IsNullOrEmpty(format)) writer.WriteAttributeString(prefix, localName, ns, XmlConvert.ToString(value, format));
+            else writer.WriteAttributeString(prefix, localName, ns, XmlConvert.ToString(value));
+        }
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, TimeSpan value)
+            => writer.WriteAttributeString(localName, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, TimeSpan value)
+            => writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, TimeSpan value)
+            => writer.WriteAttributeString(prefix, localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, Guid value)
+            => writer.WriteAttributeString(localName, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, Guid value)
+            => writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, Guid value)
+            => writer.WriteAttributeString(prefix, localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, byte value)
+            => writer.WriteAttributeString(localName, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, byte value)
+            => writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, byte value)
+            => writer.WriteAttributeString(prefix, localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, sbyte value)
+            => writer.WriteAttributeString(localName, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, sbyte value)
+            => writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, sbyte value)
+            => writer.WriteAttributeString(prefix, localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, char value)
+            => writer.WriteAttributeString(localName, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, char value)
+            => writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, char value)
+            => writer.WriteAttributeString(prefix, localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, ushort value)
+            => writer.WriteAttributeString(localName, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, ushort value)
+            => writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, ushort value)
+            => writer.WriteAttributeString(prefix, localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, uint value)
+            => writer.WriteAttributeString(localName, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, uint value)
+            => writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, uint value)
+            => writer.WriteAttributeString(prefix, localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, ulong value)
+            => writer.WriteAttributeString(localName, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, ulong value)
+            => writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, ulong value)
+            => writer.WriteAttributeString(prefix, localName, ns, XmlConvert.ToString(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, byte[] value)
+            => writer.WriteAttributeString(localName, Convert.ToBase64String(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, byte[] value)
+            => writer.WriteAttributeString(localName, ns, Convert.ToBase64String(value));
+
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, byte[] value)
+            => writer.WriteAttributeString(prefix, localName, ns, Convert.ToBase64String(value));
+
+        public static void SafeWriteAttributeString<T>(this XmlWriter writer, string localName, T value, string format) where T : struct, Enum
+            => writer.WriteAttributeString(localName, value.ToString(format));
+
+        public static void SafeWriteAttributeString<T>(this XmlWriter writer, string localName, string ns, T value, string format) where T : struct, Enum
+            => writer.WriteAttributeString(localName, ns, value.ToString(format));
+
+        public static void SafeWriteAttributeString<T>(this XmlWriter writer, string prefix, string localName, string ns, T value, string format)
+            where T : struct, Enum
+            => writer.WriteAttributeString(prefix, localName, ns, value.ToString(format));
+
+        #endregion Attributes
+
+        #region Elements
+
+        public static void SafeWriteElementString<T>(this XmlWriter writer, string localName, T value) where T : IXmlSerializable
+        {
+            writer.WriteStartElement(localName);
+            writer.WriteValue<T>(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString<T>(this XmlWriter writer, string localName, string ns, T value) where T : IXmlSerializable
+        {
+            writer.WriteStartElement(localName, ns);
+            writer.WriteValue<T>(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString<T>(this XmlWriter writer, string prefix, string localName, string ns, T value) where T : IXmlSerializable
+        {
+            writer.WriteStartElement(prefix, localName, ns);
+            writer.WriteValue<T>(value);
+            writer.WriteEndElement();
+        }
+
         public static void SafeWriteElementString(this XmlWriter writer, string localName, string value)
         {
             if (!string.IsNullOrEmpty(value))
@@ -25,370 +289,411 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
                 writer.WriteElementString(prefix, localName, ns, value);
         }
 
-        public static void SafeWriteElementString(this XmlWriter writer, string localName, string value, params (string localName, string value)[] attributes)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, bool value)
         {
-            if (!string.IsNullOrEmpty(value))
-            {
-                writer.WriteStartElement(localName);
-                foreach (var attribute in attributes)
-                    writer.SafeWriteAttributeString(attribute.localName, attribute.value);
-                writer.WriteEndElement();
-            }
+            writer.WriteStartElement(localName);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, string value, params (string localName, string value)[] attributes)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, bool value)
         {
-            if (!string.IsNullOrEmpty(value))
-            {
-                writer.WriteStartElement(localName, ns);
-                foreach (var attribute in attributes)
-                    writer.SafeWriteAttributeString(attribute.localName, attribute.value);
-                writer.WriteEndElement();
-            }
+            writer.WriteStartElement(localName, ns);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, string value, params (string localName, string value)[] attributes)
+        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, bool value)
         {
-            if (!string.IsNullOrEmpty(value))
-            {
-                writer.WriteStartElement(prefix, localName, ns);
-                foreach (var attribute in attributes)
-                    writer.SafeWriteAttributeString(attribute.localName, attribute.value);
-                writer.WriteEndElement();
-            }
+            writer.WriteStartElement(prefix, localName, ns);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string value)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, short value)
         {
-            if (!string.IsNullOrEmpty(value)) writer.WriteAttributeString(localName, value);
+            writer.WriteStartElement(localName);
+            writer.WriteInt16Value(value);
+            writer.WriteEndElement();
         }
 
-        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, string value)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, short value)
         {
-            if (!string.IsNullOrEmpty(value)) writer.WriteAttributeString(localName, ns, value);
+            writer.WriteStartElement(localName, ns);
+            writer.WriteInt16Value(value);
+            writer.WriteEndElement();
         }
 
-        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, string value)
+        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, short value)
         {
-            if (!string.IsNullOrEmpty(value)) writer.WriteAttributeString(prefix, localName, ns, value);
+            writer.WriteStartElement(prefix, localName, ns);
+            writer.WriteInt16Value(value);
+            writer.WriteEndElement();
         }
 
-        private static bool TryWritePrimitiveValue<T>(this XmlWriter writer, T value)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, int value)
         {
-            if (value is bool)
-            {
-                writer.WriteValue(Convert.ToBoolean(value));
-                return true;
-            }
-            if (value is short)
-            {
-                writer.WriteValue(Convert.ToUInt16(value));
-                return true;
-            }
-            if (value is int)
-            {
-                writer.WriteValue(Convert.ToInt32(value));
-                return true;
-            }
-            if (value is long)
-            {
-                writer.WriteValue(Convert.ToInt64(value));
-                return true;
-            }
-            if (value is float)
-            {
-                writer.WriteValue(Convert.ToSingle(value));
-                return true;
-            }
-
-            if (value is decimal)
-            {
-                writer.WriteValue(Convert.ToDecimal(value));
-                return true;
-            }
-
-            if (value is double)
-            {
-                writer.WriteValue(Convert.ToDouble(value));
-                return true;
-            }
-
-            if (value is DateTime)
-            {
-                writer.WriteValue(Convert.ToDateTime(value));
-                return true;
-            }
-
-            if (value is Enum)
-            {
-                var @enum = value as Enum;
-                writer.WriteValue(@enum.ToString("F"));
-                return true;
-            }
-
-            if (value is ushort || value is uint || value is ulong || value is DateTimeOffset)
-            {
-                writer.WriteValue(value);
-                return true;
-            }
-            return false;
+            writer.WriteStartElement(localName);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        private static bool TryWriteStringValue<T>(this XmlWriter writer, T value)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, int value)
         {
-            if (value is string)
-            {
-                var str = value as string;
-                if (str != null && string.IsNullOrWhiteSpace(str)) writer.WriteWhitespace(str); //str is whitespace
-                if (!string.IsNullOrWhiteSpace(str)) writer.WriteValue(str);
-                return true;
-            }
-            return false;
+            writer.WriteStartElement(localName, ns);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        private static bool TryWriteXmlSerializableValue<T>(this XmlWriter writer, T value)
+        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, int value)
         {
-            if (value is IXmlSerializable serializable)
-            {
-                serializable.WriteXml(writer);
-                return true;
-            }
-            return false;
+            writer.WriteStartElement(prefix, localName, ns);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static void WriteValue<T>(this XmlWriter writer, T value)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, long value)
         {
-            if (writer.TryWriteXmlSerializableValue(value)) return;
-            if (writer.TryWriteStringValue(value)) return;
-            if (writer.TryWritePrimitiveValue(value)) return;
+            writer.WriteStartElement(localName);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static void SafeWriteElementString<T>(this XmlWriter writer, string localName, T value)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, long value)
         {
-            if (value is string) writer.SafeWriteElementString(localName, value.ToString());
-            else
-            {
-                writer.WriteStartElement(localName);
-                writer.WriteValue<T>(value);
-                writer.WriteEndElement();
-            }
+            writer.WriteStartElement(localName, ns);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static void SafeWriteElementString<T>(this XmlWriter writer, string localName, string ns, T value)
+        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, long value)
         {
-            if (value is string) writer.SafeWriteElementString(localName, ns, value.ToString());
-            else
-            {
-                writer.WriteStartElement(localName, ns);
-                writer.WriteValue<T>(value);
-                writer.WriteEndElement();
-            }
+            writer.WriteStartElement(prefix, localName, ns);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static void SafeWriteElementString<T>(this XmlWriter writer, string prefix, string localName, string ns, T value)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, float value)
         {
-            if (value is string) writer.SafeWriteElementString(prefix, localName, ns, value.ToString());
-            else
-            {
-                writer.WriteStartElement(prefix, localName, ns);
-                writer.WriteValue<T>(value);
-                writer.WriteEndElement();
-            }
+            writer.WriteStartElement(localName);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static void SafeWriteElementString<T>(this XmlWriter writer, string localName, T value, params (string localName, string value)[] attributes)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, float value)
         {
-            if (value is string) writer.SafeWriteElementString(localName, value.ToString(), attributes);
-            else
-            {
-                writer.WriteStartElement(localName);
-                foreach (var attribute in attributes)
-                    writer.SafeWriteAttributeString(attribute.localName, attribute.value);
-                writer.WriteValue<T>(value);
-                writer.WriteEndElement();
-            }
+            writer.WriteStartElement(localName, ns);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static void SafeWriteElementString<T>(this XmlWriter writer, string localName, string ns, T value, params (string localName, string value)[] attributes)
+        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, float value)
         {
-            if (value is string) writer.SafeWriteElementString(localName, ns, value.ToString(), attributes);
-            else
-            {
-                writer.WriteStartElement(localName, ns);
-                foreach (var attribute in attributes)
-                    writer.SafeWriteAttributeString(attribute.localName, attribute.value);
-                writer.WriteValue<T>(value);
-                writer.WriteEndElement();
-            }
+            writer.WriteStartElement(prefix, localName, ns);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static void SafeWriteElementString<T>(this XmlWriter writer, string prefix, string localName, string ns, T value, params (string localName, string value)[] attributes)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, double value)
         {
-            if (value is string) writer.SafeWriteElementString(prefix, localName, ns, value.ToString(), attributes);
-            else
-            {
-                writer.WriteStartElement(prefix, localName, ns);
-                foreach (var attribute in attributes)
-                    writer.SafeWriteAttributeString(attribute.localName, attribute.value);
-                writer.WriteValue<T>(value);
-                writer.WriteEndElement();
-            }
+            writer.WriteStartElement(localName);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static async Task SafeWriteElementStringAsync(this XmlWriter writer, string localName, string value)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, double value)
         {
-            if (!string.IsNullOrEmpty(value))
-                await writer.WriteElementStringAsync(null, localName, null, value);
+            writer.WriteStartElement(localName, ns);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static async Task SafeWriteElementStringAsync(this XmlWriter writer, string localName, string ns, string value)
+        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, double value)
         {
-            if (!string.IsNullOrEmpty(value))
-                await writer.WriteElementStringAsync(null, localName, ns, value);
+            writer.WriteStartElement(prefix, localName, ns);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static async Task SafeWriteElementStringAsync(this XmlWriter writer, string prefix, string localName, string ns, string value)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, decimal value)
         {
-            if (!string.IsNullOrEmpty(value))
-                await writer.WriteElementStringAsync(prefix, localName, ns, value);
+            writer.WriteStartElement(localName);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static async Task SafeWriteElementStringAsync(this XmlWriter writer, string localName, string value, params (string localName, string value)[] attributes)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, decimal value)
         {
-            if (!string.IsNullOrEmpty(value))
-            {
-                await writer.WriteStartElementAsync(null, localName, null);
-                foreach (var attribute in attributes)
-                    await writer.SafeWriteAttributeStringAsync(attribute.localName, attribute.value);
-                await writer.WriteEndElementAsync();
-            }
+            writer.WriteStartElement(localName, ns);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static async Task SafeWriteElementStringAsync(this XmlWriter writer, string localName, string ns, string value, params (string localName, string value)[] attributes)
+        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, decimal value)
         {
-            if (!string.IsNullOrEmpty(value))
-            {
-                await writer.WriteStartElementAsync(null, localName, ns);
-                foreach (var attribute in attributes)
-                    await writer.SafeWriteAttributeStringAsync(attribute.localName, attribute.value);
-                await writer.WriteEndElementAsync();
-            }
+            writer.WriteStartElement(prefix, localName, ns);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static async Task SafeWriteElementStringAsync(this XmlWriter writer, string prefix, string localName, string ns, string value, params (string localName, string value)[] attributes)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, DateTime value, XmlDateTimeSerializationMode? mode = null)
         {
-            if (!string.IsNullOrEmpty(value))
-            {
-                await writer.WriteStartElementAsync(prefix, localName, ns);
-                foreach (var attribute in attributes)
-                    await writer.SafeWriteAttributeStringAsync(attribute.localName, attribute.value);
-                await writer.WriteEndElementAsync();
-            }
+            writer.WriteStartElement(localName);
+            if (mode.HasValue) writer.WriteValue(value, mode.Value);
+            else writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static async Task SafeWriteAttributeStringAsync(this XmlWriter writer, string localName, string value)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, DateTime value, XmlDateTimeSerializationMode? mode = null)
         {
-            if (!string.IsNullOrEmpty(value)) await writer.WriteAttributeStringAsync(null, localName, null, value);
+            writer.WriteStartElement(localName, ns);
+            if (mode.HasValue) writer.WriteValue(value, mode.Value);
+            else writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static async Task SafeWriteAttributeStringAsync(this XmlWriter writer, string localName, string ns, string value)
+        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, DateTime value, XmlDateTimeSerializationMode? mode = null)
         {
-            if (!string.IsNullOrEmpty(value)) await writer.WriteAttributeStringAsync(null, localName, ns, value);
+            writer.WriteStartElement(prefix, localName, ns);
+            if (mode.HasValue) writer.WriteValue(value, mode.Value);
+            else writer.WriteValue(value);
+            writer.WriteEndElement();
         }
 
-        public static async Task SafeWriteAttributeStringAsync(this XmlWriter writer, string prefix, string localName, string ns, string value)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, DateTimeOffset value, string format = null)
         {
-            if (!string.IsNullOrEmpty(value)) await writer.WriteAttributeStringAsync(prefix, localName, ns, value);
+            writer.WriteStartElement(localName);
+            if (string.IsNullOrEmpty(format)) writer.WriteValue(value);
+            else writer.WriteValue(value, format);
+            writer.WriteEndElement();
         }
 
-        private static async Task<bool> TryWriteStringValueAsync<T>(this XmlWriter writer, T value)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, DateTimeOffset value, string format = null)
         {
-            if (!(value is string)) return false;
-            var str = value.ToString();
-            if (str != null && string.IsNullOrWhiteSpace(str)) await writer.WriteWhitespaceAsync(str);
-            if (!string.IsNullOrWhiteSpace(str)) writer.WriteValue(str);
-            return true;
+            writer.WriteStartElement(localName, ns);
+            if (string.IsNullOrEmpty(format)) writer.WriteValue(value);
+            else writer.WriteValue(value, format);
+            writer.WriteEndElement();
         }
 
-        public static async Task WriteValueAsync<T>(this XmlWriter writer, T value)
+        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, DateTimeOffset value, string format = null)
         {
-            if (writer.TryWriteXmlSerializableValue(value)) return;
-            if (await writer.TryWriteStringValueAsync(value)) return;
-            if (writer.TryWritePrimitiveValue(value)) return;
-
+            writer.WriteStartElement(prefix, localName, ns);
+            if (string.IsNullOrEmpty(format)) writer.WriteValue(value);
+            else writer.WriteValue(value, format);
+            writer.WriteEndElement();
         }
 
-        public static async Task SafeWriteElementStringAsync<T>(this XmlWriter writer, string localName, T value)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, TimeSpan value)
         {
-            if (value is string) await writer.SafeWriteElementStringAsync(localName, value.ToString());
-            else
-            {
-                await writer.WriteStartElementAsync(null, localName, null);
-                await writer.WriteValueAsync(value);
-                await writer.WriteEndElementAsync();
-            }
+            writer.WriteStartElement(localName);
+            writer.WriteTimeSpanValue(value);
+            writer.WriteEndElement();
         }
 
-        public static async Task SafeWriteElementStringAsync<T>(this XmlWriter writer, string localName, string ns, T value)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, TimeSpan value)
         {
-            if (value is string) await writer.SafeWriteElementStringAsync(localName, ns, value.ToString());
-            else
-            {
-                await writer.WriteStartElementAsync(null, localName, ns);
-                await writer.WriteValueAsync(value);
-                await writer.WriteEndElementAsync();
-            }
+            writer.WriteStartElement(localName, ns);
+            writer.WriteTimeSpanValue(value);
+            writer.WriteEndElement();
         }
 
-        public static async Task SafeWriteElementStringAsync<T>(this XmlWriter writer, string prefix, string localName, string ns, T value)
+        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, TimeSpan value)
         {
-            if (value is string) await writer.SafeWriteElementStringAsync(prefix, localName, ns, value.ToString());
-            else
-            {
-                await writer.WriteStartElementAsync(prefix, localName, ns);
-                await writer.WriteValueAsync(value);
-                await writer.WriteEndElementAsync();
-            }
+            writer.WriteStartElement(prefix, localName, ns);
+            writer.WriteTimeSpanValue(value);
+            writer.WriteEndElement();
         }
 
-        public static async Task SafeWriteElementStringAsync<T>(this XmlWriter writer, string localName, T value, params (string localName, string value)[] attributes)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, Guid value)
         {
-            if (value is string) await writer.SafeWriteElementStringAsync(localName, value.ToString(), attributes);
-            else
-            {
-                await writer.WriteStartElementAsync(null, localName, null);
-                foreach (var attribute in attributes)
-                    await writer.SafeWriteAttributeStringAsync(attribute.localName, attribute.value);
-                await writer.WriteValueAsync(value);
-                await writer.WriteEndElementAsync();
-            }
+            writer.WriteStartElement(localName);
+            writer.WriteGuidValue(value);
+            writer.WriteEndElement();
         }
 
-        public static async Task SafeWriteElementStringAsync<T>(this XmlWriter writer, string localName, string ns, T value, params (string localName, string value)[] attributes)
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, Guid value)
         {
-            if (value is string) await writer.SafeWriteElementStringAsync(localName, ns, value.ToString(), attributes);
-            else
-            {
-                await writer.WriteStartElementAsync(null, localName, ns);
-                foreach (var attribute in attributes)
-                    await writer.SafeWriteAttributeStringAsync(attribute.localName, attribute.value);
-                await writer.WriteValueAsync(value);
-                await writer.WriteEndElementAsync();
-            }
+            writer.WriteStartElement(localName, ns);
+            writer.WriteGuidValue(value);
+            writer.WriteEndElement();
         }
 
-        public static async Task SafeWriteElementStringAsync<T>(this XmlWriter writer, string prefix, string localName, string ns, T value, params (string localName, string value)[] attributes)
+        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, Guid value)
         {
-            if (value is string) await writer.SafeWriteElementStringAsync(prefix, localName, ns, value.ToString(), attributes);
-            else
-            {
-                await writer.WriteStartElementAsync(prefix, localName, ns);
-                foreach (var attribute in attributes)
-                    await writer.SafeWriteAttributeStringAsync(attribute.localName, attribute.value);
-
-                await writer.WriteValueAsync(value);
-                await writer.WriteEndElementAsync();
-            }
+            writer.WriteStartElement(prefix, localName, ns);
+            writer.WriteGuidValue(value);
+            writer.WriteEndElement();
         }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, byte value)
+        {
+            writer.WriteStartElement(localName);
+            writer.WriteByteValue(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, byte value)
+        {
+            writer.WriteStartElement(localName, ns);
+            writer.WriteByteValue(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, byte value)
+        {
+            writer.WriteStartElement(prefix, localName, ns);
+            writer.WriteByteValue(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, sbyte value)
+        {
+            writer.WriteStartElement(localName);
+            writer.WriteSByteValue(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, sbyte value)
+        {
+            writer.WriteStartElement(localName, ns);
+            writer.WriteSByteValue(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, sbyte value)
+        {
+            writer.WriteStartElement(prefix, localName, ns);
+            writer.WriteSByteValue(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, char value)
+        {
+            writer.WriteStartElement(localName);
+            writer.WriteCharValue(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, char value)
+        {
+            writer.WriteStartElement(localName, ns);
+            writer.WriteCharValue(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, char value)
+        {
+            writer.WriteStartElement(prefix, localName, ns);
+            writer.WriteCharValue(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, ushort value)
+        {
+            writer.WriteStartElement(localName);
+            writer.WriteUInt16Value(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, ushort value)
+        {
+            writer.WriteStartElement(localName, ns);
+            writer.WriteUInt16Value(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, ushort value)
+        {
+            writer.WriteStartElement(prefix, localName, ns);
+            writer.WriteUInt16Value(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, uint value)
+        {
+            writer.WriteStartElement(localName);
+            writer.WriteUInt32Value(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, uint value)
+        {
+            writer.WriteStartElement(localName, ns);
+            writer.WriteUInt32Value(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, uint value)
+        {
+            writer.WriteStartElement(prefix, localName, ns);
+            writer.WriteUInt32Value(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, ulong value)
+        {
+            writer.WriteStartElement(localName);
+            writer.WriteUInt64Value(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, ulong value)
+        {
+            writer.WriteStartElement(localName, ns);
+            writer.WriteUInt64Value(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, ulong value)
+        {
+            writer.WriteStartElement(prefix, localName, ns);
+            writer.WriteUInt64Value(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, byte[] value)
+        {
+            writer.WriteStartElement(localName);
+            writer.WriteBytes(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string localName, string ns, byte[] value)
+        {
+            writer.WriteStartElement(localName, ns);
+            writer.WriteBytes(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString(this XmlWriter writer, string prefix, string localName, string ns, byte[] value)
+        {
+            writer.WriteStartElement(prefix, localName, ns);
+            writer.WriteBytes(value);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString<T>(this XmlWriter writer, string localName, T value, string format) where T : struct, Enum
+        {
+            writer.WriteStartElement(localName);
+            writer.WriteEnumValue(value, format);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString<T>(this XmlWriter writer, string localName, string ns, T value, string format) where T : struct, Enum
+        {
+            writer.WriteStartElement(localName, ns);
+            writer.WriteEnumValue(value, format);
+            writer.WriteEndElement();
+        }
+
+        public static void SafeWriteElementString<T>(this XmlWriter writer, string prefix, string localName, string ns, T value, string format) where T : struct, Enum
+        {
+            writer.WriteStartElement(prefix, localName, ns);
+            writer.WriteEnumValue(value, format);
+            writer.WriteEndElement();
+        }
+
+        #endregion Elements
     }
 }

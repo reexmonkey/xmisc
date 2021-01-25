@@ -28,14 +28,10 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
         public static IEnumerable<XElement> Serialize<T>(this XmlSerializer serializer, IEnumerable<T> values, Encoding encoding)
         {
             List<XElement> elements = new List<XElement>();
-            using (var stream = new MemoryStream())
+            foreach (var value in values)
             {
-                foreach (var value in values)
-                {
-                    serializer.Serialize(stream, value);
-                    var element = XElement.Parse(encoding.GetString(stream.ToArray()));
-                    if (element != null) elements.Add(element);
-                }
+                var element = serializer.Serialize(value, encoding);
+                if (element != null) elements.Add(element);
             }
             return elements;
         }

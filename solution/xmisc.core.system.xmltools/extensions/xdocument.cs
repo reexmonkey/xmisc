@@ -10,37 +10,41 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
 
         public static XDocument AsXDocument(this string xml, LoadOptions options) => XDocument.Parse(xml, options);
 
-        public static (bool status, XDocument document, Exception exception) TryAsXDocument(this string xml)
+        public static bool TryAsXDocument(this string xml, out XDocument document)
         {
             try
             {
-                var document = XDocument.Parse(xml);
-                return (true, document, null);
+                document = XDocument.Parse(xml);
+                return true;
             }
-            catch (XmlException ex)
+            catch (XmlException)
             {
-                return (false, default(XDocument), ex);
+                document = default;
+                return false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, default(XDocument), ex);
+                document = default;
+                return false;                
             }
         }
 
-        public static (bool status, XDocument document, Exception exception) TryAsXDocument(this string xml, LoadOptions options)
+        public static bool TryAsXDocument(this string xml, LoadOptions options, out XDocument document)
         {
             try
             {
-                var document = XDocument.Parse(xml, options);
-                return (true, document, null);
+                document = XDocument.Parse(xml, options);
+                return true;
             }
-            catch (XmlException ex)
+            catch (XmlException)
             {
-                return (false, default(XDocument), ex);
+                document = default;
+                return false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (false, default(XDocument), ex);
+                document = default;
+                return false;
             }
         }
     }
