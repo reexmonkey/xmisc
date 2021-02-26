@@ -11,6 +11,8 @@ namespace reexmonkey.xmisc.core.text.extensions
     /// </summary>
     public static class StringExtensions
     {
+        private static char[] base64Padding = { '=' };
+
         /// <summary>
         /// Extracts hexadecimal digits from a string
         /// </summary>
@@ -280,7 +282,7 @@ namespace reexmonkey.xmisc.core.text.extensions
             => text.AsEncoded(Encoding.BigEndianUnicode);
 
         /// <summary>
-        /// Encodes text to its Base-64 encoded equivaluent.
+        /// Encodes text to its Base-64 encoded equivalent.
         /// </summary>
         /// <param name="text">The string to encode.</param>
         /// <param name="encoding">The character enoding to obtain the binary form of the text.</param>
@@ -289,16 +291,51 @@ namespace reexmonkey.xmisc.core.text.extensions
             => Convert.ToBase64String(encoding.GetBytes(text));
 
         /// <summary>
-        /// Decodes Base-64 text to a string using a provided character encoding.
+        /// Decodes a specified Base64-encoded string to a string of a specified character encoding.
         /// </summary>
-        /// <param name="text">The Base-64 encoded string to decode.</param>
+        /// <param name="base64">The Base-64 encoded string to decode.</param>
         /// <param name="encoding">
-        /// The character encoding to obtain the string from the decoded Base-64 binary.
+        /// The character encoding to obtain the string from the Base-64.
         /// </param>
         /// <returns>The string equivalent of the decoded Base-64 string.</returns>
-        public static string FromBase64String(this string text, Encoding encoding)
-            => encoding.GetString(Convert.FromBase64String(text));
+        public static string FromBase64String(this string base64, Encoding encoding)
+            => encoding.GetString(Convert.FromBase64String(base64));
 
+        /// <summary>
+        /// Encodes a specified text to its URL-safe Base64-encoded equivalent representation.
+        /// </summary>
+        /// <param name="text">The string to encode.</param>
+        /// <param name="encoding">The character enoding to obtain the binary form of the text.</param>
+        /// <returns>The URL-safe Base64-encoded equivalent representation of the string.</returns>
+        public static string AsBase64Url(this string text, Encoding encoding)
+        {
+            return text.AsBase64(encoding)
+                .TrimEnd(base64Padding)
+                .Replace('+', '-')
+                .Replace('/', '_');
+        }
+
+        /// <summary>
+        /// Decodes a specified URL-safe Base64-encoded string to a string of a specified character encoding.
+        /// </summary>
+        /// <param name="base64">The URL-safe Base64-encoded string to decode.</param>
+        /// <param name="encoding">
+        /// The character encoding to obtain the string from the Base-64 value.
+        /// </param>
+        /// <returns>The string equivalent of the decoded URL-safe Base64 string.</returns>
+        public static string FromBase64UrlString(this string base64, Encoding encoding)
+        {
+            var value = base64
+                .Replace('_', '/')
+                .Replace('-', '+');
+
+            switch (value.Length % 4)
+            {
+                case 2: value += "=="; break;
+                case 3: value += "="; break;
+            }
+            return value.FromBase64String(encoding);
+        }
 
         /// <summary>
         /// Inserts line breaks after every number of characters in the provided string representation.
