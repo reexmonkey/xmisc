@@ -175,15 +175,28 @@ namespace reexmonkey.xmisc.core.text.extensions
             return text;
         }
 
+        /// <summary>
+        /// Replaces all the occurence of each first Unicode characters from a pair in the <paramref name="text"/> with the second Unicode chararcter of the pair.
+        /// </summary>
+        /// <param name="text">The text where the character replacement takes place.</param>
+        /// <param name="pairs">A tuple consisting of the character to replace, and its replacement.</param>
+        /// <returns>A string where all occurences of each first character in the pair is replaced with the second character of the pair.</returns>
         public static string Replace(this string text, params (char first, char second)[] pairs)
         {
-            foreach (var pair in pairs)
+            foreach (var (first, second) in pairs)
             {
-                text = text.Replace(pair.first, pair.second);
+                text = text.Replace(first, second);
             }
             return text;
         }
 
+        /// <summary>
+        /// Escapes all the occurence of each specified target string in a text with the specified escape string.
+        /// </summary>
+        /// <param name="text">The text where the target strings are escaped.</param>
+        /// <param name="escapeString">The string to escape each specified target string.</param>
+        /// <param name="targets">The selected strings within <paramref name="text"/> to escape.</param>
+        /// <returns>The string where each target instance has been escaped with <paramref name="escapeString"/>. </returns>
         public static string Escape(this string text, string escapeString, params string[] targets)
         {
             foreach (var target in targets)
@@ -193,6 +206,13 @@ namespace reexmonkey.xmisc.core.text.extensions
             return text;
         }
 
+        /// <summary>
+        /// Escapes all the occurence of each specified target char in a text with the specified escape char.
+        /// </summary>
+        /// <param name="text">The text where the target chars are escaped.</param>
+        /// <param name="escapeChar">The char to escape each specified target char.</param>
+        /// <param name="targets">The selected chars within <paramref name="text"/> to escape.</param>
+        /// <returns>The char where each target instance has been escaped with <paramref name="escapeChar"/>. </returns>
         public static string Escape(this string text, char escapeChar, params char[] targets)
         {
             foreach (var target in targets)
@@ -278,5 +298,31 @@ namespace reexmonkey.xmisc.core.text.extensions
         /// <returns>The string equivalent of the decoded Base-64 string.</returns>
         public static string FromBase64String(this string text, Encoding encoding)
             => encoding.GetString(Convert.FromBase64String(text));
+
+
+        /// <summary>
+        /// Inserts line breaks after every number of characters in the provided string representation.
+        /// </summary>
+        /// <param name="text">The string representation, where the insert line break is inserted.</param>
+        /// <param name="num">The number of characters to skip before inserting a line break. </param>
+        /// <returns>The string representation with the line breaks</returns>
+        public static string InsertLineBreaks(this string text, int num)
+        {
+            using (var sw = new StringWriter())
+            {
+                var chars = text.ToCharArray();
+                var blocks = chars.Length / num;
+                var remainder = chars.Length % num;
+                var rounds = remainder > 0 ? blocks + 1 : blocks;
+                var counter = 0;
+                for (var i = 0; i < chars.Length; i += num)  // output as Base64 with lines chopped at line break
+                {
+                    var limit = Math.Min(num, chars.Length - i);
+                    sw.Write(chars, i, limit);
+                    if (++counter < rounds) sw.Write("\n");
+                }
+                return sw.ToString();
+            }
+        }
     }
 }
