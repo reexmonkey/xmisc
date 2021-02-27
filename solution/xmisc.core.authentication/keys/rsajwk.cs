@@ -190,13 +190,13 @@ namespace reexmonkey.xmisc.core.authentication.keys
     {
         /// <summary>
         /// Modulus
-        /// <para/> Modulus value for the RSA public key.
+        /// <para/> Modulus value for the RSA private key.
         /// </summary>
         public string N { get; set; }
 
         /// <summary>
         /// Exponent
-        /// <para /> Exponent value for the RSA public key.
+        /// <para /> Exponent value for the RSA private key.
         /// </summary>
         public string E { get; set; }
 
