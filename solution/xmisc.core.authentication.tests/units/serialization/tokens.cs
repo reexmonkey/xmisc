@@ -46,7 +46,9 @@ namespace xmisc.core.authentication.tests.units.serialization
             Assert.True(map["http://example.com/is_root"].ConvertTo<bool>());
 
             Assert.NotNull(jws.Signature);
-            Assert.Equal(new byte[] { 116, 24, 223, 180, 151, 153, 224, 37, 79, 250, 96, 125, 216, 173, 187, 186, 22, 212, 37, 77, 105, 214, 
+            Assert.Equal(new byte[]
+            {
+116, 24, 223, 180, 151, 153, 224, 37, 79, 250, 96, 125, 216, 173, 187, 186, 22, 212, 37, 77, 105, 214,
                 191, 240, 91, 88, 5, 88, 83, 132, 141, 121 }, jws.Signature);
         }
 
@@ -69,7 +71,9 @@ namespace xmisc.core.authentication.tests.units.serialization
             Assert.Null(jwe.Header.X5t);
 
             Assert.NotNull(jwe.EncryptedKey);
-            Assert.Equal(new byte[] {56, 163, 154, 192, 58, 53, 222, 4, 105, 218, 136, 218, 29, 94, 203,
+            Assert.Equal(new byte[]
+            {
+56, 163, 154, 192, 58, 53, 222, 4, 105, 218, 136, 218, 29, 94, 203,
                 22, 150, 92, 129, 94, 211, 232, 53, 89, 41, 60, 138, 56, 196, 216,
                 82, 98, 168, 76, 37, 73, 70, 7, 36, 8, 191, 100, 136, 196, 244, 220,
                 145, 158, 138, 155, 4, 117, 141, 230, 199, 247, 173, 45, 182, 214,
@@ -88,17 +92,53 @@ namespace xmisc.core.authentication.tests.units.serialization
                 172, 99, 226, 233, 73, 37, 124, 42, 72, 49, 242, 35, 127, 184, 134,
                 117, 114, 135, 206 }, jwe.EncryptedKey);
 
-            Assert.NotNull(jwe.InitializationVector);
-            Assert.Equal(new byte[] { 227, 197, 117, 252, 2, 219, 233, 68, 180, 225, 77, 219 }, jwe.InitializationVector);
+            Assert.NotNull(jwe.IV);
+            Assert.Equal(new byte[] { 227, 197, 117, 252, 2, 219, 233, 68, 180, 225, 77, 219 }, jwe.IV);
 
             Assert.NotNull(jwe.Ciphertext);
-            Assert.Equal(new byte[] { 229, 236, 166, 241, 53, 191, 115, 196, 174, 43, 73, 109, 39, 122,
+            Assert.Equal(new byte[]
+            {
+229, 236, 166, 241, 53, 191, 115, 196, 174, 43, 73, 109, 39, 122,
                 233, 96, 140, 206, 120, 52, 51, 237, 48, 11, 190, 219, 186, 80, 111,
                 104, 50, 142, 47, 167, 59, 61, 181, 127, 196, 21, 40, 82, 242, 32,
                 123, 143, 168, 226, 73, 216, 176, 144, 138, 247, 106, 60, 16, 205, 160, 109, 64, 63, 192}, jwe.Ciphertext);
-            
-            Assert.NotNull(jwe.AuthenticationTag);
-            Assert.Equal(new byte[] { 92, 80, 104, 49, 133, 25, 161, 215, 173, 101, 219, 211, 136, 91, 210, 145 }, jwe.AuthenticationTag);
+
+            Assert.NotNull(jwe.Tag);
+            Assert.Equal(new byte[] { 92, 80, 104, 49, 133, 25, 161, 215, 173, 101, 219, 211, 136, 91, 210, 145 }, jwe.Tag);
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void ShouldSerializeJwsToJson(bool compact)
+        {
+            // arrange
+            const string content = "eyJ0eXAiOiJKV1QiLA0KICJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk";
+            var jws = Jws.Parse(content);
+
+            //act
+            var json = jws.ToString(compact);
+
+            //assert
+            Assert.NotNull(json);
+            console.WriteLine(json);
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void ShouldSerializeJweToJson(bool compact)
+        {
+            // arrange
+            const string content = "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ.OKOawDo13gRp2ojaHV7LFpZcgV7T6DVZKTyKOMTYUmKoTCVJRgckCL9kiMT03JGeipsEdY3mx_etLbbWSrFr05kLzcSr4qKAq7YN7e9jwQRb23nfa6c9d - StnImGyFDbSv04uVuxIp5Zms1gNxKKK2Da14B8S4rzVRltdYwam_lDp5XnZAYpQdb76FdIKLaVmqgfwX7XWRxv2322i - vDxRfqNzo_tETKzpVLzfiwQyeyPGLBIO56YJ7eObdv0je81860ppamavo35UgoRdbYaBcoh9QcfylQr66oc6vFWXRcZ_ZT2LawVCWTIy3brGPi6UklfCpIMfIjf7iGdXKHzg.48V1_ALb6US04U3b.5eym8TW_c8SuK0ltJ3rpYIzOeDQz7TALvtu6UG9oMo4vpzs9tX_EFShS8iB7j6jiSdiwkIr3ajwQzaBtQD_A.XFBoMYUZodetZdvTiFvSkQ";
+            var jwe = Jwe.Parse(content);
+
+            //act
+            var json = jwe.ToString(compact);
+
+            //assert
+            Assert.NotNull(json);
+            console.WriteLine(json);
         }
     }
 }

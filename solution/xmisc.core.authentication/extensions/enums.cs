@@ -47,6 +47,7 @@ namespace reexmonkey.xmisc.core.authentication.extensions
         {
             if (string.IsNullOrEmpty(value)) return default;
 
+            if (value.Equals("dir", StringComparison.OrdinalIgnoreCase)) return JweAlg.Dir;
             if (value.Equals("RSA-OAEP", StringComparison.OrdinalIgnoreCase)) return JweAlg.RSA_OAEP;
             if (value.Equals("RSA-OAEP-256", StringComparison.OrdinalIgnoreCase)) return JweAlg.RSA_OAEP_256;
             if (value.Equals("ECDH-ES", StringComparison.OrdinalIgnoreCase)) return JweAlg.ECDH_ES;

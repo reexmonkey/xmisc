@@ -1,22 +1,26 @@
 ﻿using reexmonkey.xmisc.core.authentication.extensions;
 using reexmonkey.xmisc.core.authentication.types;
+using reexmonkey.xmisc.core.text.extensions;
 using ServiceStack;
 using ServiceStack.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace reexmonkey.xmisc.core.authentication.keys
 {
     /// <summary>
     /// Represents a symmetric key, whose value is a single octet sequence.
     /// </summary>
-    public class OctJwk : Jwk
+    [DataContract]
+    public sealed class OctJwk : Jwk
     {
         /// <summary>
         /// Key Value
         /// <para/> Value of the symmetric (or other single-valued) key
         /// </summary>
+        [DataMember]
         public List<byte> K { get; set; }
 
         /// <summary>
@@ -82,6 +86,18 @@ namespace reexmonkey.xmisc.core.authentication.keys
             var k = o.Get<string>("k");
             if (!string.IsNullOrEmpty(k)) jwk.K.AddRange(k.FromBase64UrlSafe());
             return jwk;
+        }
+
+        /// <summary>
+        /// Returns a JSON serialization string that represents the current object.
+        /// </summary>
+        /// <returns>A JSON serialization string that represents the current object.</returns>
+        public override string ToString()
+        {
+            using (JsConfig.CreateScope("EmitLowercaseUnderscoreNames,ExcludeTypeInfo"))
+            {
+                return this.ToJson();
+            }
         }
     }
 }

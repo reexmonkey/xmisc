@@ -90,6 +90,12 @@ namespace reexmonkey.xmisc.core.authentication.keys
 
             return jwk;
         }
+
+        /// <summary>
+        /// Returns a JWS JSON serialization string that represents the current object.
+        /// </summary>
+        /// <returns>A JWS JSON serialization string that represents the current object.</returns>
+        public virtual string ToJsonString() => this.ToJson();
     }
 
     /// <summary>
@@ -166,5 +172,11 @@ namespace reexmonkey.xmisc.core.authentication.keys
 
             return jwk;
         }
+
+        /// <summary>
+        /// Returns a JWS JSON serialization string that represents the current object.
+        /// </summary>
+        /// <returns>A JWS JSON serialization string that represents the current object.</returns>
+        public override string ToJsonString() => this.ToJson();
     }
 }

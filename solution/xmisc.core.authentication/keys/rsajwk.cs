@@ -11,7 +11,7 @@ namespace reexmonkey.xmisc.core.authentication.keys
     /// <summary>
     /// Represents a cryptographic RSA public key.
     /// </summary>
-    public class RsaPublicJwk : Jwk
+    public sealed class RsaPublicJwk : Jwk
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RsaPublicJwk"/> class.
@@ -86,6 +86,18 @@ namespace reexmonkey.xmisc.core.authentication.keys
 
             return jwk;
         }
+
+        /// <summary>
+        /// Returns a JSON serialization string that represents the current object.
+        /// </summary>
+        /// <returns>A JSON serialization string that represents the current object.</returns>
+        public override string ToString()
+        {
+            using (JsConfig.CreateScope("EmitLowercaseUnderscoreNames,ExcludeTypeInfo"))
+            {
+                return this.ToJson().IndentJson();
+            }
+        }
     }
 
     /// <summary>
@@ -157,13 +169,37 @@ namespace reexmonkey.xmisc.core.authentication.keys
                 T = o.Get<string>("t")
             };
         }
+
+        /// <summary>
+        /// Returns a JSON serialization string that represents the current object.
+        /// </summary>
+        /// <returns>A JSON serialization string that represents the current object.</returns>
+        public override string ToString()
+        {
+            using (JsConfig.CreateScope("EmitLowercaseUnderscoreNames,ExcludeTypeInfo"))
+            {
+                return this.ToJson();
+            }
+        }
     }
 
     /// <summary>
     /// Represents a cryptographic RSA private key.
     /// </summary>
-    public class RsaPrivateJwk : RsaPublicJwk
+    public class RsaPrivateJwk : Jwk
     {
+        /// <summary>
+        /// Modulus
+        /// <para/> Modulus value for the RSA public key.
+        /// </summary>
+        public string N { get; set; }
+
+        /// <summary>
+        /// Exponent
+        /// <para /> Exponent value for the RSA public key.
+        /// </summary>
+        public string E { get; set; }
+
         /// <summary>
         /// Private Exponent
         /// <para/> Private exponent value for the RSA private key
@@ -237,7 +273,7 @@ namespace reexmonkey.xmisc.core.authentication.keys
         /// </summary>
         /// <param name="value">The string representation of an <see cref="RsaPrivateJwk"/> instance.</param>
         /// <returns>The equivalent <see cref="RsaPrivateJwk"/> representation.</returns>
-        public static new RsaPrivateJwk Parse(string value)
+        public static RsaPrivateJwk Parse(string value)
         {
             if (string.IsNullOrEmpty(value))
             {
@@ -251,7 +287,7 @@ namespace reexmonkey.xmisc.core.authentication.keys
         /// </summary>
         /// <param name="o">The <see cref="JsonObject"/> representation of an <see cref="RsaPrivateJwk"/> instance</param>
         /// <returns>The equivalent <see cref="RsaPrivateJwk"/> representation.</returns>
-        public static new RsaPrivateJwk Parse(JsonObject o)
+        public static RsaPrivateJwk Parse(JsonObject o)
         {
             var jwk = new RsaPrivateJwk
             {
@@ -294,6 +330,18 @@ namespace reexmonkey.xmisc.core.authentication.keys
             }
 
             return jwk;
+        }
+
+        /// <summary>
+        /// Returns a JSON serialization string that represents the current object.
+        /// </summary>
+        /// <returns>A JSON serialization string that represents the current object.</returns>
+        public override string ToString()
+        {
+            using (JsConfig.CreateScope("EmitLowercaseUnderscoreNames,ExcludeTypeInfo"))
+            {
+                return this.ToJson().IndentJson();
+            }
         }
     }
 }

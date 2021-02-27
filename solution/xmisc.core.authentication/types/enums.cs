@@ -1,4 +1,6 @@
-﻿namespace reexmonkey.xmisc.core.authentication.types
+﻿using System.Runtime.Serialization;
+
+namespace reexmonkey.xmisc.core.authentication.types
 {
     /// <summary>
     /// Represents the type of cryptographic algorithm used to secure a JWS.
@@ -86,55 +88,64 @@
     /// <summary>
     /// Represents the type of cryptographic algorithm used to secure a JWE.
     /// </summary>
+    [DataContract]
     public enum JweAlg
     {
         /// <summary>
         /// RSAES-PKCS1-v1_5
         /// <para /> Recommended-
         /// </summary>
+        [EnumMember]
         RSA1_5,
 
         /// <summary>
         /// RSAES OAEP using default parameters
         /// <para /> Recommended+
         /// </summary>
+        [EnumMember(Value = "RSA-OAEP")]
         RSA_OAEP,
 
         /// <summary>
         /// RSAES OAEP using SHA-256 and MGF1 with SHA-256
         /// <para /> Optional
         /// </summary>
+        [EnumMember(Value = "RSA-OAEP-256")]
         RSA_OAEP_256,
 
         /// <summary>
         ///  AES Key Wrap with default initial value using 128-bit key
         ///  <para /> Recommended
         /// </summary>
+        [EnumMember]
         A128KW,
 
         /// <summary>
         ///  AES Key Wrap with default initial value using 192-bit key
         ///  <para /> Optional
         /// </summary>
+        [EnumMember]
         A192KW,
 
         /// <summary>
         ///  AES Key Wrap with default initial value using 256-bit key
         ///  <para /> Recommended
         /// </summary>
+        [EnumMember]
         A256KW,
 
         /// <summary>
         ///  Direct use of a shared symmetric key as the CEK
         ///  <para /> Recommended
         /// </summary>
-        dir,
+        [EnumMember(Value = "dir")]        
+        Dir,
 
         /// <summary>
         ///  Elliptic Curve Diffie-Hellman Ephemeral Static key agreement using Concat KDF
         /// <para /> Header parameters: "epk", "apu", "apv"
         /// <para /> Recommended+
         /// </summary>
+        [EnumMember(Value = "ECDH-ES")]
         ECDH_ES,
 
         /// <summary>
@@ -142,6 +153,7 @@
         /// <para /> Header parameters: "epk", "apu", "apv"
         /// <para /> Recommended
         /// </summary>
+        [EnumMember(Value = "ECDH-ES+A128KW")]
         ECDH_ESA128KW,
 
         /// <summary>
@@ -149,6 +161,7 @@
         /// <para /> Header parameters: "epk", "apu", "apv"
         /// <para /> Optional
         /// </summary>
+        [EnumMember(Value = "ECDH-ES+A192KW")]
         ECDH_ESA192KW,
 
         /// <summary>
@@ -156,6 +169,7 @@
         /// <para /> Header parameters: "epk", "apu", "apv"
         /// <para /> Recommended
         /// </summary>
+        [EnumMember(Value = "ECDH-ES+A256KW")]
         ECDH_ESA256KW,
 
         /// <summary>
@@ -163,6 +177,7 @@
         /// <para /> Header parameters: "iv", "tag"
         /// <para /> Optional
         /// </summary>
+        [EnumMember]
         A128GCMKW,
 
         /// <summary>
@@ -170,6 +185,7 @@
         /// <para /> Header parameters: "iv", "tag"
         /// <para /> Optional
         /// </summary>
+        [EnumMember]
         A192GCMKW,
 
         /// <summary>
@@ -177,6 +193,7 @@
         /// <para /> Header parameters: "iv", "tag"
         /// <para /> Optional
         /// </summary>
+        [EnumMember]
         A256GCMKW,
 
         /// <summary>
@@ -184,6 +201,7 @@
         /// <para /> Header parameters: "p2s", "p2c"
         /// <para /> Optional
         /// </summary>
+        [EnumMember(Value = "PBES2-HS256+A128KW")]
         PBES2_HS256A128KW,
 
         /// <summary>
@@ -191,6 +209,7 @@
         /// <para /> Header parameters: "p2s", "p2c"
         /// <para /> Optional
         /// </summary>
+        [EnumMember(Value = "PBES2-HS384+A192KW")]
         PBES2_HS384A192KW,
 
         /// <summary>
@@ -198,6 +217,7 @@
         /// <para /> Header parameters: "p2s", "p2c"
         /// <para /> Optional
         /// </summary>
+        [EnumMember(Value = "PBES2-HS512+A256KW")]
         PBES2_HS512A256KW,
     }
 

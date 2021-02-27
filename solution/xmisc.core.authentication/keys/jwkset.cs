@@ -1,20 +1,25 @@
 ﻿using reexmonkey.xmisc.core.authentication.extensions;
 using reexmonkey.xmisc.core.authentication.types;
+using reexmonkey.xmisc.core.text.extensions;
+using ServiceStack;
 using ServiceStack.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace reexmonkey.xmisc.core.authentication.keys
 {
     /// <summary>
     /// Represents a JSON Web Key Set
     /// </summary>
+    [DataContract]
     public sealed class JwkSet
     {
         /// <summary>
         /// List of JWKs belonging to this set.
         /// </summary>
+        [DataMember]
         public List<Jwk> Keys { get; set; }
 
         /// <summary>
@@ -132,6 +137,18 @@ namespace reexmonkey.xmisc.core.authentication.keys
                 return RsaPublicJwk.Parse(map);
 
             return default;
+        }
+
+        /// <summary>
+        /// Returns a JSON serialization string that represents the current object.
+        /// </summary>
+        /// <returns>A JSON serialization string that represents the current object.</returns>
+        public override string ToString()
+        {
+            using (JsConfig.CreateScope("EmitLowercaseUnderscoreNames,ExcludeTypeInfo"))
+            {
+                return this.ToJson().IndentJson();
+            }
         }
     }
 }

@@ -67,5 +67,50 @@ namespace xmisc.core.authentication.tests.units.serialization
             Assert.True(jwks.Keys[0].Kty == Kty.EC);
             Assert.True(jwks.Keys[1].Kty == Kty.RSA);
         }
+
+        [Fact]
+        public void ShouldSerializeJwkToJson()
+        {
+            // arrange
+            var content = fixture.LoadKeyFile(Fixture.PUBLIC_KEY_RSA);
+            var jwk = RsaPublicJwk.Parse(content);
+
+            //act
+            var json = jwk.ToString();
+
+            //assert
+            Assert.NotNull(json);
+            console.WriteLine(json);
+        }
+
+        [Fact]
+        public void ShouldSerializeToPublicKeySetToJson()
+        {
+            // arrange
+            var content = fixture.LoadKeyFile(Fixture.PUBLIC_KEY_SET_RSA);
+            var jwks = JwkSet.Parse(content);
+
+            //act
+            var json = jwks.ToString();
+
+            //assert
+            Assert.NotNull(json);
+            console.WriteLine(json);
+        }
+
+        [Fact]
+        public void ShouldSerializeToPrivateKeySetToJson()
+        {
+            // arrange
+            var content = fixture.LoadKeyFile(Fixture.PRIVATE_KEY_SET);
+            var jwks = JwkSet.Parse(content);
+
+            //act
+            var json = jwks.ToString();
+
+            //assert
+            Assert.NotNull(json);
+            console.WriteLine(json);
+        }
     }
 }
