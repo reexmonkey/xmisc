@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace reexmonkey.xmisc.core.authentication.types
 {
@@ -224,63 +225,65 @@ namespace reexmonkey.xmisc.core.authentication.types
     /// <summary>
     /// Represents the type of intended public use of a JWK.
     /// </summary>
+    [Flags]
     public enum Use
     {
         /// <summary>
         /// Signature
         /// </summary>
-        sig,
+        sig = 0x0001,
 
         /// <summary>
         /// Encryption
         /// </summary>
-        enc
+        enc = 0x0010
     }
 
     /// <summary>
-    /// Represents the type of operation a JWK is intended o be used.
+    /// Represents the type of operation a JWK is intended to be used.
     /// </summary>
+    [Flags]
     public enum KeyOps
     {
         /// <summary>
         /// Compute digital signature or MAC
         /// </summary>
-        sign,
+        sign = 0x00000001,
 
         /// <summary>
         /// Verify digital signature or MAC
         /// </summary>
-        verify,
+        verify = 0x00000010,
 
         /// <summary>
         /// Encrypt content
         /// </summary>
-        encrypt,
+        encrypt = 0x00000100,
 
         /// <summary>
         /// Decrypt content and validate decryption, if applicable
         /// </summary>
-        decrypt,
+        decrypt = 0x00001000,
 
         /// <summary>
         /// Encrypt key
         /// </summary>
-        wrapKey,
+        wrapKey = 0x00010000,
 
         /// <summary>
         /// Decrypt key and validate decryption, if applicable
         /// </summary>
-        unwrapKey,
+        unwrapKey = 0x00100000,
 
         /// <summary>
         /// Derive key
         /// </summary>
-        deriveKey,
+        deriveKey = 0x01000000,
 
         /// <summary>
         /// Derive bits not to be used as a key
         /// </summary>
-        deriveBits
+        deriveBits = 0x10000000
     }
 
     /// <summary>
