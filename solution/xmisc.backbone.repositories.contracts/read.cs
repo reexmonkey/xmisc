@@ -31,7 +31,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="offset">Specifies the number of data models to bypass.</param>
         /// <param name="count">Specifies the number of data models to return.</param>
         /// <returns>The found data models.</returns>
-        IEnumerable<TModel> FindAllByKeys(IEnumerable<TKey> keys, bool? references = null, int? offset = null, int? count = null);
+        List<TModel> FindAllByKeys(IEnumerable<TKey> keys, bool? references = null, int? offset = null, int? count = null);
 
         /// <summary>
         /// Finds all data models that satisfy the given predicate and optionally paginates the results.
@@ -42,7 +42,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="offset">Specifies the number of data models to bypass.</param>
         /// <param name="count">Specifies the number of data models to return.</param>
         /// <returns>The found data models; otherwise an empty sequence.</returns>
-        IEnumerable<TModel> FindAll(Expression<Func<TModel, bool>> predicate, bool? references = null, int? offset = null, int? count = null);
+        List<TModel> FindAll(Expression<Func<TModel, bool>> predicate, bool? references = null, int? offset = null, int? count = null);
 
         /// <summary>
         /// Gets all the data models from the data store and optionally paginates the results.
@@ -52,7 +52,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="offset">Specifies the number of data models to bypass.</param>
         /// <param name="count">Specifies the number of data models to return.</param>
         /// <returns>All data models in data store.</returns>
-        IEnumerable<TModel> Get(bool? references = null, int? offset = null, int? count = null);
+        List<TModel> Get(bool? references = null, int? offset = null, int? count = null);
 
         /// <summary>
         /// Finds a data model asynchronously in the data store that is specified by the given key.
@@ -73,7 +73,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="count">Specifies the number of data models to return.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise that returns found data models; otherwise the default values of the data models.</returns>
-        Task<IEnumerable<TModel>> FindAllByKeysAsync(IEnumerable<TKey> keys, bool? references = null, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
+        Task<List<TModel>> FindAllByKeysAsync(IEnumerable<TKey> keys, bool? references = null, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Find all data models asynchronously that satisfy the given predicate and optionally paginates the results.
@@ -85,7 +85,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="count">Specifies the number of data models to return.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise that returns found data models; otherwise the default values of the data models.</returns>
-        Task<IEnumerable<TModel>> FindAllAsync(Expression<Func<TModel, bool>> predicate, bool? references = null, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
+        Task<List<TModel>> FindAllAsync(Expression<Func<TModel, bool>> predicate, bool? references = null, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Gets all the data models asynchronously from the data store and optionally paginates the results.
@@ -96,7 +96,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="count">Specifies the number of data models to return.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise that returns retrieved data models; otherwise the default values of the data models.</returns>
-        Task<IEnumerable<TModel>> GetAsync(bool? references = null, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
+        Task<List<TModel>> GetAsync(bool? references = null, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Retrieves the keys of data models from the data store.
@@ -105,7 +105,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="offset">Ignores the specified number of keys.</param>
         /// <param name="count">Returns the the specified number of keys.</param>
         /// <returns>The number of key of data models from the serach that may optionally have been filtered.</returns>
-        IEnumerable<TKey> GetKeys(int? offset = null, int? count = null);
+        List<TKey> GetKeys(int? offset = null, int? count = null);
 
         /// <summary>
         /// Retrieves asynchronously the keys of data models from the data store.
@@ -115,7 +115,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="count">Returns the the specified number of keys.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>The number of key of data models from the serach that may optionally have been filtered.</returns>
-        Task<IEnumerable<TKey>> GetKeysAsync(int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
+        Task<List<TKey>> GetKeysAsync(int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Determines whether the data store contains the specified key.

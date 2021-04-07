@@ -29,7 +29,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
             this IReadRepository<TKey, TModel> repository,
             Expression<Func<TModel, bool>> predicate,
             Func<TModel, TKey> keySelector,
-            bool references = true,
+            bool? references = true,
             int? offset = null,
             int? count = null)
             where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
@@ -56,7 +56,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
             this IReadRepository<TKey, TModel> repository,
             Expression<Func<TModel, bool>> predicate,
             Func<TModel, TKey> keySelector,
-            bool references = true,
+            bool? references = true,
             int? offset = null,
             int? count = null,
             CancellationToken token = default(CancellationToken))

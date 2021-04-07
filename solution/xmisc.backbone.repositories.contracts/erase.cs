@@ -25,7 +25,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// </summary>
         /// <param name="keys">The identifiers that specify the data models to erase.</param>
         /// <returns>The number of data models erased.</returns>
-        int EraseAllByKeys(IEnumerable<TKey> keys);
+        long EraseAllByKeys(IEnumerable<TKey> keys);
 
         /// <summary>
         /// Erases the specified data model from the data store.
@@ -39,7 +39,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// </summary>
         /// <param name="models">The data models in the data store to erase.</param>
         /// <returns>The number of data models erased.</returns>
-        int EraseAll(IEnumerable<TModel> models);
+        long EraseAll(IEnumerable<TModel> models);
 
         /// <summary>
         /// Asynchronously erases an data model that is specified by the provided <paramref name="key"/>.
@@ -55,7 +55,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="keys">The identifiers that specify the data models to erase.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param> 
         /// <returns>A promise that returns the number of data models erased.</returns>
-        Task<int> EraseAllByKeysAsync(IEnumerable<TKey> keys, CancellationToken token = default(CancellationToken));
+        Task<long> EraseAllByKeysAsync(IEnumerable<TKey> keys, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Asynchronously erases the specified data model from the datastore.
@@ -71,6 +71,6 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="models">The data models to erase from the data store.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param> 
         /// <returns>A promise that returns the number of data models erased.</returns>
-        Task<int> EraseAllAsync(IEnumerable<TModel> models, CancellationToken token = default(CancellationToken));
+        Task<long> EraseAllAsync(IEnumerable<TModel> models, CancellationToken token = default(CancellationToken));
     }
 }
