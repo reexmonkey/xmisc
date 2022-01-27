@@ -42,7 +42,8 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.infrastructure
         /// <summary>
         /// Initializes a new instance of the <see cref="FpiBase"/> class.
         /// </summary>
-        protected FpiBase() { }
+        protected FpiBase()
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FpiBase"/> class with details.
@@ -84,7 +85,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.infrastructure
         /// Returns a string representation of this instance.
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
+        public string ToJson()
         {
             var sb = new StringBuilder();
             switch (Status)

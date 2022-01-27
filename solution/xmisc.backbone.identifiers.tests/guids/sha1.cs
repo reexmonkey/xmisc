@@ -22,8 +22,8 @@ namespace xmisc.backbone.identity.tests.guids
         public void TestUniqueness(string x, string y)
         {
             //act
-            var first = Sha1Guid.NewGuid(Fixture.NamespaceId, x, Fixture.Encoding);
-            var second = Sha1Guid.NewGuid(Fixture.NamespaceId, y, Fixture.Encoding);
+            var first = Sha1Guid.NewGuid(Sha1Guid.DnsNamespaceId, x, Fixture.Encoding);
+            var second = Sha1Guid.NewGuid(Sha1Guid.DnsNamespaceId, y, Fixture.Encoding);
 
             //assert
             Assert.Equal(first, second);
@@ -37,7 +37,7 @@ namespace xmisc.backbone.identity.tests.guids
         public void TestVersionNumber(string name)
         {
             //arrange
-            var guid = Sha1Guid.NewGuid(Fixture.Encoding.GetBytes(Fixture.NamespaceId), Fixture.Encoding.GetBytes(name));
+            var guid = Sha1Guid.NewGuid(Sha1Guid.DnsNamespaceId.ToByteArray(), Fixture.Encoding.GetBytes(name));
             var bytes = guid.ToByteArray();
             //act
             var version = (ushort)(bytes[7] >> 4);

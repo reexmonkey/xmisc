@@ -16,15 +16,14 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
         /// <summary>
         /// Initializes a new instance of the <see cref="Md5FingerprintGenerator"/>.
         /// </summary>
-        /// <param name="namespaceId">The identifier of the namespace, from and within which the fingerprints are generated.</param>
+        /// <param name="namespaceId">Any of the default namespace IDs for namespace-based Uuids (version 5) as defined in RFC 4122.</param>
         /// <param name="encoding">The character encoding to encode <paramref name="namespaceId"/> into bytes.</param>
         /// <param name="serializer">The binary serializer that serializes objects, whose fingerprints shall be generated.</param>
-        public Md5FingerprintGenerator(string namespaceId, Encoding encoding, BinarySerializerBase serializer)
+        public Md5FingerprintGenerator(Guid namespaceId, Encoding encoding, BinarySerializerBase serializer)
         {
-            if (string.IsNullOrWhiteSpace(namespaceId)) throw new ArgumentException(nameof(namespaceId));
             if (encoding == null) throw new ArgumentNullException(nameof(encoding));
             this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
-            this.namespaceId = encoding.GetBytes(namespaceId);
+            this.namespaceId = namespaceId.ToByteArray();
         }
 
         /// <summary>

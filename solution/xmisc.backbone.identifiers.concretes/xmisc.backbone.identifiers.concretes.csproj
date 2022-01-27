@@ -10,23 +10,24 @@
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
     <Description>Implements custom identifiers.</Description>
-	<Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
+	<Copyright>Copyright (c) 2015 - 2022, Reflektiv</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
 	<AssemblyName>xmisc.backbone.identitifiers.concretes</AssemblyName>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard2.0\xmisc.backbone.identitifiers.concretes.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard2.0\xmisc.backbone.identitifiers.concretes.xml</DocumentationFile>
+    <DocumentationFile></DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="2.0.26">
+    <PackageReference Include="GitInfo" Version="2.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="xmisc.backbone.identifiers.contracts" Version="6.0.22" />
+    <PackageReference Include="xmisc.backbone.identifiers.contracts" Version="8.2.9" />
   </ItemGroup>
   <ItemGroup>
     <None Include="./../../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />

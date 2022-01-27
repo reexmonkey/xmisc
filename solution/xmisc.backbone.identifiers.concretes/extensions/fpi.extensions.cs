@@ -19,6 +19,6 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.extensions
         /// </summary>
         /// <param name="fpi"></param>
         /// <returns>The equivalent Formal Public Identifier (FPI) from the conversion.</returns>
-        public static string AsUrn(this Fpi fpi) => $"urn:{fpi.ToString().Replace("//", ":")}";
+        public static string AsUrn(this Fpi fpi) => $"urn:{fpi.ToJson().Replace("//", ":")}";
     }
 }

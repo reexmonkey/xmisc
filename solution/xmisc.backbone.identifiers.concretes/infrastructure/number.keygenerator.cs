@@ -14,7 +14,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.infrastructure
         /// Gets the default unique numeric identifier.
         /// </summary>
         /// <returns>The default unique identifier.</returns>
-        public TNumber GetNullKey() => default(TNumber);
+        public TNumber GetNullKey() => default;
 
         /// <summary>
         /// Generates the next unique numeric identifier.
