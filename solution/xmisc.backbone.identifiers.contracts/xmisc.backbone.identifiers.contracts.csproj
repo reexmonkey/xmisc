@@ -18,15 +18,15 @@
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>xmisc.backbone.identifiers.contracts.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\xmisc.backbone.identifiers.contracts.xml</DocumentationFile>
     <OutputPath>bin\Debug\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>xmisc.backbone.identifiers.contracts.xml</DocumentationFile>
+    <DocumentationFile></DocumentationFile>
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="2.0.26">
+    <PackageReference Include="GitInfo" Version="2.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
