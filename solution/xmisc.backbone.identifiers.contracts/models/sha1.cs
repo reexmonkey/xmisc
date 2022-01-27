@@ -22,7 +22,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// <summary>
         /// Gets the default fully-qualified Distinguished Name (DNs) namespace ID  as defined in RFC 4122.
         /// </summary>
-        public static readonly Guid DNsNamespaceId = new Guid("6ba7b810-9dad-11d1-80b4-00c04fd430c8");
+        public static readonly Guid DnsNamespaceId = new Guid("6ba7b810-9dad-11d1-80b4-00c04fd430c8");
 
         /// <summary>
         /// Gets the default uniform resource locator (URL) namespace ID  as defined in RFC 4122.
@@ -32,7 +32,12 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// <summary>
         /// Gets the default ISO OID namepace ID as defined in RFC 4122.
         /// </summary>
-        public static readonly Guid IsoOidNamespaceId = new Guid("2b36106a-5654-4b4a-8b62-4f46a056c274");
+        public static readonly Guid IsoOidNamespaceId = new Guid("6ba7b812-9dad-11d1-80b4-00c04fd430c8");
+
+        /// <summary>
+        /// Gets the default X500 namepace ID as defined in RFC 4122.
+        /// </summary>
+        public static readonly Guid X500NamespaceId = new Guid("6ba7b814-9dad-11d1-80b4-00c04fd430c8");
 
         private readonly Guid guid;
 
@@ -206,7 +211,8 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// <param name="name">The string value that is drawn from a namespace and serves as the basis for generating the version 5 GUID. </param>
         /// <param name="encoding">The character encoding that was used to format the specified <paramref name="namespaceId"/> and <paramref name="name"/>.</param>
         /// <returns>A new <see cref="Sha1Guid"/> object.</returns>
-        public static Sha1Guid NewGuid(string namespaceId, string name, Encoding encoding) => NewGuid(encoding.GetBytes(namespaceId), encoding.GetBytes(name));
+        public static Sha1Guid NewGuid(string namespaceId, string name, Encoding encoding) 
+            => NewGuid(encoding.GetBytes(namespaceId), encoding.GetBytes(name));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Sha1Guid"/> structure for a string-based name drawn from- and within a GUID-based namespace.
@@ -215,7 +221,8 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// <param name="name">The string value that is drawn from a namespace and serves as the basis for generating the version 5 GUID. </param>
         /// <param name="encoding">The character encoding that was used to format the specified <paramref name="name"/>.</param>
         /// <returns>A new <see cref="Sha1Guid"/> object.</returns>
-        public static Sha1Guid NewGuid(Guid namespaceId, string name, Encoding encoding) => NewGuid(namespaceId.ToByteArray(), encoding.GetBytes(name));
+        public static Sha1Guid NewGuid(Guid namespaceId, string name, Encoding encoding) 
+            => NewGuid(namespaceId.ToByteArray(), encoding.GetBytes(name));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Sha1Guid"/> structure for a byte-specified name drawn from- and within a byte-based namespace.

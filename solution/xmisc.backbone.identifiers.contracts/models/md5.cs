@@ -22,7 +22,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// <summary>
         /// Gets the default fully-qualified Distinguished Name (DNs) namespace ID  as defined in RFC 4122.
         /// </summary>
-        public static readonly Guid DNsNamespaceId = new Guid("6ba7b810-9dad-11d1-80b4-00c04fd430c8");
+        public static readonly Guid DnsNamespaceId = new Guid("6ba7b810-9dad-11d1-80b4-00c04fd430c8");
 
         /// <summary>
         /// Gets the default uniform resource locator (URL) namespace ID  as defined in RFC 4122.
@@ -32,7 +32,12 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// <summary>
         /// Gets the default ISO OID namepace ID as defined in RFC 4122.
         /// </summary>
-        public static readonly Guid IsoOidNamespaceId = new Guid("2b36106a-5654-4b4a-8b62-4f46a056c274");
+        public static readonly Guid IsoOidNamespaceId = new Guid("6ba7b812-9dad-11d1-80b4-00c04fd430c8");
+
+        /// <summary>
+        /// Gets the default X500 namepace ID as defined in RFC 4122.
+        /// </summary>
+        public static readonly Guid X500NamespaceId = new Guid("6ba7b814-9dad-11d1-80b4-00c04fd430c8");
 
         private readonly Guid guid;
 
