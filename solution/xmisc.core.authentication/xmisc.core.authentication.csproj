@@ -39,7 +39,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="ServiceStack.Text" Version="6.0.0" />
-    <PackageReference Include="xmisc.core.text" Version="8.1.0" />
+    <PackageReference Include="xmisc.core.text" Version="8.2.7" />
   </ItemGroup>
 
 </Project>
