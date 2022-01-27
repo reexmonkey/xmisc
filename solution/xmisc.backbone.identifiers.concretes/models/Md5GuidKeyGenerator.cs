@@ -7,19 +7,19 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
     /// <summary>
     /// Represents an abstract provider that produces SHA1-based global unique identifiers (version 5) as defined in RFC 4122.
     /// </summary>
-    public abstract class Sha1GuidKeyGeneratorBase : IKeyGenerator<Sha1Guid>
+    public abstract class Md5GuidKeyGeneratorBase : IKeyGenerator<Md5Guid>
     {
         private readonly Guid namespaceId;
         private readonly string name;
         private readonly Encoding encoding;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Sha1GuidKeyGeneratorBase"/> class.
+        /// Initializes a new instance of the <see cref="Md5GuidKeyGeneratorBase"/> class.
         /// </summary>
         /// <param name="namespaceId">One of the default namespaces as defined in RFC 4122. </param>
         /// <param name="name">The unique identifying string, which together with the default namespaces form a unique namespace for the UUID generation.</param>
         /// <param name="encoding">The character encoding to encode <paramref name="name"/> to its byte representation.</param>
-        public Sha1GuidKeyGeneratorBase(Guid namespaceId, string name, Encoding encoding)
+        public Md5GuidKeyGeneratorBase(Guid namespaceId, string name, Encoding encoding)
         {
             this.namespaceId = namespaceId;
 
@@ -34,27 +34,27 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
         /// Gets the default namespace-based globally unique identifier.
         /// </summary>
         /// <returns>The default unique identifier.</returns>
-        public Sha1Guid GetNullKey() => Sha1Guid.Empty;
+        public Md5Guid GetNullKey() => Md5Guid.Empty;
 
         /// <summary>
         /// Generates the next unique randomly or pseudo-randomly generated (version 1) global unique identifier.
         /// </summary>
         /// <returns>The generated global unique identifier.</returns>
-        public Sha1Guid GetNext() => Sha1Guid.NewGuid(namespaceId, name, encoding);
+        public Md5Guid GetNext() => Md5Guid.NewGuid(namespaceId, name, encoding);
     }
 
 
     /// <summary>
     /// Represents an SHA1 UUID provider that produces SHA1-based global unique identifiers (version 5) for DNS as defined in RFC 4122.
     /// </summary>
-    public sealed class DnsSha1GuidKeyGenerator : Sha1GuidKeyGeneratorBase
+    public sealed class DnsMd5GuidKeyGenerator : Md5GuidKeyGeneratorBase
     {
         /// <summary>
-        /// Initializes an instance of the <see cref="DnsSha1GuidKeyGenerator"/> class.
+        /// Initializes an instance of the <see cref="DnsMd5GuidKeyGenerator"/> class.
         /// </summary>
         /// <param name="dns">The DNS that forms part of the namespace of the generated UUID.</param>
         /// <param name="encoding">The type of character encoding to encode <paramref name="dns"/></param>
-        public DnsSha1GuidKeyGenerator(string dns, Encoding encoding) : base(Sha1Guid.DnsNamespaceId, dns, encoding)
+        public DnsMd5GuidKeyGenerator(string dns, Encoding encoding) : base(Md5Guid.DnsNamespaceId, dns, encoding)
         {
         }
     }
@@ -62,14 +62,14 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
     /// <summary>
     /// Represents an SHA1 UUID provider that produces SHA1-based global unique identifiers (version 5) for URLs as defined in RFC 4122.
     /// </summary>
-    public sealed class UrlSha1GuidKeyGenerator : Sha1GuidKeyGeneratorBase
+    public sealed class UrlMd5GuidKeyGenerator : Md5GuidKeyGeneratorBase
     {
         /// <summary>
-        /// Initializes an instance of the <see cref="UrlSha1GuidKeyGenerator"/> class.
+        /// Initializes an instance of the <see cref="UrlMd5GuidKeyGenerator"/> class.
         /// </summary>
         /// <param name="url">The URL that forms part of the namespace of the generated UUID.</param>
         /// <param name="encoding">The type of character encoding to encode <paramref name="url"/></param>
-        public UrlSha1GuidKeyGenerator(string url, Encoding encoding) : base(Sha1Guid.UrlNamespaceId, url, encoding)
+        public UrlMd5GuidKeyGenerator(string url, Encoding encoding) : base(Md5Guid.UrlNamespaceId, url, encoding)
         {
         }
     }
@@ -77,14 +77,14 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
     /// <summary>
     /// Represents an SHA1 UUID provider that produces SHA1-based global unique identifiers (version 5) for ISO OIDs as defined in RFC 4122.
     /// </summary>
-    public sealed class IsoOidSha1GuidKeyGenerator : Sha1GuidKeyGeneratorBase
+    public sealed class IsoOidMd5GuidKeyGenerator : Md5GuidKeyGeneratorBase
     {
         /// <summary>
-        /// Initializes an instance of the <see cref="UrlSha1GuidKeyGenerator"/> class.
+        /// Initializes an instance of the <see cref="UrlMd5GuidKeyGenerator"/> class.
         /// </summary>
         /// <param name="oid">The OID that forms part of the namespace of the generated UUID.</param>
         /// <param name="encoding">The type of character encoding to encode <paramref name="oid"/></param>
-        public IsoOidSha1GuidKeyGenerator(string oid, Encoding encoding) : base(Sha1Guid.IsoOidNamespaceId, oid, encoding)
+        public IsoOidMd5GuidKeyGenerator(string oid, Encoding encoding) : base(Md5Guid.IsoOidNamespaceId, oid, encoding)
         {
         }
     }
