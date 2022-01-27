@@ -64,7 +64,7 @@ namespace reexmonkey.xmisc.core.system.extensions
         /// <param name="func">The lambda function that encapsulates the method to call.</param>
         /// <param name="cancellation">The token that propagates the notification on the cancellation of the operation.</param>
         /// <returns>A task that promises to run and return a value.</returns>
-        public static Task<TResult> ToAsync<TResult>(this Func<TResult> func, CancellationToken cancellation = default(CancellationToken))
+        public static Task<TResult> ToAsync<TResult>(this Func<TResult> func, CancellationToken cancellation = default)
         {
             if (cancellation.IsCancellationRequested) return Task.FromCanceled<TResult>(cancellation);
             try
@@ -84,7 +84,7 @@ namespace reexmonkey.xmisc.core.system.extensions
         /// <param name="action">The lambda function that encapsulates the method to call.</param>
         /// <param name="cancellation">The token that propagates the notification on the cancellation of the operation.</param>
         /// <returns>A task that promises to execute and return no value.</returns>
-        public static Task ToAsync(this Action action, CancellationToken cancellation = default(CancellationToken))
+        public static Task ToAsync(this Action action, CancellationToken cancellation = default)
         {
             if (cancellation.IsCancellationRequested) return Task.FromCanceled(cancellation);
             try
@@ -105,7 +105,7 @@ namespace reexmonkey.xmisc.core.system.extensions
         /// <param name="func">The lambda function that encapsulates the method to call.</param>
         /// <param name="cancellation">The token that propagates the notification on the cancellation of the operation.</param>
         /// <returns>A task that promises to run and return a value.</returns>
-        public static Task<TResult> RunAsync<TResult>(this Func<TResult> func, CancellationToken cancellation = default(CancellationToken))
+        public static Task<TResult> RunAsync<TResult>(this Func<TResult> func, CancellationToken cancellation = default)
         {
             return factory.StartNew(func, cancellation);
         }
@@ -116,7 +116,7 @@ namespace reexmonkey.xmisc.core.system.extensions
         /// <param name="action"></param>
         /// <param name="cancellation">The token that propagates the notification on the cancellation of the operation.</param>
         /// <returns>A task that promises to execute and return no value.</returns>
-        public static Task RunAsync(this Action action, CancellationToken cancellation = default(CancellationToken))
+        public static Task RunAsync(this Action action, CancellationToken cancellation = default)
         {
             return factory.StartNew(action);
         }

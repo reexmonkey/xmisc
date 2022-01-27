@@ -46,22 +46,22 @@ namespace reexmonkey.xmisc.core.io.serializers
             }
             catch (ArgumentNullException)
             {
-                data = default(TData);
+                data = default;
                 return false;
             }
             catch (SerializationException)
             {
-                data = default(TData);
+                data = default;
                 return false;
             }
             catch (NotSupportedException)
             {
-                data = default(TData);
+                data = default;
                 return false;
             }
             catch (Exception)
             {
-                data = default(TData);
+                data = default;
                 return false;
             }
         }
@@ -84,22 +84,22 @@ namespace reexmonkey.xmisc.core.io.serializers
             }
             catch (ArgumentNullException)
             {
-                source = default(TSource);
+                source = default;
                 return false;
             }
             catch (SerializationException)
             {
-                source = default(TSource);
+                source = default;
                 return false;
             }
             catch (NotSupportedException)
             {
-                source = default(TSource);
+                source = default;
                 return false;
             }
             catch (Exception)
             {
-                source = default(TSource);
+                source = default;
                 return false;
             }
         }

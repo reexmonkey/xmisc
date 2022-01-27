@@ -831,7 +831,7 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             var value = reader.SafeReadElementContentAsString();
             return !string.IsNullOrEmpty(value)
                 ? value.ToNullableEnum<T>(ignoreCase)
-                : default(T?);
+                : default;
         }
 
         public static T? SafeReadElementContentAsNullableEnum<T>(this XmlReader reader, string localName, string ns, bool ignoreCase = true) where T : struct, Enum
@@ -839,7 +839,7 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
             var value = reader.SafeReadElementContentAsString(localName, ns);
             return !string.IsNullOrEmpty(value)
                 ? value.ToNullableEnum<T>(ignoreCase)
-                : default(T?);
+                : default;
         }
 
         public static T SafeReadElementContentAs<T>(this XmlReader reader, Func<string, T> func)

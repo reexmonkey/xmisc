@@ -5,25 +5,31 @@
   </PropertyGroup>	 
   </Target>
   <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>reexmonkey.xmisc.core.system</RootNamespace>
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
     <Description>Core system utilities and extensions.</Description>
-	<Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
+	<Copyright>Copyright (c) 2015 - 2022, Reflektiv</Copyright>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>xmisc.core.system.xml</DocumentationFile>
+    <DocumentationFile></DocumentationFile>
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Debug\xmisc.core.system.xml</DocumentationFile>
     <OutputPath>bin\Debug\</OutputPath>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\LICENSE.md" Link="LICENSE.md">
+      <PackagePath>$(PackageLicenseFile)</PackagePath>
+      <Pack>true</Pack>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>	
-    <PackageReference Include="GitInfo" Version="2.0.26">
+    <PackageReference Include="GitInfo" Version="2.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>	

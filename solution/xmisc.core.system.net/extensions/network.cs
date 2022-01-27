@@ -31,13 +31,13 @@ namespace reexmonkey.xmisc.core.system.net.extensions
             }
         }
 
-        private static Task<IPAddress[]> GetIPAddressesAsync(string hostNameOrAddress, CancellationToken token = default(CancellationToken))
+        private static Task<IPAddress[]> GetIPAddressesAsync(string hostNameOrAddress, CancellationToken token = default)
         {
             token.ThrowIfCancellationRequested();
             return Dns.GetHostAddressesAsync(hostNameOrAddress);
         }
 
-        private async static Task<IPAddress> GetIPAddressAsync(string remoteHost, int port, AddressFamily family, CancellationToken token = default(CancellationToken))
+        private async static Task<IPAddress> GetIPAddressAsync(string remoteHost, int port, AddressFamily family, CancellationToken token = default)
         {
             using (var socket = new Socket(family, SocketType.Dgram, 0))
             {
@@ -58,11 +58,11 @@ namespace reexmonkey.xmisc.core.system.net.extensions
                 if (unicastAddresses.Address.AddressFamily == AddressFamily.InterNetwork && address.Equals(unicastAddresses.Address))
                     return unicastAddresses.IPv4Mask;
             }
-            return default(IPAddress);
+            return default;
         }
 
         public static IPAddress AsIPAddress(this string address)
-            => IPAddress.TryParse(address, out IPAddress value) ? value : default(IPAddress);
+            => IPAddress.TryParse(address, out IPAddress value) ? value : default;
 
         public static IPAddress GetRootIPv4Address(
             this IEnumerable<IPAddress> addresses,
@@ -102,27 +102,27 @@ namespace reexmonkey.xmisc.core.system.net.extensions
 
         public static string Format(this int port, string protocol) => $"{port.ToString()}/{protocol}";
 
-        public async static Task<IPAddress> GetLocalIPv4AddressAsync(string remoteHost, int port, Func<bool> networkAvailableFunc, CancellationToken token = default(CancellationToken))
+        public async static Task<IPAddress> GetLocalIPv4AddressAsync(string remoteHost, int port, Func<bool> networkAvailableFunc, CancellationToken token = default)
         {
             return networkAvailableFunc()
                 ? await GetIPAddressAsync(remoteHost, port, AddressFamily.InterNetwork, token).ConfigureAwait(false)
                 : LoopbackIPv4.AsIPAddress();
         }
 
-        public async static Task<IPAddress> GetLocalIPv6AddressAsync(string remoteHost, int port, Func<bool> networkAvailableFunc, CancellationToken token = default(CancellationToken))
+        public async static Task<IPAddress> GetLocalIPv6AddressAsync(string remoteHost, int port, Func<bool> networkAvailableFunc, CancellationToken token = default)
         {
             return networkAvailableFunc()
                 ? await GetIPAddressAsync(remoteHost, port, AddressFamily.InterNetwork, token).ConfigureAwait(false)
                 : LoopbackIPv4.AsIPAddress();
         }
 
-        public async static Task<IPAddress[]> GetLocalIPv4AddressesAsync(string hostNameOrAddress, CancellationToken token = default(CancellationToken))
+        public async static Task<IPAddress[]> GetLocalIPv4AddressesAsync(string hostNameOrAddress, CancellationToken token = default)
         {
             var addresses = await GetIPAddressesAsync(hostNameOrAddress, token).ConfigureAwait(false);
             return addresses.Where(x => x.AddressFamily == AddressFamily.InterNetwork).ToArray();
         }
 
-        public static async Task<IPAddress[]> GetLocalIPv6AddressesAsync(string hostNameOrAddress, CancellationToken token = default(CancellationToken))
+        public static async Task<IPAddress[]> GetLocalIPv6AddressesAsync(string hostNameOrAddress, CancellationToken token = default)
         {
             var addresses = await GetIPAddressesAsync(hostNameOrAddress, token).ConfigureAwait(false);
             return addresses.Where(x => x.AddressFamily == AddressFamily.InterNetworkV6).ToArray();

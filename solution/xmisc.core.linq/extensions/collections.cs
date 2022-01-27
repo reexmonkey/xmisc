@@ -233,7 +233,7 @@ namespace reexmonkey.xmisc.core.linq.extensions
         /// <param name="source">The current <see cref="IDictionary{TKey, TValue}"/> instance.</param>
         /// <param name="key">The key used to either retrieve the value from the dictionary.</param>
         /// <returns>The retrieved value in the dictionary if it exists; otherwise the default value of <typeparamref name="TValue"/> is retrieved.</returns>
-        public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key) => !source.TryGetValue(key, out TValue value) ? value : default(TValue);
+        public static TValue GetValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key) => !source.TryGetValue(key, out TValue value) ? value : default;
 
         /// <summary>
         /// Produces a concatenation of a sequence and a singleton based on a precondition.
