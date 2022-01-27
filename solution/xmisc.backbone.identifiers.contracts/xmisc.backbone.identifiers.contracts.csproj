@@ -11,9 +11,11 @@
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
     <Description>Specifies interfaces for custom identifiers.</Description>
-    <Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
+    <Copyright>Copyright (c) 2015 - 2022, Reflektiv</Copyright>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
     <AssemblyName>xmisc.backbone.identifiers.contracts</AssemblyName>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>xmisc.backbone.identifiers.contracts.xml</DocumentationFile>
