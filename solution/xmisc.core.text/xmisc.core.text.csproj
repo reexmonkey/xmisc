@@ -17,6 +17,7 @@
     <Description>Input/Output utilities and extensions.</Description>
     <Copyright>Copyright (c) 2015 - 2022, Reflektiv</Copyright>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>xmisc.core.text.xml</DocumentationFile>
