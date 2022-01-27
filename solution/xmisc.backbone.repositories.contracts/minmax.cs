@@ -44,7 +44,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// </summary>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise to return the smallest scalar unique identifier (key) of data models.</returns>
-        Task<TKey> MinKeyAsync(CancellationToken token = default(CancellationToken));
+        Task<TKey> MinKeyAsync(CancellationToken token = default);
 
         /// <summary>
         /// Determines the smallest scalar unique identifier (key) asynchronously for a set of data models that satisfy the specified predicate.
@@ -52,14 +52,14 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="predicate">Filters the set of data models for which the smallest unique identifier (key) shall be identified.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>The smallest unique identifier (key) of specified data models.</returns>
-        Task<TKey> MinKeyAsync(Expression<Func<TModel, bool>> predicate, CancellationToken token = default(CancellationToken));
+        Task<TKey> MinKeyAsync(Expression<Func<TModel, bool>> predicate, CancellationToken token = default);
 
         /// <summary>
         /// Determines the largest scalar unique identifier (key) asynchronously for a set of data models that satisfy the specified predicate.
         /// </summary>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise to return the largest scalar unique identifier (key) of data models.</returns>
-        Task<TKey> MaxKeyAsync(CancellationToken token = default(CancellationToken));
+        Task<TKey> MaxKeyAsync(CancellationToken token = default);
 
         /// <summary>
         /// Determines the largest scalar unique identifier (key) asynchronously for a set of data models that satisfy the specified predicate.
@@ -67,6 +67,6 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="predicate">Filters the set of data models for which the largest unique identifier (key) shall be identified.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>The largest scalar unique identifier (key) of specified data models.</returns>
-        Task<TKey> MaxKeyAsync(Expression<Func<TModel, bool>> predicate, CancellationToken token = default(CancellationToken));
+        Task<TKey> MaxKeyAsync(Expression<Func<TModel, bool>> predicate, CancellationToken token = default);
     }
 }

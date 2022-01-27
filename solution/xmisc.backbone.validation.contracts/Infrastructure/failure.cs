@@ -78,7 +78,7 @@ namespace xmisc.backbone.validation.contracts.Infrastructure
         /// <param name="parent">
         /// Optional: the <see cref="AbstractValidationResult"/> that owns this failure.
         /// </param>
-        protected AbstractValidationFailure(string propertyName, string error, TState state = default(TState), AbstractValidationResult parent = null)
+        protected AbstractValidationFailure(string propertyName, string error, TState state = default, AbstractValidationResult parent = null)
             : base(propertyName, error, parent)
         {
             CustomState = state;
@@ -94,7 +94,7 @@ namespace xmisc.backbone.validation.contracts.Infrastructure
         /// <param name="parent">
         /// Optional: the <see cref="AbstractValidationResult"/> that owns this failure.
         /// </param>
-        protected AbstractValidationFailure(string propertyName, string error, object attemptedValue, TState state = default(TState), AbstractValidationResult parent = null) : base(propertyName, error, attemptedValue, parent)
+        protected AbstractValidationFailure(string propertyName, string error, object attemptedValue, TState state = default, AbstractValidationResult parent = null) : base(propertyName, error, attemptedValue, parent)
         {
             CustomState = state;
         }

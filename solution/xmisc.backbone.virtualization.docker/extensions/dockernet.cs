@@ -29,7 +29,7 @@ namespace reexmonkey.xmisc.backbone.virtualization.docker.extensions
             int containerPort,
             string protocol,
             IEnumerable<string> env,
-            CancellationToken cancellation = default(CancellationToken))
+            CancellationToken cancellation = default)
         {
             var key = containerPort.Format(protocol);
             var exposedPorts = new Dictionary<string, EmptyStruct>()
@@ -52,7 +52,7 @@ namespace reexmonkey.xmisc.backbone.virtualization.docker.extensions
             int containerPort,
             string protocol,
             IEnumerable<string> env,
-            CancellationToken cancellation = default(CancellationToken))
+            CancellationToken cancellation = default)
         {
             var key = containerPort.Format(protocol);
             var exposedPorts = new Dictionary<string, EmptyStruct>()
@@ -74,7 +74,7 @@ namespace reexmonkey.xmisc.backbone.virtualization.docker.extensions
             IEnumerable<string> env,
             IDictionary<string, EmptyStruct> exposedPorts,
             IDictionary<string, IList<PortBinding>> portBindings,
-            CancellationToken cancellation = default(CancellationToken))
+            CancellationToken cancellation = default)
         {
             var parameters = new CreateContainerParameters()
             {
@@ -96,7 +96,7 @@ namespace reexmonkey.xmisc.backbone.virtualization.docker.extensions
             IEnumerable<string> env,
             IDictionary<string, EmptyStruct> exposedPorts,
             IDictionary<string, IList<PortBinding>> portBindings,
-            CancellationToken cancellation = default(CancellationToken))
+            CancellationToken cancellation = default)
         {
             var parameters = new CreateContainerParameters()
             {
@@ -115,7 +115,7 @@ namespace reexmonkey.xmisc.backbone.virtualization.docker.extensions
         public static async Task<(string id, bool success)> StartContainerAsync(
             this DockerClient client,
             string containerId,
-            ContainerStartParameters parameters, CancellationToken cancellation = default(CancellationToken))
+            ContainerStartParameters parameters, CancellationToken cancellation = default)
         {
             var started = await client.Containers.StartContainerAsync(containerId, parameters, cancellation).ConfigureAwait(false);
             return (containerId, started);
@@ -126,7 +126,7 @@ namespace reexmonkey.xmisc.backbone.virtualization.docker.extensions
             string containerId,
             ContainerStartParameters parameters,
             int delay,
-            CancellationToken cancellation = default(CancellationToken))
+            CancellationToken cancellation = default)
         {
             var result = await client.StartContainerAsync(containerId, parameters, cancellation).ConfigureAwait(false);
             await Task.Delay(delay, cancellation).ConfigureAwait(false);
@@ -140,7 +140,7 @@ namespace reexmonkey.xmisc.backbone.virtualization.docker.extensions
             this DockerClient client,
             IEnumerable<string> containerIds,
             ContainerStartParameters parameters,
-            CancellationToken cancellation = default(CancellationToken))
+            CancellationToken cancellation = default)
         {
             var results = new List<(string id, bool success)>();
             foreach (var containerId in containerIds)
@@ -155,7 +155,7 @@ namespace reexmonkey.xmisc.backbone.virtualization.docker.extensions
             this DockerClient client,
             string containerId,
             ContainerStopParameters parameters,
-            CancellationToken cancellation = default(CancellationToken))
+            CancellationToken cancellation = default)
         {
             var stopped = await client.Containers.StopContainerAsync(containerId, parameters, cancellation).ConfigureAwait(false);
             return (containerId, stopped);
@@ -165,7 +165,7 @@ namespace reexmonkey.xmisc.backbone.virtualization.docker.extensions
             this DockerClient client,
             IEnumerable<string> containerIds,
             ContainerStopParameters parameters,
-            CancellationToken cancellation = default(CancellationToken))
+            CancellationToken cancellation = default)
         {
             var results = new List<(string id, bool success)>();
             foreach (var containerId in containerIds)
@@ -181,7 +181,7 @@ namespace reexmonkey.xmisc.backbone.virtualization.docker.extensions
             IEnumerable<string> containerIds,
             ContainerStopParameters stopParameters,
             ContainerRemoveParameters removeParameters,
-            CancellationToken cancellation = default(CancellationToken))
+            CancellationToken cancellation = default)
         {
             var results = new List<string>();
             var stoppedResults = await client.StopContainersAsync(containerIds, stopParameters, cancellation).ConfigureAwait(false);
@@ -198,7 +198,7 @@ namespace reexmonkey.xmisc.backbone.virtualization.docker.extensions
         public static async Task<string> RemoveContainerAsync(
             this DockerClient client, string id,
             ContainerRemoveParameters parameters,
-            CancellationToken cancellation = default(CancellationToken))
+            CancellationToken cancellation = default)
         {
             await client.Containers.RemoveContainerAsync(id, parameters, cancellation).ConfigureAwait(false);
             return id;
@@ -208,7 +208,7 @@ namespace reexmonkey.xmisc.backbone.virtualization.docker.extensions
             this DockerClient client,
             IEnumerable<string> ids,
             ContainerRemoveParameters parameters,
-            CancellationToken cancellation = default(CancellationToken))
+            CancellationToken cancellation = default)
         {
             var removed = new List<string>();
             foreach (var containerId in ids)
@@ -222,7 +222,7 @@ namespace reexmonkey.xmisc.backbone.virtualization.docker.extensions
         public static Task<IList<ContainerListResponse>> GetContainersAsync(
             this DockerClient client,
             ContainersListParameters parameters,
-            CancellationToken cancellation = default(CancellationToken))
+            CancellationToken cancellation = default)
             => client.Containers.ListContainersAsync(parameters, cancellation);
 
         public static ContainerListResponse FindContainerById(this IEnumerable<ContainerListResponse> containers, string id)

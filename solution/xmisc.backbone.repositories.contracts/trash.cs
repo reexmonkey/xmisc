@@ -85,7 +85,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="references">Should the references of the data model also be trashed?</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise to trash a data model that is specified by <paramref name="key"/>.</returns>
-        Task<TModel> TrashByKeyAsync(TKey key, bool? references = null, CancellationToken token = default(CancellationToken));
+        Task<TModel> TrashByKeyAsync(TKey key, bool? references = null, CancellationToken token = default);
 
         /// <summary>
         /// Trashes data models asynchronously that are specified by the provided unique identifiers.
@@ -96,7 +96,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="count">The numbers of data models to return.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise to trash and return data models that are specified by <paramref name="keys"/>.</returns>
-        Task<List<TModel>> TrashAllByKeysAsync(IEnumerable<TKey> keys, bool? references = null, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
+        Task<List<TModel>> TrashAllByKeysAsync(IEnumerable<TKey> keys, bool? references = null, int? offset = null, int? count = null, CancellationToken token = default);
 
         /// <summary>
         /// Trashes the specified data model asynchronously.
@@ -113,7 +113,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="references">Should the references of the data models also be trashed?</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise to trash the given data models.</returns>
-        Task TrashAllAsync(IEnumerable<TModel> models, bool? references = null, CancellationToken token = default(CancellationToken));
+        Task TrashAllAsync(IEnumerable<TModel> models, bool? references = null, CancellationToken token = default);
 
         /// <summary>
         /// Restores a data model asynchronously that is specified by the provided <paramref name="key"/>.
@@ -132,7 +132,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="count">The numbers of data models to return.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise to restore and return the trashed data models that are specified by <paramref name="keys"/>.</returns>
-        Task<List<TModel>> RestoreAllByKeysAsync(IEnumerable<TKey> keys, bool? references = null, int? offset = null, int? count = null, CancellationToken token = default(CancellationToken));
+        Task<List<TModel>> RestoreAllByKeysAsync(IEnumerable<TKey> keys, bool? references = null, int? offset = null, int? count = null, CancellationToken token = default);
 
         /// <summary>
         /// Restores the specified data model asynchronously.
@@ -149,6 +149,6 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="references">Should the references of the data models also be restored?</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise to restore the given data models.</returns>
-        Task RestoreAllAsync(IEnumerable<TModel> models, bool? references = null, CancellationToken token = default(CancellationToken));
+        Task RestoreAllAsync(IEnumerable<TModel> models, bool? references = null, CancellationToken token = default);
     }
 }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Target Name="AutoVersion" AfterTargets="AfterBuild">
   <PropertyGroup>
     <PackageVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)$(GitSemVerDashLabel)</PackageVersion>	
@@ -9,17 +9,17 @@
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
     <Description>Specifies validation interfaces.</Description>
-    <Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
+    <Copyright>Copyright (c) 2015 - 2022, Reflektiv</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
-   <PackageReference Include="Docker.DotNet" Version="3.125.2" />
-   <PackageReference Include="GitInfo" Version="2.0.26">
+   <PackageReference Include="Docker.DotNet" Version="3.125.5" />
+   <PackageReference Include="GitInfo" Version="2.2.0">
      <PrivateAssets>all</PrivateAssets>
      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
    </PackageReference>
-    <PackageReference Include="xmisc.core.system.net" Version="6.0.3" />
+    <PackageReference Include="xmisc.core.system.net" Version="8.2.5" />
   </ItemGroup>
   <ItemGroup>
     <None Include="./../../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />

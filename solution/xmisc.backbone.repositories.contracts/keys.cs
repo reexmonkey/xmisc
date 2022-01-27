@@ -27,7 +27,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// </summary>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>The asynchronous operation that returns a data item that uniquely identifies the entity.</returns>
-        Task<TKey> GetKeyAsync(CancellationToken token = default(CancellationToken));
+        Task<TKey> GetKeyAsync(CancellationToken token = default);
 
         /// <summary>
         /// Asynchronously sets the data item that uniquely identifies the entity.
@@ -35,6 +35,6 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="key">The data item that uniquely identifies the entity</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>The asynchronous operation that sets the the data item, which uniquely identifies the entity.</returns>
-        Task SetKeyAsync(TKey key, CancellationToken token = default(CancellationToken));
+        Task SetKeyAsync(TKey key, CancellationToken token = default);
     }
 }

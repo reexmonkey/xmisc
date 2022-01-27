@@ -5,12 +5,12 @@
   </PropertyGroup>	 
   </Target>
   <PropertyGroup>
-	<TargetFramework>netstandard1.4</TargetFramework>
+	<TargetFramework>net6.0</TargetFramework>
     <RootNamespace>reexmonkey.xmisc.backbone.io.protobuf</RootNamespace>
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
     <Description>ProtoBufs Serialization Adapter.</Description>
-	<Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
+	<Copyright>Copyright (c) 2015 - 2022, Reflektiv</Copyright>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
 	<AssemblyName>xmisc.backbone.io.protobuf</AssemblyName>
   </PropertyGroup>
@@ -21,11 +21,11 @@
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="2.0.26">
+    <PackageReference Include="GitInfo" Version="2.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="protobuf-net" Version="2.4.6" />
-    <PackageReference Include="xmisc.core.io" Version="6.0.1" />
+    <PackageReference Include="protobuf-net" Version="3.0.101" />
+    <PackageReference Include="xmisc.core.io" Version="8.2.6" />
   </ItemGroup>
 </Project>

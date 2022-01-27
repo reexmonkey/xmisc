@@ -5,12 +5,12 @@
   </PropertyGroup>	 
   </Target>
   <PropertyGroup>
-	<TargetFramework>netstandard1.4</TargetFramework>
+	<TargetFramework>net6.0</TargetFramework>
     <RootNamespace>reexmonkey.xmisc.backbone.validation.contracts</RootNamespace>
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
     <Description>Specifies validation interfaces.</Description>
-	<Copyright>Copyright (c) 2015 - 2020, Reflektiv</Copyright>
+	<Copyright>Copyright (c) 2015 - 2022, Reflektiv</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
 	<AssemblyName>xmisc.backbone.validation.contracts</AssemblyName>
@@ -27,8 +27,8 @@
     <None Include="./../../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="8.6.2" />
-    <PackageReference Include="GitInfo" Version="2.0.26">
+    <PackageReference Include="FluentValidation" Version="10.3.6" />
+    <PackageReference Include="GitInfo" Version="2.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

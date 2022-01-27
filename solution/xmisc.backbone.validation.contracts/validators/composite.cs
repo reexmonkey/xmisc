@@ -53,7 +53,7 @@ namespace reexmonkey.xmisc.backbone.validation.contracts.validators
         /// <param name="context"></param>
         /// <param name="cancellation"></param>
         /// <returns></returns>
-        public override async Task<ValidationResult> ValidateAsync(ValidationContext<T> context, CancellationToken cancellation = default(CancellationToken))
+        public override async Task<ValidationResult> ValidateAsync(ValidationContext<T> context, CancellationToken cancellation = default)
         {
             var primaryErrors = (await base.ValidateAsync(context)).Errors;
             var secondaryErrors = await ValidateAsync(validators, context, cancellation);
@@ -63,7 +63,7 @@ namespace reexmonkey.xmisc.backbone.validation.contracts.validators
         private async Task<IList<ValidationFailure>> ValidateAsync(
             IEnumerable<IValidator> validators,
             ValidationContext<T> context,
-            CancellationToken cancellation = default(CancellationToken))
+            CancellationToken cancellation = default)
         {
             var errors = new List<ValidationFailure>();
             foreach (var validator in validators)

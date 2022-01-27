@@ -59,7 +59,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
             bool? references = true,
             int? offset = null,
             int? count = null,
-            CancellationToken token = default(CancellationToken))
+            CancellationToken token = default)
             where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
         {
             return (await repository

@@ -31,7 +31,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// </summary>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>The total number of data models in the data store.</returns>
-        Task<long> CountAsync(CancellationToken token = default(CancellationToken));
+        Task<long> CountAsync(CancellationToken token = default);
 
         /// <summary>
         /// Asynchronously counts the specified data models in the data store that satisfy the given predicate.
@@ -39,6 +39,6 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="predicate">The condition for a data model that when evaluated to true, includes the data model in the count.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>The total number of data models that satisfy the given predicate.</returns>
-        Task<long> CountAsync(Expression<Func<TModel, bool>> predicate, CancellationToken token = default(CancellationToken));
+        Task<long> CountAsync(Expression<Func<TModel, bool>> predicate, CancellationToken token = default);
     }
 }
