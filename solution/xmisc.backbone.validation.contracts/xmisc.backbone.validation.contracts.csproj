@@ -16,7 +16,7 @@
 	<AssemblyName>xmisc.backbone.validation.contracts</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\xmisc.backbone.validation.contracts.xml</DocumentationFile>
+    <DocumentationFile></DocumentationFile>
     <OutputPath>bin\Debug\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
