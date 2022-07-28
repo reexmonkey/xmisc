@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
+    #nullable enable
+
     /// <summary>
     /// Specifies a repository that queries a data store for data models of the specified type <typeparamref name="TModel"/>.
     /// </summary>
@@ -20,7 +23,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="key">The key that uniquely identifies the data model.</param>
         /// <param name="references">Decides whether to load the related references of the data model as well.</param>
         /// <returns>The found data model; otherwise the default value of the data model.</returns>
-        TModel FindByKey(TKey key, bool? references = null);
+        TModel? FindByKey(TKey key, bool? references = null);
 
         /// <summary>
         /// Finds data models that are specified by the given keys and optionally paginates the results.
@@ -61,7 +64,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="references">Decides whether to load the related references of the data model as well.</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise that returns the found data model; otherwise a default value of the data model.</returns>
-        Task<TModel> FindByKeyAsync(TKey key, bool? references = null, CancellationToken token = default);
+        Task<TModel?> FindByKeyAsync(TKey key, bool? references = null, CancellationToken token = default);
 
         /// <summary>
         /// Finds data models asynchronously that are specified by the given keys and optionally paginates the results.

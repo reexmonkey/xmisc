@@ -37,7 +37,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="references">Should the references of the model also be saved?</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
         /// <returns>A promise that indicates whether the model was inserted in the data store or updated.
-        /// <para/> True if the model was inserted in the data store; otherwise false if it was updated.
+        /// <para/>A promise to return true if the model was inserted in the data store; otherwise false if it was updated.
         /// </returns>
         Task<bool> SaveAsync(TModel model, bool? references = true, CancellationToken token = default);
 
@@ -47,7 +47,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="models">The models to persist to the data store.</param>
         /// <param name="references">Should the references of the model also be saved?</param>
         /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
-        /// <returns>A promise that indiactes number of models added to the data store.</returns>
+        /// <returns>A promise to return the number of models added to the data store.</returns>
         Task<long> SaveAllAsync(IEnumerable<TModel> models, bool? references = true, CancellationToken token = default);
     }
 }

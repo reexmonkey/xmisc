@@ -1,34 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Target Name="AutoVersion" AfterTargets="AfterBuild">
   <PropertyGroup>
-    <PackageVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)$(GitSemVerDashLabel)</PackageVersion>	
+	<PackageVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)$(GitSemVerDashLabel)</PackageVersion>	
   </PropertyGroup>	 
   </Target>
   <PropertyGroup>
-	<TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>reexmonkey.xmisc.backbone.repositories.contracts</RootNamespace>
-    <Company>Reflektiv</Company>
-    <Authors>reexmonkey</Authors>
-    <Description>Specifies domain service (repository) interfaces.</Description>
-	  <Copyright>Copyright (c) 2015 -2019, Reflektiv</Copyright>
-    <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>    
-    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+	<TargetFramework>net6.0</TargetFramework>
+	<RootNamespace>reexmonkey.xmisc.backbone.repositories.contracts</RootNamespace>
+	<Company>Reflektiv</Company>
+	<Authors>reexmonkey</Authors>
+	<Description>Specifies domain service (repository) interfaces.</Description>
+	  <Copyright>Copyright (c) 2015 -2022, Reflektiv</Copyright>
+	<PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>    
+	<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	<AssemblyName>xmisc.backbone.repositories.contracts</AssemblyName>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard1.4\xmisc.backbone.repositories.contracts.xml</DocumentationFile>
+	<DocumentationFile></DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile></DocumentationFile>
+	<DocumentationFile></DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="./../../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
+	<None Include="./../../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="2.2.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+	<PackageReference Include="GitInfo" Version="2.2.0">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
   </ItemGroup>
 </Project>
