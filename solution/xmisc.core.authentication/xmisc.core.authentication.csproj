@@ -10,7 +10,7 @@
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
     <Description>Authentication utilities and extensions.</Description>
-    <Copyright>Copyright (c) 2015 - 2022, Reflektiv</Copyright>
+    <Copyright>Copyright (c) 2015 - 2023, Reflektiv</Copyright>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
   </PropertyGroup>
 
@@ -38,7 +38,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="ServiceStack.Text" Version="6.0.0" />
+    <PackageReference Include="ServiceStack.Text" Version="6.8.0" />
     <PackageReference Include="xmisc.core.text" Version="8.2.7" />
   </ItemGroup>
 
