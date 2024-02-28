@@ -65,7 +65,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xmisc.core.authentication.t
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xmisc.core.system.xmltools", "xmisc.core.system.xmltools\xmisc.core.system.xmltools.csproj", "{9C7E8518-FD04-4405-B730-470797F286F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xmisc.core.text.tests", "xmisc.core.text.tests\xmisc.core.text.tests.csproj", "{4859FC61-0091-4CFC-9B8E-B1F540E85EE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xmisc.core.text.tests", "xmisc.core.text.tests\xmisc.core.text.tests.csproj", "{4859FC61-0091-4CFC-9B8E-B1F540E85EE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
