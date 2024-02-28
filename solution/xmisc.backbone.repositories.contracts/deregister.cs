@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
     /// <summary>
-    /// Specifies synchronous operations to deregister one or more models by assigning each model a default identifier.
+    /// Specifies synchronous operations that deregister one or more models by assigning each model a default identifier.
     /// </summary>
     /// <typeparam name="TKey">The type of default identifier to assign to each model.</typeparam>
     /// <typeparam name="TModel">The type of model to register or deregister. </typeparam>

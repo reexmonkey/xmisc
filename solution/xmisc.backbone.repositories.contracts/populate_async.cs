@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
     /// <summary>
-    /// Specifies synchronous operations that populate one or more data model with references or details from a data store.
+    /// Specifies asynchronous operations that populate one or more data model with references or details from a data store.
     /// </summary>
     /// <typeparam name="TKey">The type of unique key to identify the data model.</typeparam>
     /// <typeparam name="TModel">The type of data model to hydrate.</typeparam>

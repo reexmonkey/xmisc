@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
     /// <summary>
-    /// Specifies asynchronous operations to deregister one or more models by assigning each model a default identifier.
+    /// Specifies asynchronous operations that deregister one or more data models by assigning each model a default identifier.
     /// </summary>
-    /// <typeparam name="TKey">The type of default identifier to assign to each model.</typeparam>
+    /// <typeparam name="TKey">The type of default identifier to assign each model.</typeparam>
     /// <typeparam name="TModel">The type of model to register or deregister. </typeparam>
     public interface IDeregisterRepositoryAsync<in TKey, in TModel>
         where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
     /// <summary>
-    /// Specifies asynchronous operations that inserts or updates models into/in a data store.
+    /// Specifies asynchronous operations that insert or update models into/in a data store.
     /// </summary>
     /// <typeparam name="TKey">The type of key, which identifies the model to insert or update.</typeparam>
     /// <typeparam name="TModel">The type of model to persist.</typeparam>

@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
-#nullable enable
-
     /// <summary>
     /// Specifies synchronous operations that query a data store for one or more data models.
     /// </summary>
