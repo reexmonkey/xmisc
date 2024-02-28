@@ -37,6 +37,10 @@ namespace xmisc.backbone.identity.tests.guids
 
             //Assert
             Assert.True(Fixture.SequentialGuidComparer.Compare(first, second) < 0 && Fixture.SequentialGuidComparer.Compare(second, third) < 0);
+
+            console.WriteLine("first: {0}", first);
+            console.WriteLine("second: {0}", second);
+            console.WriteLine("third: {0}", third);
         }
 
         [Fact]

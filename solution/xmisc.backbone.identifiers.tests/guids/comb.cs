@@ -2,11 +2,19 @@
 using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
 using reexmonkey.xmisc.backbone.identifiers.contracts.models;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace xmisc.backbone.identity.tests.guids
 {
     public class SequentialGuidTests
     {
+        private readonly ITestOutputHelper console;
+
+        public SequentialGuidTests(ITestOutputHelper console)
+        {
+            this.console = console;
+        }
+
         [Fact]
         public void TestUniqueness()
         {
@@ -16,6 +24,9 @@ namespace xmisc.backbone.identity.tests.guids
 
             //Assert
             Assert.NotEqual(first, second);
+
+            console.WriteLine("first: {0}", first);
+            console.WriteLine("second: {0}", second);
         }
 
         [Fact]
@@ -28,6 +39,10 @@ namespace xmisc.backbone.identity.tests.guids
 
             //Assert
             Assert.True(first < second && second < third);
+
+            console.WriteLine("first: {0}", first);
+            console.WriteLine("second: {0}", second);
+            console.WriteLine("third: {0}", third);
         }
 
 

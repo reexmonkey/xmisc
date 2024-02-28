@@ -10,15 +10,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-    <PackageReference Include="ServiceStack.OrmLite.SqlServer.Core" Version="6.0.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
-    <PackageReference Include="xmisc.backbone.io.formatter" Version="6.0.13" />
-    <PackageReference Include="xmisc.backbone.io.jil" Version="6.0.13" />
-    <PackageReference Include="xmisc.backbone.io.messagepack" Version="6.0.22" />
-    <PackageReference Include="xmisc.backbone.io.protobuf" Version="6.0.13" />
-    <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageReference Include="ServiceStack.OrmLite.SqlServer.Core" Version="8.1.2" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+    <PackageReference Include="xmisc.backbone.io.formatter" Version="8.2.12" />
+    <PackageReference Include="xmisc.backbone.io.jil" Version="8.2.13" />
+    <PackageReference Include="xmisc.backbone.io.messagepack" Version="8.2.12" />
+    <PackageReference Include="xmisc.backbone.io.protobuf" Version="8.2.12" />
+    <PackageReference Include="xunit" Version="2.7.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

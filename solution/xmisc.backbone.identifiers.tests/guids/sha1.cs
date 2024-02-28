@@ -27,6 +27,9 @@ namespace xmisc.backbone.identity.tests.guids
 
             //assert
             Assert.Equal(first, second);
+
+            console.WriteLine("first: {0}", first);
+            console.WriteLine("second: {0}", second);
         }
 
         [Theory]

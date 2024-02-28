@@ -1,12 +1,21 @@
 ﻿using reexmonkey.xmisc.backbone.identifiers.contracts.models;
 using reexmonkey.xmisc.backbone.identifiers.tests.fixtures;
+using System;
 using System.Text;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace xmisc.backbone.identity.tests.guids
 {
     public class Md5GuidTests
     {
+        private readonly ITestOutputHelper console;
+
+        public Md5GuidTests(ITestOutputHelper console)
+        {
+            this.console = console;
+        }
+
         [Theory]
         [InlineData("test", "test")]
         [InlineData("unique", "unique")]
@@ -20,6 +29,9 @@ namespace xmisc.backbone.identity.tests.guids
 
             //assert
             Assert.Equal(first, second);
+
+            console.WriteLine("first: {0}", first);
+            console.WriteLine("second: {0}", second);
         }
 
         [Theory]
