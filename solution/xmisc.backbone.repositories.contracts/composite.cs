@@ -31,17 +31,17 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// </summary>
         /// <typeparam name="TKeyAttribute"></typeparam>
         /// <param name="attribute">The key attribute to add to the pool of key attributes.</param>
-        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        /// <param name="cancellation">Propagates the notification that the operation should be cancelled.</param>
         /// <returns>A promise that the key attribute shall be added to the pool of key attributes.</returns>
-        Task AddKeyAttributeAsync<TKeyAttribute>(TKeyAttribute attribute, CancellationToken token = default);
+        Task AddKeyAttributeAsync<TKeyAttribute>(TKeyAttribute attribute, CancellationToken cancellation = default);
 
         /// <summary>
         /// Asynchronously removes a key attribute from the pool of key attributes.
         /// </summary>
         /// <typeparam name="TKeyAttribute">The type of key attribute to remove.</typeparam>
         /// <param name="attribute">The key attribute to remove from the pool of key attributes.</param>
-        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        /// <param name="cancellation">Propagates the notification that the operation should be cancelled.</param>
         /// <returns>A promise that the key attribute shall be remnoved from the pool of key attributes.</returns>
-        Task RemoveKeyAttributeAsync<TKeyAttribute>(TKeyAttribute attribute, CancellationToken token = default);
+        Task RemoveKeyAttributeAsync<TKeyAttribute>(TKeyAttribute attribute, CancellationToken cancellation = default);
     }
 }

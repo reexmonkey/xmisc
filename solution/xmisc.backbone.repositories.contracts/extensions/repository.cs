@@ -21,9 +21,9 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         /// <param name="repository">The repository that contains the data model.</param>
         /// <param name="predicate">The condition that when evaluated to true, returns the found data models.</param>
         /// <param name="keySelector">A function to extract the specified key for each data model group.</param>
-        /// <param name="references">Decides whether to load the related references of the data models as well.</param>
+        /// <param name="references">Decides whether to load the related references or details of the data models as well.</param>
         /// <param name="offset">The number of data models to bypass.</param>
-        /// <param name="count">The number of data models to return.</param>
+        /// <param name="limit">The number of data models to return.</param>
         /// <returns>A dictionary that contains grouped data models satisfying the <paramref name="predicate"/>.</returns>
         public static IDictionary<TKey, List<TModel>> FindAll<TKey, TModel>(
             this IReadRepository<TKey, TModel> repository,
@@ -31,11 +31,11 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
             Func<TModel, TKey> keySelector,
             bool? references = true,
             int? offset = null,
-            int? count = null)
+            int? limit = null)
             where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
         {
             return repository
-                .FindAll(predicate, references, offset, count)
+                .FindAll(predicate, references, offset, limit)
                 .GroupBy(keySelector).ToDictionary(g => g.Key, g => g.ToList());
         }
 
@@ -47,24 +47,28 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         /// <param name="repository">The repository that contains the data model.</param>
         /// <param name="predicate">The condition that when evaluated to true, returns the found data models.</param>
         /// <param name="keySelector">A function to extract the specified key for each data model group.</param>
-        /// <param name="references">Decides whether to load the related references of the data models as well.</param>
+        /// <param name="references">Decides whether to load the related references or details of the data models as well.</param>
         /// <param name="offset">The number of data models to bypass.</param>
-        /// <param name="count">The number of data models to return.</param>
-        /// <param name="token">Propagates the notification that the asynchronous operation should be cancelled.</param>
+        /// <param name="limit">The number of data models to return.</param>
+        /// <param name="cancellation">Propagates the notification that the operation should be cancelled.</param>
         /// <returns>A dictionary that contains grouped data models satisfying the <paramref name="predicate"/>.</returns>
         public static async Task<IDictionary<TKey, List<TModel>>> FindAllAsync<TKey, TModel>(
-            this IReadRepository<TKey, TModel> repository,
+            this IReadRepositoryAsync<TKey, TModel> repository,
             Expression<Func<TModel, bool>> predicate,
             Func<TModel, TKey> keySelector,
             bool? references = true,
             int? offset = null,
-            int? count = null,
-            CancellationToken token = default)
+            int? limit = null,
+            CancellationToken cancellation = default)
             where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
         {
-            return (await repository
-                .FindAllAsync(predicate, references, offset, count, token))
-                .GroupBy(keySelector).ToDictionary(g => g.Key, g => g.ToList());
+            var matches = repository.FindAllAsync(predicate, references, offset, limit, cancellation);
+            var list = new List<TModel>();
+            await foreach(var match in matches)
+            {
+                list.Add(match);
+            };
+            return list.GroupBy(keySelector).ToDictionary(g => g.Key, g => g.ToList());
         }
 
         /// <summary>

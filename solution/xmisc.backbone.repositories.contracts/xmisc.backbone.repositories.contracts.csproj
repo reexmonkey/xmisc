@@ -5,12 +5,14 @@
   </PropertyGroup>	 
   </Target>
   <PropertyGroup>
-	<TargetFramework>net6.0</TargetFramework>
+	<TargetFramework>net8.0</TargetFramework>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>enable</Nullable>
 	<RootNamespace>reexmonkey.xmisc.backbone.repositories.contracts</RootNamespace>
 	<Company>Reflektiv</Company>
-	<Authors>reexmonkey</Authors>
+	<Authors>Emmanuel M. Ngwane</Authors>
 	<Description>Specifies domain service (repository) interfaces.</Description>
-	  <Copyright>Copyright (c) 2015 -2022, Reflektiv</Copyright>
+	  <Copyright>Copyright (c) 2015 -2024, Emmanuel M. Ngwane</Copyright>
 	<PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>    
 	<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 	<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
@@ -28,7 +30,7 @@
 	<None Include="./../../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
   </ItemGroup>
   <ItemGroup>
-	<PackageReference Include="GitInfo" Version="2.2.0">
+	<PackageReference Include="GitInfo" Version="3.3.4">
 	  <PrivateAssets>all</PrivateAssets>
 	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>
