@@ -34,12 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="2.2.0">
+    <PackageReference Include="GitInfo" Version="3.3.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="ServiceStack.Text" Version="6.8.0" />
-    <PackageReference Include="xmisc.core.text" Version="8.2.7" />
+    <PackageReference Include="ServiceStack.Text" Version="8.1.2" />
+    <PackageReference Include="xmisc.core.text" Version="9.0.5" />
   </ItemGroup>
 
 </Project>

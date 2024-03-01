@@ -30,11 +30,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="2.2.0">
+    <PackageReference Include="GitInfo" Version="3.3.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-    <PackageReference Include="xmisc.core.linq" Version="8.2.5" />
+    <PackageReference Include="xmisc.core.linq" Version="9.0.6" />
   </ItemGroup>
 </Project>
