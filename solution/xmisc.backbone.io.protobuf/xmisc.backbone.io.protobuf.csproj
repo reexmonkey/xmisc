@@ -28,11 +28,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="2.2.0">
+    <PackageReference Include="GitInfo" Version="3.3.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="protobuf-net" Version="3.0.101" />
-    <PackageReference Include="xmisc.core.io" Version="8.2.6" />
+    <PackageReference Include="protobuf-net" Version="3.2.30" />
+    <PackageReference Include="xmisc.core.io" Version="9.0.6" />
   </ItemGroup>
 </Project>

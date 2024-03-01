@@ -49,7 +49,7 @@ namespace reexmonkey.xmisc.backbone.migration.simple.migrations.migrations
         /// <param name="commandTimeout">The command timeout to use (in seconds), or null to use the default from your ADO.NET provider</param>
         public void Execute(string sql, Func<string, DbConnection, DbCommand> cmdFunc, IEnumerable<DbParameter> parameters,  int? commandTimeout = null)
         {
-            if (Logger != null) Logger.LogSql(sql);
+            Logger?.LogSql(sql);
             using (var command =  cmdFunc(sql, Connection))
             {
                 command.Parameters.Clear();

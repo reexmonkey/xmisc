@@ -14,12 +14,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-   <PackageReference Include="Docker.DotNet" Version="3.125.5" />
-   <PackageReference Include="GitInfo" Version="2.2.0">
+   <PackageReference Include="Docker.DotNet" Version="3.125.15" />
+   <PackageReference Include="GitInfo" Version="3.3.4">
      <PrivateAssets>all</PrivateAssets>
      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
    </PackageReference>
-    <PackageReference Include="xmisc.core.system.net" Version="8.2.5" />
+    <PackageReference Include="xmisc.core.system.net" Version="9.0.6" />
   </ItemGroup>
   <ItemGroup>
     <None Include="./../../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />

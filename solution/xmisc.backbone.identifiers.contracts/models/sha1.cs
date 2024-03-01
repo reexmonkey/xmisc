@@ -12,7 +12,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     [Serializable]
-    public struct Sha1Guid: IEquatable<Sha1Guid>, IComparable, IComparable<Sha1Guid>, IFormattable
+    public readonly struct Sha1Guid: IEquatable<Sha1Guid>, IComparable, IComparable<Sha1Guid>, IFormattable
     {
         /// <summary>
         ///  A read-only instance of the  <see cref="Sha1Guid"/> structure whose all 128 bits are set to zeros.
@@ -154,7 +154,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// result contains a valid <see cref="Sha1Guid"/>. If the method returns false, result equals
         /// <see cref="Empty"/> </param>
         /// <returns>true if the parse operation was successful; otherwise, false.</returns>
-        public static bool TryParseExact(String value, String format, out Sha1Guid result)
+        public static bool TryParseExact(string value, string format, out Sha1Guid result)
         {
             bool success = false;
             if(Guid.TryParseExact(value, format, out Guid guid) &&  guid.IsVersion5Variant())
@@ -287,7 +287,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// <para/>where the value of the GUID is represented as a series of lowercase hexadecimal digits in groups of 8, 4, 4,
         /// 4, and 12 digits and separated by hyphens.
         /// <para/>An example of a return value is "382c74c3-721d-4f34-80e5-57657b6cbc27".
-        /// <para/>To convert the hexadecimal digits from a through f to uppercase, call the <see cref="String.ToUpper()"/>
+        /// <para/>To convert the hexadecimal digits from a through f to uppercase, call the <see cref="string.ToUpper()"/>
         /// method on the returned string.
         /// </returns>
         public override string ToString() => AsGuid().ToString();

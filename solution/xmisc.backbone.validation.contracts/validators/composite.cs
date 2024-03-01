@@ -15,7 +15,7 @@ namespace reexmonkey.xmisc.backbone.validation.contracts.validators
     /// <remarks>See: "http://www.jeremyskinner.co.uk/2011/01/13/using-fluentvalidation-to-validate-types-with-multiple-interfaces/"</remarks>
     public abstract class AbstractCompositeValidator<T> : AbstractValidator<T>
     {
-        private List<IValidator> validators;
+        private readonly List<IValidator> validators;
 
         /// <summary>
         /// Creates a new instance of the <see cref="AbstractCompositeValidator{T}"/> class.
@@ -55,12 +55,12 @@ namespace reexmonkey.xmisc.backbone.validation.contracts.validators
         /// <returns></returns>
         public override async Task<ValidationResult> ValidateAsync(ValidationContext<T> context, CancellationToken cancellation = default)
         {
-            var primaryErrors = (await base.ValidateAsync(context)).Errors;
+            var primaryErrors = (await base.ValidateAsync(context, cancellation)).Errors;
             var secondaryErrors = await ValidateAsync(validators, context, cancellation);
             return new ValidationResult(primaryErrors.Concat(secondaryErrors));
         }
 
-        private async Task<IList<ValidationFailure>> ValidateAsync(
+        private static async Task<IList<ValidationFailure>> ValidateAsync(
             IEnumerable<IValidator> validators,
             ValidationContext<T> context,
             CancellationToken cancellation = default)
