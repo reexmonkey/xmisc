@@ -14,10 +14,10 @@ namespace xmisc.core.text.tests.fixtures
             return result;
         }
 
-        public static TSource[] Combine<TSource>(this TSource[]source, TSource[] other)
+        public static byte[] Combine(this byte[]source, byte[] other)
         {
             var total = source.Length + other.Length;
-            var result = new TSource[total];
+            var result = new byte[total];
             Buffer.BlockCopy(source, 0, result, 0, source.Length);
             Buffer.BlockCopy(other, 0, result, source.Length, other.Length);
             return result;

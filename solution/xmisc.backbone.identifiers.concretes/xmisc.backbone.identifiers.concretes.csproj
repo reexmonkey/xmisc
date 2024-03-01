@@ -23,11 +23,11 @@
     <DocumentationFile></DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="2.2.0">
+    <PackageReference Include="GitInfo" Version="3.3.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="xmisc.backbone.identifiers.contracts" Version="8.2.9" />
+    <PackageReference Include="xmisc.backbone.identifiers.contracts" Version="9.0.11" />
   </ItemGroup>
   <ItemGroup>
     <None Include="./../../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />

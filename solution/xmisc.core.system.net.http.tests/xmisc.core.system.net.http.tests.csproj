@@ -7,10 +7,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageReference Include="xmisc.backbone.io.formatter" Version="8.2.12" />
-    <PackageReference Include="xmisc.backbone.io.jil" Version="8.2.13" />
-    <PackageReference Include="xmisc.backbone.io.messagepack" Version="8.2.12" />
-    <PackageReference Include="xmisc.backbone.io.protobuf" Version="8.2.12" />
+    <PackageReference Include="xmisc.backbone.io.formatter" Version="9.0.11" />
+    <PackageReference Include="xmisc.backbone.io.jil" Version="9.0.11" />
+    <PackageReference Include="xmisc.backbone.io.messagepack" Version="9.0.11" />
+    <PackageReference Include="xmisc.backbone.io.protobuf" Version="9.0.11" />
     <PackageReference Include="xmisc.core.linq" Version="9.0.6" />
     <PackageReference Include="xunit" Version="2.7.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
