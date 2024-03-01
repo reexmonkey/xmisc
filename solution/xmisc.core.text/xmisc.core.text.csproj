@@ -10,22 +10,15 @@
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
     <Description>Input/Output utilities and extensions.</Description>
-    <Copyright>Copyright (c) 2015 - 2022, Reflektiv</Copyright>
+    <Copyright>Copyright (c) 2015 - 2024, Reflektiv</Copyright>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
     <Description>Input/Output utilities and extensions.</Description>
-    <Copyright>Copyright (c) 2015 - 2022, Reflektiv</Copyright>
+    <Copyright>Copyright (c) 2015 - 2024, Reflektiv</Copyright>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>xmisc.core.text.xml</DocumentationFile>
-    <OutputPath>bin\Debug\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile></DocumentationFile>
-    <OutputPath>bin\Release\</OutputPath>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\LICENSE.md" Link="LICENSE.md">
@@ -35,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="2.2.0">
+    <PackageReference Include="GitInfo" Version="3.3.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

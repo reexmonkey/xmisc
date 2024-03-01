@@ -11,7 +11,7 @@ namespace reexmonkey.xmisc.core.text.extensions
     /// </summary>
     public static class StringExtensions
     {
-        private static char[] base64Padding = { '=' };
+        private static readonly char[] base64Padding = { '=' };
 
         /// <summary>
         /// Extracts hexadecimal digits from a string
