@@ -119,23 +119,13 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
         public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, decimal value)
             => writer.WriteAttributeString(localName, prefix, ns, XmlConvert.ToString(value));
 
-        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, DateTime value, XmlDateTimeSerializationMode? mode = null)
-        {
-            if (mode.HasValue) writer.WriteAttributeString(localName, XmlConvert.ToString(value, mode.Value));
-            else writer.WriteAttributeString(localName, XmlConvert.ToString(value, mode.Value));
-        }
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, DateTime value, XmlDateTimeSerializationMode mode) => writer.WriteAttributeString(localName, XmlConvert.ToString(value, mode));
 
-        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, DateTime value, XmlDateTimeSerializationMode? mode = null)
-        {
-            if (mode.HasValue) writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value));
-            else writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value, mode.Value));
-        }
+        public static void SafeWriteAttributeString(this XmlWriter writer, string localName, string ns, DateTime value, XmlDateTimeSerializationMode mode)
+            => writer.WriteAttributeString(localName, ns, XmlConvert.ToString(value, mode));
 
-        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, DateTime value, XmlDateTimeSerializationMode? mode = null)
-        {
-            if (mode.HasValue) writer.WriteAttributeString(prefix, localName, ns, XmlConvert.ToString(value));
-            else writer.WriteAttributeString(prefix, localName, ns, XmlConvert.ToString(value));
-        }
+        public static void SafeWriteAttributeString(this XmlWriter writer, string prefix, string localName, string ns, DateTime value, XmlDateTimeSerializationMode mode)
+            => writer.WriteAttributeString(prefix, localName, ns, XmlConvert.ToString(value, mode));
 
         public static void SafeWriteAttributeString(this XmlWriter writer, string localName, DateTimeOffset value, string format = null)
         {
