@@ -53,7 +53,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         /// <param name="cancellation">Propagates the notification that the operation should be cancelled.</param>
         /// <returns>A dictionary that contains grouped data models satisfying the <paramref name="predicate"/>.</returns>
         public static async Task<IDictionary<TKey, List<TModel>>> FindAllAsync<TKey, TModel>(
-            this IReadRepositoryAsync<TKey, TModel> repository,
+            this IAsyncEnumerableReadRepositoryAsync<TKey, TModel> repository,
             Expression<Func<TModel, bool>> predicate,
             Func<TModel, TKey> keySelector,
             bool? references = true,
@@ -64,7 +64,39 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
         {
             var matches = repository.FindAllAsync(predicate, references, offset, limit, cancellation);
             var list = new List<TModel>();
-            await foreach(var match in matches)
+            await foreach (var match in matches)
+            {
+                list.Add(match);
+            };
+            return list.GroupBy(keySelector).ToDictionary(g => g.Key, g => g.ToList());
+        }
+
+        /// <summary>
+        /// Finds all data models asynchronously that satisfy the given predicate and groups them according to the specified key selector.
+        /// </summary>
+        /// <typeparam name="TKey">The type of key to uniquely identify each data model.</typeparam>
+        /// <typeparam name="TModel">The type of data model to search.</typeparam>
+        /// <param name="repository">The repository that contains the data model.</param>
+        /// <param name="predicate">The condition that when evaluated to true, returns the found data models.</param>
+        /// <param name="keySelector">A function to extract the specified key for each data model group.</param>
+        /// <param name="references">Decides whether to load the related references or details of the data models as well.</param>
+        /// <param name="offset">The number of data models to bypass.</param>
+        /// <param name="limit">The number of data models to return.</param>
+        /// <param name="cancellation">Propagates the notification that the operation should be cancelled.</param>
+        /// <returns>A dictionary that contains grouped data models satisfying the <paramref name="predicate"/>.</returns>
+        public static async Task<IDictionary<TKey, List<TModel>>> FindAllAsync<TKey, TModel>(
+            this IListReadRepositoryAsync<TKey, TModel> repository,
+            Expression<Func<TModel, bool>> predicate,
+            Func<TModel, TKey> keySelector,
+            bool? references = true,
+            int? offset = null,
+            int? limit = null,
+            CancellationToken cancellation = default)
+            where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        {
+            var matches = await repository.FindAllAsync(predicate, references, offset, limit, cancellation);
+            var list = new List<TModel>();
+            foreach (var match in matches)
             {
                 list.Add(match);
             };
@@ -105,6 +137,5 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.extensions
             };
             return new TransactionScope(scopeOption, options, TransactionScopeAsyncFlowOption.Enabled);
         }
-
     }
 }

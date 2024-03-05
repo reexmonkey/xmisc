@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
     /// <summary>
-    /// Specifies synchronous operations that query a data store for one or more data models.
+    /// Specifies an interface that queries a data store for one or more data in a sychronous operation.
     /// </summary>
     /// <typeparam name="TKey">The type of the key that uniquely identifies a model.</typeparam>
     /// <typeparam name="TModel">The type of data model.</typeparam>
