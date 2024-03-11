@@ -6,20 +6,20 @@ using System.Text;
 namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
 {
     /// <summary>
-    /// Specifies a UUID provider that produces SHA1-based (version 5) universal unique identifiers
+    /// Represents a UUID provider that produces SHA1-based (version 5) universal unique identifiers
     /// from a specified namespace and name as defined in RFC 4122.
     /// </summary>
-    public abstract class Sha1GuidKeyGeneratorBase : INameKeyGenerator<Sha1Guid>
+    public class Sha1GuidKeyGenerator : INameKeyGenerator<Sha1Guid>
     {
         private readonly Guid namespaceId;
         private readonly Encoding encoding;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Sha1GuidKeyGeneratorBase"/> class.
+        /// Initializes a new instance of the <see cref="Sha1GuidKeyGenerator"/> class.
         /// </summary>
         /// <param name="namespaceId">One of the default namespaces as defined in RFC 4122. </param>
         /// <param name="encoding">The character encoding to encode the name to its equivalent byte representation.</param>
-        public Sha1GuidKeyGeneratorBase(Guid namespaceId, Encoding encoding)
+        public Sha1GuidKeyGenerator(Guid namespaceId, Encoding encoding)
         {
             this.namespaceId = namespaceId;
             this.encoding = encoding;
@@ -42,7 +42,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
     /// <summary>
     /// Represents a UUID provider that produces SHA1-based (version 5) universal unique identifiers for DNS as defined in RFC 4122.
     /// </summary>
-    public sealed class DnsSha1GuidKeyGenerator : Sha1GuidKeyGeneratorBase
+    public sealed class DnsSha1GuidKeyGenerator : Sha1GuidKeyGenerator
     {
         /// <summary>
         /// Initializes an instance of the <see cref="DnsSha1GuidKeyGenerator"/> class.
@@ -56,7 +56,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
     /// <summary>
     /// Represents a UUID provider that produces SHA1-based (version 5) universal unique identifiers for URLs as defined in RFC 4122.
     /// </summary>
-    public sealed class UrlSha1GuidKeyGenerator : Sha1GuidKeyGeneratorBase
+    public sealed class UrlSha1GuidKeyGenerator : Sha1GuidKeyGenerator
     {
         /// <summary>
         /// Initializes an instance of the <see cref="UrlSha1GuidKeyGenerator"/> class.
@@ -71,7 +71,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
     /// <summary>
     /// Represents a UUID provider that produces SHA1-based (version 5) universal unique identifiers  for ISO OIDs as defined in RFC 4122.
     /// </summary>
-    public sealed class IsoOidSha1GuidKeyGenerator : Sha1GuidKeyGeneratorBase
+    public sealed class IsoOidSha1GuidKeyGenerator : Sha1GuidKeyGenerator
     {
         /// <summary>
         /// Initializes an instance of the <see cref="UrlSha1GuidKeyGenerator"/> class.

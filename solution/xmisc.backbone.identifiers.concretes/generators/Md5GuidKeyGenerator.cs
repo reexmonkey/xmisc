@@ -6,19 +6,19 @@ using System.Text;
 namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
 {
     /// <summary>
-    /// Specfiies a UUID provider that produces MD5-based (version 3) universal unique identifiers as defined in RFC 4122.
+    /// Represents a UUID provider that produces MD5-based (version 3) universal unique identifiers as defined in RFC 4122.
     /// </summary>
-    public abstract class Md5GuidKeyGeneratorBase : INameKeyGenerator<Md5Guid>
+    public class Md5GuidKeyGenerator : INameKeyGenerator<Md5Guid>
     {
         private readonly Guid namespaceId;
         private readonly Encoding encoding;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Md5GuidKeyGeneratorBase"/> class.
+        /// Initializes a new instance of the <see cref="Md5GuidKeyGenerator"/> class.
         /// </summary>
         /// <param name="namespaceId">One of the default namespaces as defined in RFC 4122. </param>
         /// <param name="encoding">The character encoding to encode the values to its byte representation.</param>
-        protected Md5GuidKeyGeneratorBase(Guid namespaceId, Encoding encoding)
+        protected Md5GuidKeyGenerator(Guid namespaceId, Encoding encoding)
         {
             this.namespaceId = namespaceId;
             this.encoding = encoding;
@@ -41,7 +41,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
     /// <summary>
     /// Represents a UUID provider that produces MD5-based (version 3) universal unique identifiers for DNS as defined in RFC 4122.
     /// </summary>
-    public sealed class DnsMd5GuidKeyGenerator : Md5GuidKeyGeneratorBase
+    public sealed class DnsMd5GuidKeyGenerator : Md5GuidKeyGenerator
     {
         /// <summary>
         /// Initializes an instance of the <see cref="DnsMd5GuidKeyGenerator"/> class.
@@ -55,7 +55,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
     /// <summary>
     /// Represents a UUID provider that produces MD5-based (version 3) universal unique identifiers for URLs as defined in RFC 4122.
     /// </summary>
-    public sealed class UrlMd5GuidKeyGenerator : Md5GuidKeyGeneratorBase
+    public sealed class UrlMd5GuidKeyGenerator : Md5GuidKeyGenerator
     {
         /// <summary>
         /// Initializes an instance of the <see cref="UrlMd5GuidKeyGenerator"/> class.
@@ -69,7 +69,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
     /// <summary>
     /// Represents a UUID provider that produces MD5-based (version 3) universal unique identifiers for ISO OIDs as defined in RFC 4122.
     /// </summary>
-    public sealed class IsoOidMd5GuidKeyGenerator : Md5GuidKeyGeneratorBase
+    public sealed class IsoOidMd5GuidKeyGenerator : Md5GuidKeyGenerator
     {
         /// <summary>
         /// Initializes an instance of the <see cref="UrlMd5GuidKeyGenerator"/> class.
