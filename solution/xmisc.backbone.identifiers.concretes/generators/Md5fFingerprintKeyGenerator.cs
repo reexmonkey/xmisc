@@ -1,3 +1,4 @@
+using reexmonkey.xmisc.backbone.identifiers.contracts.generators;
 using reexmonkey.xmisc.backbone.identifiers.contracts.models;
 using reexmonkey.xmisc.core.io.serializers;
 using System;
@@ -21,16 +22,16 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
         /// <param name="serializer">The binary serializer that serializes objects, whose fingerprints shall be generated.</param>
         public Md5FingerprintGenerator(Guid namespaceId, Encoding encoding, BinarySerializerBase serializer)
         {
+            this.namespaceId = namespaceId.ToByteArray();
             if (encoding == null) throw new ArgumentNullException(nameof(encoding));
             this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
-            this.namespaceId = namespaceId.ToByteArray();
         }
 
         /// <summary>
         /// Gets the default fingerprint for all types of objects.
         /// </summary>
         /// <returns>The default fingerprint for all types of objects.</returns>
-        public Md5Guid GetNullFingerprint() => Md5Guid.Empty;
+        public Md5Guid GetDefaultFingerprint() => Md5Guid.Empty;
 
         /// <summary>
         /// Produces a fingerprint that uniquely or pesudo-uniquely identifies the specified object.

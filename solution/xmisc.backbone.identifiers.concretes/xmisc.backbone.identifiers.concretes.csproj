@@ -1,35 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Target Name="AutoVersion" AfterTargets="AfterBuild">
   <PropertyGroup>
-    <PackageVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)$(GitSemVerDashLabel)</PackageVersion>	
+	<PackageVersion>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)$(GitSemVerDashLabel)</PackageVersion>	
   </PropertyGroup>	 
   </Target>
   <PropertyGroup>
 	<TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>reexmonkey.xmisc.backbone.identifiers.concretes</RootNamespace>
-    <Company>Reflektiv</Company>
-    <Authors>reexmonkey</Authors>
-    <Description>Implements custom identifiers.</Description>
-	<Copyright>Copyright (c) 2015 - 2022, Reflektiv</Copyright>
-    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
+	<RootNamespace>reexmonkey.xmisc.backbone.identifiers.concretes</RootNamespace>
+	<Company>Reflektiv</Company>
+	<Authors>reexmonkey</Authors>
+	<Description>Implements custom identifiers.</Description>
+	<Copyright>Copyright (c) 2015 - 2024, reexmonkey</Copyright>
+	<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+	<PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
 	<AssemblyName>xmisc.backbone.identitifiers.concretes</AssemblyName>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard2.0\xmisc.backbone.identitifiers.concretes.xml</DocumentationFile>
+	<DocumentationFile>bin\Debug\netstandard2.0\xmisc.backbone.identitifiers.concretes.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile></DocumentationFile>
+	<DocumentationFile></DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="3.3.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="xmisc.backbone.identifiers.contracts" Version="9.0.11" />
+	<PackageReference Include="GitInfo" Version="3.3.4">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
+	<PackageReference Include="xmisc.backbone.identifiers.contracts" Version="10.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="./../../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
+	<None Include="./../../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
   </ItemGroup>
 </Project>

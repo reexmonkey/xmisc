@@ -1,4 +1,4 @@
-using reexmonkey.xmisc.backbone.identifiers.contracts.models;
+using reexmonkey.xmisc.backbone.identifiers.contracts.generators;
 using System;
 
 namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
@@ -13,22 +13,22 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
         /// <summary>
         /// Initializes a new instance of the <see cref="FpiKeyGenerator"/> class with a lambda constructor function.
         /// </summary>
-        /// <param name="ctor">The constructor that defines the mechanism of creating a FPI. </param>
+        /// <param name="ctor">The constructor that defines the mechanism of creating a Fpi. </param>
         public FpiKeyGenerator(Func<Fpi> ctor)
         {
             this.ctor = ctor ?? throw new ArgumentNullException(nameof(ctor));
         }
 
         /// <summary>
-        /// Gets the default FPI for all types of objects.
+        /// Gets the default Fpi for all types of objects.
         /// </summary>
         /// <returns>The default fingerprint for all types of objects.</returns>
-        public Fpi GetNullKey() => Fpi.NullFpi;
+        public Fpi GetDefaultKey() => Fpi.Empty;
 
         /// <summary>
-        /// Generates the next FPI.
+        /// Generates the next Fpi.
         /// </summary>
-        /// <returns>The generated FPI.</returns>
+        /// <returns>The generated Fpi.</returns>
         public Fpi GetNext() => ctor();
     }
 }

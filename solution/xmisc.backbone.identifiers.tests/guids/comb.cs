@@ -1,5 +1,4 @@
 ﻿using reexmonkey.xmisc.backbone.identifiers.contracts.extensions;
-using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
 using reexmonkey.xmisc.backbone.identifiers.contracts.models;
 using Xunit;
 using Xunit.Abstractions;
@@ -44,7 +43,6 @@ namespace xmisc.backbone.identity.tests.guids
             console.WriteLine("second: {0}", second);
             console.WriteLine("third: {0}", third);
         }
-
 
         [Fact]
         public void TestVersionNumber()

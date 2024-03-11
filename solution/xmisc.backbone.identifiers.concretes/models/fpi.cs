@@ -1,31 +1,30 @@
-using reexmonkey.xmisc.backbone.identifiers.concretes.infrastructure;
-using reexmonkey.xmisc.backbone.identifiers.contracts.infrastructure;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
 {
     /// <summary>
-    /// Represents a Formal Public Identifier (FPI) as defined in RFC 3151
+    /// Represents a Formal Public Identifier (Fpi) as defined in RFC 3151
     /// </summary>
-    public class Fpi : FpiBase, IEquatable<Fpi>
+    public sealed class Fpi : FpiBase, IEquatable<Fpi>
     {
         /// <summary>
-        /// Gets the default FPI.
+        /// Gets the default Fpi.
         /// </summary>
         /// <returns>The default unique identifier.</returns>
-        public static readonly Fpi NullFpi = new Fpi(ApprovalStatus.None, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+        public static readonly Fpi Empty = new Fpi(ApprovalStatus.None, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Fpi"/> class with details.
         /// </summary>
-        /// <param name="status">The approval status of the FPI.</param>
-        /// <param name="author">The owner of the FPI</param>
-        /// <param name="product">The reference to the standard authority that approved the FPI.</param>
-        /// <param name="description">The product class of the FPI</param>
-        /// <param name="language">The langauage of the FPI according to ISO 639</param>
-        /// <param name="reference">The reference to the standard authority that approved the FPI.</param>
+        /// <param name="status">The approval status of the Fpi.</param>
+        /// <param name="author">The owner of the Fpi</param>
+        /// <param name="product">The reference to the standard authority that approved the Fpi.</param>
+        /// <param name="description">The product class of the Fpi</param>
+        /// <param name="language">The langauage of the Fpi according to ISO 639</param>
+        /// <param name="reference">The reference to the standard authority that approved the Fpi.</param>
         public Fpi(ApprovalStatus status, string author, string product, string description, string language, string reference = null)
             : base(status, author, product, description, language, reference)
         {
@@ -67,31 +66,25 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
         }
 
         /// <summary>
+        /// Returns a value that indicates whether this instance is equal to a specified object.
+        /// </summary>
+        /// <param name="obj">The object to compare with this instance.</param>
+        /// <returns>true if o is a <see cref="Fpi"/> that has the same value as this instance; otherwise, false.</returns>
+        public override bool Equals(object obj) => Equals(obj as Fpi);
+
+        /// <summary>
         /// Returns a value indicating whether this instance and a specified <see cref="Fpi"/> object represent the same value.
         /// </summary>
         /// <param name="other"> An object to compare to this instance.</param>
         /// <returns>true if <paramref name="other"/> is equal to this instance; otherwise, false.</returns>
         public bool Equals(Fpi other)
         {
-            if (ReferenceEquals(this, other)) return true;
-            if (ReferenceEquals(null, other)) return false;
-            return Status == other.Status && string.Equals(Author, other.Author, StringComparison.OrdinalIgnoreCase)
-                   && string.Equals(Reference, other.Reference, StringComparison.OrdinalIgnoreCase)
-                   && string.Equals(Product, other.Product, StringComparison.OrdinalIgnoreCase)
-                   && string.Equals(Description, other.Description, StringComparison.OrdinalIgnoreCase)
-                   && string.Equals(Language, other.Language, StringComparison.OrdinalIgnoreCase);
-        }
-
-        /// <summary>
-        /// Returns a value that indicates whether this instance is equal to a specified object.
-        /// </summary>
-        /// <param name="o">The object to compare with this instance.</param>
-        /// <returns>true if o is a <see cref="Fpi"/> that has the same value as this instance; otherwise, false.</returns>
-        public override bool Equals(object o)
-        {
-            if (ReferenceEquals(this, o)) return true;
-            if (ReferenceEquals(o, null)) return false;
-            return o is Fpi && Equals((Fpi)o);
+            return !(other is null) &&
+                   Author == other.Author &&
+                   Reference == other.Reference &&
+                   Product == other.Product &&
+                   Description == other.Description &&
+                   Language == other.Language;
         }
 
         /// <summary>
@@ -100,16 +93,13 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
         /// <returns>The hash code for this instance.</returns>
         public override int GetHashCode()
         {
-            unchecked
-            {
-                var hashCode = (int)Status;
-                hashCode = (hashCode * 397) ^ (Author != null ? Author.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Reference != null ? Reference.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Product != null ? Product.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Description != null ? Description.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Language != null ? Language.GetHashCode() : 0);
-                return hashCode;
-            }
+            int hashCode = 1285179832;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Author);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Reference);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Product);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Description);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Language);
+            return hashCode;
         }
 
         /// <summary>
@@ -119,7 +109,9 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
         /// <param name="right">The second object to compare.</param>
         /// <returns> true if <paramref name="left"/> and <paramref name="right"/> are equal; otherwise, false.</returns>
         public static bool operator ==(Fpi left, Fpi right)
-            => EqualityComparer<Fpi>.Default.Equals(left, right);
+        {
+            return EqualityComparer<Fpi>.Default.Equals(left, right);
+        }
 
         /// <summary>
         /// Indicates whether the values of two specified <see cref="Fpi"/> objects are not equal.
@@ -128,6 +120,135 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
         /// <param name="right">The second object to compare.</param>
         /// <returns>true if <paramref name="left"/> and <paramref name="right"/> are not equal; otherwise, false.</returns>
         public static bool operator !=(Fpi left, Fpi right)
-            => !EqualityComparer<Fpi>.Default.Equals(left, right);
+        {
+            return !(left == right);
+        }
+
+        /// <summary>
+        /// Returns a string that represents this instance of the <see cref="Fpi"/> class.
+        /// </summary>
+        /// <returns>The equivalent string representation of this instance.</returns>
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            switch (Status)
+            {
+                case ApprovalStatus.Standard:
+                    sb.Append(Reference);
+                    break;
+
+                case ApprovalStatus.None:
+                    sb.Append("-");
+                    break;
+
+                default:
+                    sb.Append("+");
+                    break;
+            }
+            sb.AppendFormat("//{0}", Author);
+            sb.AppendFormat("//{0}", Product);
+            if (!string.IsNullOrEmpty(Description)) sb.AppendFormat(" {0}", Description);
+            sb.AppendFormat("//{0}", Language);
+            return sb.ToString();
+        }
+    }
+
+    /// <summary>
+    /// Represents a base class for a Formal Public Identifier (Fpi) as defined in RFC 3151
+    /// </summary>
+    public abstract class FpiBase
+    {
+        /// <summary>
+        /// Gets the approval status of the Fpi.
+        /// </summary>
+        public ApprovalStatus Status { get; protected set; }
+
+        /// <summary>
+        /// Gets the owner of the Fpi
+        /// </summary>
+        public string Author { get; protected set; }
+
+        /// <summary>
+        /// Gets the reference to the standard authority that approved the Fpi.
+        /// </summary>
+        public string Reference { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the product class of the Fpi
+        /// </summary>
+        public string Product { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the description of the Fpi
+        /// </summary>
+        public string Description { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the langauage of the Fpi according to ISO 639
+        /// </summary>
+        public string Language { get; protected set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FpiBase"/> class.
+        /// </summary>
+        protected FpiBase()
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FpiBase"/> class with details.
+        /// </summary>
+        /// <param name="status">The approval status of the Fpi.</param>
+        /// <param name="author">The owner of the Fpi</param>
+        /// <param name="product">The reference to the standard authority that approved the Fpi.</param>
+        /// <param name="description">The product class of the Fpi</param>
+        /// <param name="language">The langauage of the Fpi according to ISO 639</param>
+        /// <param name="reference">The reference to the standard authority that approved the Fpi.</param>
+        protected FpiBase(ApprovalStatus status, string author, string product, string description, string language, string reference)
+        {
+            if (string.IsNullOrEmpty(author))
+                throw new ArgumentException("Value cannot be null or empty.", nameof(author));
+            if (string.IsNullOrWhiteSpace(author))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(author));
+            if (string.IsNullOrEmpty(product))
+                throw new ArgumentException("Value cannot be null or empty.", nameof(product));
+            if (string.IsNullOrWhiteSpace(product))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(product));
+            if (string.IsNullOrEmpty(description))
+                throw new ArgumentException("Value cannot be null or empty.", nameof(description));
+            if (string.IsNullOrWhiteSpace(description))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(description));
+            if (string.IsNullOrEmpty(language))
+                throw new ArgumentException("Value cannot be null or empty.", nameof(language));
+            if (string.IsNullOrWhiteSpace(language))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(language));
+
+            Status = status;
+            Author = author;
+            Product = product;
+            Description = description;
+            Language = language;
+            Reference = reference;
+        }
+    }
+
+    /// <summary>
+    /// Represents the status of an approval
+    /// </summary>
+    public enum ApprovalStatus
+    {
+        /// <summary>
+        /// Approved formally by an authority
+        /// </summary>
+        Standard = 0x1,
+
+        /// <summary>
+        /// Approved informally by an authority
+        /// </summary>
+        Informal = 0x2,
+
+        /// <summary>
+        /// Not approved by any authority
+        /// </summary>
+        None = 0xf
     }
 }

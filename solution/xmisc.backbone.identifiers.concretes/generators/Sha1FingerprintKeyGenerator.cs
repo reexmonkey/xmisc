@@ -1,3 +1,4 @@
+using reexmonkey.xmisc.backbone.identifiers.contracts.generators;
 using reexmonkey.xmisc.backbone.identifiers.contracts.models;
 using reexmonkey.xmisc.core.io.serializers;
 using System;
@@ -30,12 +31,12 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
         /// Gets the default fingerprint for all types of objects.
         /// </summary>
         /// <returns>The default fingerprint for all types of objects.</returns>
-        public Sha1Guid GetNullFingerprint() => Sha1Guid.Empty;
+        public Sha1Guid GetDefaultFingerprint() => Sha1Guid.Empty;
 
         /// <summary>
         /// Produces a fingerprint that uniquely or pesudo-uniquely identifies the specified object.
         /// </summary>
-        /// <typeparam name="TModel">The type of obhect, whose fingerprint is produced.</typeparam>
+        /// <typeparam name="TModel">The type of object, whose fingerprint is produced.</typeparam>
         /// <param name="model">The object, whose fingerprint shall be produced.</param>
         /// <returns>The fingerprint that uniquely identifies or pseudo-identifies the specified <paramref name="model"/>.</returns>
         public Sha1Guid GetFingerprint<TModel>(TModel model) => Sha1Guid.NewGuid(namespaceId, serializer.Serialize(model));

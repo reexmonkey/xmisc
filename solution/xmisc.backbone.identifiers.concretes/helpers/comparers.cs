@@ -2,8 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
+using System.Text;
 
-namespace reexmonkey.xmisc.backbone.identifiers.concretes.infrastructure
+namespace reexmonkey.xmisc.backbone.identifiers.concretes.helpers
 {
     /// <summary>
     /// Represents a comparer that compares two values of <see cref="Guid"/> values according to the sort rules of SQL Server for GUIDs.
