@@ -1,4 +1,4 @@
-namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
+namespace reexmonkey.xmisc.backbone.identifiers.contracts.generators
 {
     /// <summary>
     /// Specifies a provider that produces a fingerprint that uniquely or pesudo-uniquely identifies an object.
@@ -7,10 +7,10 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
     public interface IFingerprintGenerator<out TFingerprint>
     {
         /// <summary>
-        /// Gets the default fingerprint for all types of objects. 
+        /// Gets the default fingerprint for all types of objects.
         /// </summary>
         /// <returns>The default fingerprint for all types of objects.</returns>
-        TFingerprint GetNullFingerprint();
+        TFingerprint GetDefaultFingerprint();
 
         /// <summary>
         /// Produces a fingerprint that uniquely or pesudo-uniquely identifies the specified object.
