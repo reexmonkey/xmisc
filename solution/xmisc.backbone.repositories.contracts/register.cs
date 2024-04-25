@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-
-namespace reexmonkey.xmisc.backbone.repositories.contracts
+﻿namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
     /// <summary>
     /// Specifies synchronous operations that register one or more models by assigning each model a unique identifier.
@@ -10,7 +6,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
     /// <typeparam name="TKey">The type of unique identifier to assign to each model.</typeparam>
     /// <typeparam name="TModel">The type of model to register or deregister. </typeparam>
     public interface IRegisterRepository<in TKey, in TModel>
-        where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        where TKey : IEquatable<TKey>
     {
         /// <summary>
         /// Registers the model by assigning a unique identifier to it.

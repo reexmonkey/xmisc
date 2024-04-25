@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace reexmonkey.xmisc.backbone.repositories.contracts
+﻿namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
     /// <summary>
     /// Specifies asynchronous operations that restore one or more temporarily deleted data models.
@@ -11,7 +6,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
     /// <typeparam name="TKey">The type of key that identifies the model to restore.</typeparam>
     /// <typeparam name="TModel">The type of model to restore.</typeparam>
     public interface IRestoreRepositoryAsync<in TKey, TModel>
-        where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        where TKey : IEquatable<TKey>
         where TModel : ISupportTrashing<TModel>
     {
         /// <summary>

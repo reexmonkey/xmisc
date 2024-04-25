@@ -6,7 +6,7 @@
     /// <typeparam name="TKey">The type of key, which identifies the model to insert or update.</typeparam>
     /// <typeparam name="TModel">The type of model to persist.</typeparam>
     public interface IWriteRepositoryAsync<in TKey, in TModel>
-        where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        where TKey : IEquatable<TKey>
 
     {
         /// <summary>

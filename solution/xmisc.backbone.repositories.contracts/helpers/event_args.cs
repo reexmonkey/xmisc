@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace reexmonkey.xmisc.backbone.repositories.contracts.helpers
+﻿namespace reexmonkey.xmisc.backbone.repositories.contracts.helpers
 {
     /// <summary>
     /// Specifies a class that contains event data, when one or more parent data models have been modified.
@@ -28,7 +25,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.helpers
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     public sealed class DeleteParentModelEventArgs<TKey> : ModificationEventArgs
-       where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+       where TKey : IEquatable<TKey>
     {
         /// <summary>
         /// The primary key of the specified parent data model.
@@ -51,7 +48,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.helpers
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     public sealed class DeleteManyParentModelsEventArgs<TKey> : ModificationEventArgs
-       where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+       where TKey : IEquatable<TKey>
     {
         /// <summary>
         /// The primary keys of the specified parent data models.
@@ -74,7 +71,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.helpers
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     public sealed class UpdateParentModelEventArgs<TKey> : ModificationEventArgs
-       where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+       where TKey : IEquatable<TKey>
     {
         /// <summary>
         /// The primary key of the parent data model.
@@ -97,7 +94,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts.helpers
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     public sealed class UpdateManyParentModelsEventArgs<TKey> : ModificationEventArgs
-       where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+       where TKey : IEquatable<TKey>
     {
         /// <summary>
         /// The primary keys of the parent data models.

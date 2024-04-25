@@ -1,9 +1,4 @@
 ﻿using reexmonkey.xmisc.backbone.repositories.contracts.helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
@@ -12,7 +7,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
     /// </summary>
     /// <typeparam name="TKey">The type of primary key used by a parent data model.</typeparam>
     public interface IDeletionEventsSubscriber<TKey>
-        where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        where TKey : IEquatable<TKey>
     {
         /// <summary>
         /// Handles the event triggered when a parent data model is deleted.
@@ -34,7 +29,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
     /// </summary>
     /// <typeparam name="TKey">The type of primary key used by a parent data model.</typeparam>
     public interface IUpdateEventsSubscriber<TKey>
-        where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        where TKey : IEquatable<TKey>
     {
         /// <summary>
         /// Handles the event triggered when a parent data model is updated.

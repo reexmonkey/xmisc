@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace reexmonkey.xmisc.backbone.repositories.contracts
+﻿namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
     /// <summary>
     /// Specifies synchronous operations that deregister one or more models by assigning each model a default identifier.
@@ -11,7 +6,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
     /// <typeparam name="TKey">The type of default identifier to assign to each model.</typeparam>
     /// <typeparam name="TModel">The type of model to register or deregister. </typeparam>
     public interface IDeregisterRepository<in TKey, in TModel>
-        where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        where TKey : IEquatable<TKey>
     {
         /// <summary>
         /// Deregisters the model by assigning a default identifier to it.

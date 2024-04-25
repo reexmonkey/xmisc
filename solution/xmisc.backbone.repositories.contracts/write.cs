@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace reexmonkey.xmisc.backbone.repositories.contracts
+﻿namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
     /// <summary>
     /// Specifies synchronous operations that insert or update one or more data models into/in a data store.
@@ -11,7 +6,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
     /// <typeparam name="TKey">The type of key, which identifies the model to insert or update.</typeparam>
     /// <typeparam name="TModel">The type of model to persist.</typeparam>
     public interface IWriteRepository<in TKey, in TModel>
-        where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        where TKey : IEquatable<TKey>
 
     {
         /// <summary>

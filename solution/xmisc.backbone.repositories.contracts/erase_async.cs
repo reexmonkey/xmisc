@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace reexmonkey.xmisc.backbone.repositories.contracts
+﻿namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
     /// <summary>
     /// Specifies asynchronous operations that erase one or more data models from a data store.
@@ -11,7 +6,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
     /// <typeparam name="TKey">The type of key, which identifies the model to erase.</typeparam>
     /// <typeparam name="TModel">The type of model to erase.</typeparam>
     public interface IEraseRepositoryAsync<in TKey, in TModel>
-        where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        where TKey : IEquatable<TKey>
     {
         /// <summary>
         /// Asynchronously erases an data model that is specified by the provided <paramref name="key"/>.

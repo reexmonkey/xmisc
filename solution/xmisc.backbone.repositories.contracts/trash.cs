@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace reexmonkey.xmisc.backbone.repositories.contracts
+﻿namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
     /// <summary>
     /// Specifies synchronous operations that trash one or more data models temporarily by marking them for deletion.
@@ -12,8 +7,8 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
     /// <typeparam name="TKey">The type of key that identifies the model to mark for deletion.</typeparam>
     /// <typeparam name="TModel">The type of model to mark for deletion.</typeparam>
     public interface ITrashRepository<in TKey, TModel>
-        where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
-        where TModel: ISupportTrashing<TModel>
+        where TKey : IEquatable<TKey>
+        where TModel : ISupportTrashing<TModel>
     {
         /// <summary>
         /// Marks the given data model, which is specified by a unique identifier, for deletion.

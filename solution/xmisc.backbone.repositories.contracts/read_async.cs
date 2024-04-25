@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace reexmonkey.xmisc.backbone.repositories.contracts
+﻿namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
 
     /// <summary>
@@ -13,7 +7,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
     /// <typeparam name="TKey">The type of the key that uniquely identifies a data model.</typeparam>
     /// <typeparam name="TModel">The type of data model.</typeparam>
     public interface IReadRepositoryAsync<TKey, TModel>
-        where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        where TKey : IEquatable<TKey>
     {
         /// <summary>
         /// Finds a data model asynchronously in the data store that is specified by the given key.

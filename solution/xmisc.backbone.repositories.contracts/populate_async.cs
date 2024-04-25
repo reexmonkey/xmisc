@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace reexmonkey.xmisc.backbone.repositories.contracts
+﻿namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
     /// <summary>
     /// Specifies asynchronous operations that populate one or more data model with references or details from a data store.
@@ -11,7 +6,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
     /// <typeparam name="TKey">The type of unique key to identify the data model.</typeparam>
     /// <typeparam name="TModel">The type of data model to hydrate.</typeparam>
     public interface IPopulateRepositoryAsync<TKey, TModel>
-        where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        where TKey : IEquatable<TKey>
     {
 
         /// <summary>

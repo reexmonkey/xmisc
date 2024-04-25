@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 
 namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
@@ -12,7 +8,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
     /// <typeparam name="TKey">The type of the key that uniquely identifies a model.</typeparam>
     /// <typeparam name="TModel">The type of data model.</typeparam>
     public interface IReadRepository<TKey, TModel>
-        where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        where TKey : IEquatable<TKey>
     {
         /// <summary>
         /// Finds a data model in the data store that is specified by a unique identifier or an evaluated condition.

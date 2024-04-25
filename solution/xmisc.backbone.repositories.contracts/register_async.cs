@@ -6,7 +6,7 @@
     /// <typeparam name="TKey">The type of unique identifier to assign to each model.</typeparam>
     /// <typeparam name="TModel">The type of model to register or deregister. </typeparam>
     public interface IRegisterRepositoryAsync<in TKey, in TModel>
-        where TKey : IEquatable<TKey>, IComparable, IComparable<TKey>
+        where TKey : IEquatable<TKey>
     {
 
         /// <summary>
