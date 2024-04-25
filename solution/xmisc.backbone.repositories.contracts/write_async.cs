@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace reexmonkey.xmisc.backbone.repositories.contracts
+﻿namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
     /// <summary>
     /// Specifies asynchronous operations that insert or update models into/in a data store.
@@ -20,9 +15,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="model">The model to persist to the data store.</param>
         /// <param name="references">Should the references or details of the model also be saved?</param>
         /// <param name="cancellation">Propagates the notification that the operation should be cancelled.</param>
-        /// <returns>A promise that indicates whether the model was inserted in the data store or updated.
-        /// <para/>A promise to return true if the model was inserted in the data store; otherwise false if it was updated.
-        /// </returns>
+        /// <returns>A promise to return true if the model was inserted in the data store; otherwise false if it was updated.</returns>
         Task<bool> SaveAsync(TModel model, bool? references = true, CancellationToken cancellation = default);
 
         /// <summary>
@@ -31,7 +24,7 @@ namespace reexmonkey.xmisc.backbone.repositories.contracts
         /// <param name="models">The models to persist to the data store.</param>
         /// <param name="references">Should the references or details of the model also be saved?</param>
         /// <param name="cancellation">Propagates the notification that the operation should be cancelled.</param>
-        /// <returns>A promise to return the number of models added to the data store.</returns>
+        /// <returns>A promise to return the number of models persisted to the data store.</returns>
         Task<long> SaveAllAsync(IEnumerable<TModel> models, bool? references = true, CancellationToken cancellation = default);
     }
 }
