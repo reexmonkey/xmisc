@@ -8,7 +8,7 @@ namespace reexmonkey.xmisc.backbone.io.jil.serializers
 {
     public class JilStreamSerializer : StreamSerializerBase
     {
-        private readonly JilTextSerializer inner = new JilTextSerializer();
+        private readonly JilTextSerializer inner = new();
         private readonly Encoding encoding;
         private readonly int bufferSize;
 

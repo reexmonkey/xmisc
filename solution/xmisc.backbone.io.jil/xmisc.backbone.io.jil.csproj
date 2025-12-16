@@ -5,32 +5,21 @@
   </PropertyGroup>	 
   </Target>
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
 	<RootNamespace>reexmonkey.xmisc.backbone.io.jil</RootNamespace>
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
     <Description>JIL Serialization Adapter.</Description>
-    <Copyright>Copyright (c) 2015 - 2022, Reflektiv</Copyright>
+    <Copyright>Copyright (c) 2015 - 2025, Reflektiv</Copyright>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>bin\Release\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>bin\Debug\</OutputPath>
-  </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="3.3.4">
+    <PackageReference Include="GitInfo" Version="3.6.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Jil" Version="2.17.0" />
-    <PackageReference Include="xmisc.core.io" Version="9.0.6" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\" />
+    <PackageReference Include="xmisc.core.io" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>

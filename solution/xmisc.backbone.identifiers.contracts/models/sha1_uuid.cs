@@ -1,5 +1,5 @@
 using reexmonkey.xmisc.backbone.identifiers.contracts.extensions;
-using reexmonkey.xmisc.core.cryptography.extensions;
+using reexmonkey.xmisc.backbone.identifiers.contracts.helpers;
 using System;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -8,36 +8,36 @@ using System.Text;
 namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
 {
     /// <summary>
-    /// Represents a name-based (version 5) globally unique identifier (GUID) that uses <see cref="SHA1"/> hashing as defined in RFC 4122 (https://tools.ietf.org/html/rfc4122)
+    /// Represents a name-based (version 5) globally unique identifier (GUID) that uses <see cref="SHA1"/> hashing as defined in RFC 9562 (https://tools.ietf.org/html/rfc4122)
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     [Serializable]
-    public readonly struct Sha1Guid: IEquatable<Sha1Guid>, IComparable, IComparable<Sha1Guid>, IFormattable
+    public readonly record struct Sha1Guid : IComparable, IComparable<Sha1Guid>, IFormattable
     {
         /// <summary>
         ///  A read-only instance of the  <see cref="Sha1Guid"/> structure whose all 128 bits are set to zeros.
         /// </summary>
-        public static readonly Sha1Guid Empty = new Sha1Guid();
+        public static readonly Sha1Guid Empty = new();
 
         /// <summary>
-        /// Gets the default fully-qualified Distinguished Name (DNs) namespace ID  as defined in RFC 4122.
+        /// Gets the default fully-qualified Distinguished Name (DNs) namespace ID  as defined in RFC 9562.
         /// </summary>
-        public static readonly Guid DnsNamespaceId = new Guid("6ba7b810-9dad-11d1-80b4-00c04fd430c8");
+        public static readonly Guid DnsNamespaceId = new("6ba7b810-9dad-11d1-80b4-00c04fd430c8");
 
         /// <summary>
-        /// Gets the default uniform resource locator (URL) namespace ID  as defined in RFC 4122.
+        /// Gets the default uniform resource locator (URL) namespace ID  as defined in RFC 9562.
         /// </summary>
-        public static readonly Guid UrlNamespaceId = new Guid("6ba7b811-9dad-11d1-80b4-00c04fd430c8");
+        public static readonly Guid UrlNamespaceId = new("6ba7b811-9dad-11d1-80b4-00c04fd430c8");
 
         /// <summary>
-        /// Gets the default ISO OID namepace ID as defined in RFC 4122.
+        /// Gets the default ISO OID namepace ID as defined in RFC 9562.
         /// </summary>
-        public static readonly Guid IsoOidNamespaceId = new Guid("6ba7b812-9dad-11d1-80b4-00c04fd430c8");
+        public static readonly Guid OidNamespaceId = new("6ba7b812-9dad-11d1-80b4-00c04fd430c8");
 
         /// <summary>
-        /// Gets the default X500 namepace ID as defined in RFC 4122.
+        /// Gets the default X500 namepace ID as defined in RFC 9562.
         /// </summary>
-        public static readonly Guid X500NamespaceId = new Guid("6ba7b814-9dad-11d1-80b4-00c04fd430c8");
+        public static readonly Guid X500NamespaceId = new("6ba7b814-9dad-11d1-80b4-00c04fd430c8");
 
         private readonly Guid guid;
 
@@ -85,7 +85,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Sha1Guid"/> structure by using the specified <see cref="Guid"/>.
-        /// <para /> Note the specified <paramref name="guid"/> should be compliant to a version 5 GUID as defined in RFC 4122.
+        /// <para /> Note the specified <paramref name="guid"/> should be compliant to a version 5 GUID as defined in RFC 9562.
         /// </summary>
         /// <param name="guid">The globally unique identifier (GUID) to initialize this instance.</param>
         public Sha1Guid(Guid guid) => this.guid = guid;
@@ -157,7 +157,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         public static bool TryParseExact(string value, string format, out Sha1Guid result)
         {
             bool success = false;
-            if(Guid.TryParseExact(value, format, out Guid guid) &&  guid.IsVersion5Variant())
+            if (Guid.TryParseExact(value, format, out Guid guid) && guid.IsVersion5Variant())
             {
                 success = true;
                 result = guid;
@@ -168,74 +168,65 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
 
         private static Sha1Guid Create(byte[] hash)
         {
+            int version = 5;
             var guid = new byte[16];
 
-            //Assign time - low: 0-3
-            guid[0] = hash[0];
-            guid[1] = hash[1];
-            guid[2] = hash[2];
-            guid[3] = hash[3];
+            //copy the first 16 bytes
+            Array.Copy(hash, 0, guid, 0, 16);
 
-            //Assign times - mid: 4-5
-            guid[4] = hash[4];
-            guid[5] = hash[5];
-
-            //Assign time - hi and version: 6-7
-            guid[6] = hash[6];
-            guid[7] = hash[7];
-
-            // convert bytes to time_hi and version
-            var hiver = (ushort)((guid[7] << 8 | guid[6]) & 0X0FFF | (5 << 12));
-            guid[6] = (byte)hiver;
-            guid[7] = (byte)(hiver >> 8);
+            // set version to 5:
+            guid[6] = (byte)((guid[6] & 0x0F) | (version << 4));
 
             //clock sequence hi and reserved: 8
-            guid[8] = (byte)(((hash[8] & 0x3F00) >> 8) | 0x80);
+            guid[8] = (byte)((guid[8] & 0x3F) | 0x80);
 
-            //clock sequence - low: 9
-            guid[9] = hash[9];
-
-            guid[10] = hash[10];
-            guid[11] = hash[11];
-            guid[12] = hash[12];
-            guid[13] = hash[13];
-            guid[14] = hash[14];
-            guid[15] = hash[15];
-            return new Sha1Guid(guid);
+            //reverse copy to match network byte order
+            var swapped = guid.SwapByteOrder();
+            return new Sha1Guid(swapped);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Sha1Guid"/> structure for a string-based name drawn from- and within a string-based namespace.
+        /// <para>
+        /// Note: While UUIDv5 uses SHA-1, this is acceptable for UUID generation as it's used for uniqueness, not cryptographic security.
+        /// RFC 9562 acknowledges that SHA-1 is deprecated for cryptographic purposes but remains suitable for UUID generation.
+        /// </para>
         /// </summary>
         /// <param name="namespaceId">The identifier of the namespace, from and within which a name is drawn.</param>
         /// <param name="name">The string value that is drawn from a namespace and serves as the basis for generating the version 5 GUID. </param>
         /// <param name="encoding">The character encoding that was used to format the specified <paramref name="namespaceId"/> and <paramref name="name"/>.</param>
         /// <returns>A new <see cref="Sha1Guid"/> object.</returns>
-        public static Sha1Guid NewGuid(string namespaceId, string name, Encoding encoding) 
+        public static Sha1Guid NewGuid(string namespaceId, string name, Encoding encoding)
             => NewGuid(encoding.GetBytes(namespaceId), encoding.GetBytes(name));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Sha1Guid"/> structure for a string-based name drawn from- and within a GUID-based namespace.
+        /// <para>
+        /// Note: While UUIDv5 uses SHA-1, this is acceptable for UUID generation as it's used for uniqueness, not cryptographic security.
+        /// RFC 9562 acknowledges that SHA-1 is deprecated for cryptographic purposes but remains suitable for UUID generation.
+        /// </para>
         /// </summary>
         /// <param name="namespaceId">The identifier of the namespace, from and within which a name is drawn.</param>
         /// <param name="name">The string value that is drawn from a namespace and serves as the basis for generating the version 5 GUID. </param>
         /// <param name="encoding">The character encoding that was used to format the specified <paramref name="name"/>.</param>
         /// <returns>A new <see cref="Sha1Guid"/> object.</returns>
-        public static Sha1Guid NewGuid(Guid namespaceId, string name, Encoding encoding) 
+        public static Sha1Guid NewGuid(Guid namespaceId, string name, Encoding encoding)
             => NewGuid(namespaceId.ToByteArray(), encoding.GetBytes(name));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Sha1Guid"/> structure for a byte-specified name drawn from- and within a byte-based namespace.
+        /// <para>
+        /// Note: While UUIDv5 uses SHA-1, this is acceptable for UUID generation as it's used for uniqueness, not cryptographic security.
+        /// RFC 9562 acknowledges that SHA-1 is deprecated for cryptographic purposes but remains suitable for UUID generation.
+        /// </para>
         /// </summary>
         /// <param name="namespaceId">The identifier of the namespace, from and within which a name is drawn.</param>
         /// <param name="name">The value that is drawn from a namespace and serves as the basis for generating the version 5 GUID.</param>
         /// <returns>A new <see cref="Sha1Guid"/> object</returns>
         public static Sha1Guid NewGuid(byte[] namespaceId, byte[] name)
         {
-            var combined = new byte[namespaceId.Length + name.Length];
-            Buffer.BlockCopy(namespaceId, 0, combined, 0, namespaceId.Length);
-            Buffer.BlockCopy(name, 0, combined, namespaceId.Length, name.Length);
-            var hash = combined.GetHash(SHA1.Create());
+            var swapped = namespaceId.SwapByteOrder();
+            var hash = SHA1.HashData([.. swapped, .. name]);
             return Create(hash);
         }
 
@@ -250,33 +241,6 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// </summary>
         /// <returns>A <see cref="Guid"/> structure that contains the value that was converted.</returns>
         public Guid AsGuid() => guid;
-
-        /// <summary>
-        /// Returns a value indicating whether this instance and a specified <see cref="Sha1Guid"/> object represent the same value.
-        /// </summary>
-        /// <param name="other"> An object to compare to this instance.</param>
-        /// <returns>true if <paramref name="other"/> is equal to this instance; otherwise, false.</returns>
-        public bool Equals(Sha1Guid other)
-        {
-            return guid.Equals(other.guid);
-        }
-
-        /// <summary>
-        /// Returns a value that indicates whether this instance is equal to a specified object.
-        /// </summary>
-        /// <param name="o">The object to compare with this instance.</param>
-        /// <returns>true if o is a <see cref="Sha1Guid"/> that has the same value as this instance; otherwise, false.</returns>
-        public override bool Equals(object o)
-        {
-            if (ReferenceEquals(null, o)) return false;
-            return o is Sha1Guid && Equals((Sha1Guid)o);
-        }
-
-        /// <summary>
-        /// Returns the hash code for this instance.
-        /// </summary>
-        /// <returns>The hash code for this instance.</returns>
-        public override int GetHashCode() => guid.GetHashCode();
 
         /// <summary>
         /// Returns a string representation of the value of this instance in registry format.
@@ -300,7 +264,6 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// </param>
         /// <returns>The value of this <see cref="Sha1Guid"/> , represented as a series of lowercase hexadecimal digits in the specified format.</returns>
         public string ToString(string format) => guid.ToString(format);
-
 
         /// <summary>
         /// Returns a string representation of the value of this instance in registry format.
@@ -345,22 +308,6 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         public int CompareTo(Sha1Guid other) => guid.CompareTo(other.guid);
 
         /// <summary>
-        /// Indicates whether the values of two specified <see cref="Sha1Guid"/> objects are equal.
-        /// </summary>
-        /// <param name="left">The first object to compare.</param>
-        /// <param name="right">The second object to compare.</param>
-        /// <returns> true if <paramref name="left"/> and <paramref name="right"/> are equal; otherwise, false.</returns>
-        public static bool operator ==(Sha1Guid left, Sha1Guid right) => left.Equals(right);
-
-        /// <summary>
-        /// Indicates whether the values of two specified <see cref="Sha1Guid"/> objects are not equal.
-        /// </summary>
-        /// <param name="left">The first object to compare.</param>
-        /// <param name="right">The second object to compare.</param>
-        /// <returns>true if <paramref name="left"/> and <paramref name="right"/> are not equal; otherwise, false.</returns>
-        public static bool operator !=(Sha1Guid left, Sha1Guid right) => !left.Equals(right);
-
-        /// <summary>
         /// Indicates whether the value of this instance is less than the value of the specified <see cref="Sha1Guid"/> instance.
         /// </summary>
         /// <param name="left">The first object to compare.</param>
@@ -402,6 +349,6 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// Converts a <see cref="Guid"/> structure to an equivalent <see cref="Sha1Guid"/> structure.
         /// </summary>
         /// <param name="guid">The <see cref="Guid"/> instance to convert.</param>
-        public static implicit operator Sha1Guid(Guid guid) => new Sha1Guid(guid);
+        public static implicit operator Sha1Guid(Guid guid) => new(guid);
     }
 }

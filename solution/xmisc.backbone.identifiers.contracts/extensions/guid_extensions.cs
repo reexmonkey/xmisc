@@ -1,5 +1,4 @@
-﻿using reexmonkey.xmisc.backbone.identifiers.contracts.models;
-using System;
+﻿using System;
 
 namespace reexmonkey.xmisc.backbone.identifiers.contracts.extensions
 {
@@ -22,45 +21,45 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.extensions
         private static bool IsValidVersion(this Guid guid, int version) => guid.GetVersion() == version;
 
         /// <summary>
-        /// Checks if this GUID is a valid time-based GUID as defined in RFC 4122
+        /// Checks if this GUID is a valid time-based GUID as defined in RFC 9562
         /// </summary>
         /// <param name="guid">The GUID, whose version is verified.</param>
         /// <returns>true if it is a time-based GUID; otherwise false.</returns>
         public static bool IsVersion1Variant(this Guid guid) => guid.IsValidVersion(1);
 
         /// <summary>
-        /// Checks if this GUID is a valid DCE Security GUID as defined in RFC 4122
+        /// Checks if this GUID is a valid DCE Security GUID as defined in RFC 9562
         /// </summary>
         /// <param name="guid">The GUID, whose version is verified.</param>
         /// <returns>true if it is a DCE Security GUID; otherwise false.</returns>
         public static bool IsVersion2Variant(this Guid guid) => guid.IsValidVersion(2);
 
         /// <summary>
-        /// Checks if this GUID is a valid name-based GUID that uses MD5 hashing, as defined in RFC 4122
+        /// Checks if this GUID is a valid name-based GUID that uses MD5 hashing, as defined in RFC 9562
         /// </summary>
         /// <param name="guid">The GUID, whose version is verified.</param>
         /// <returns>true if it is a name-based GUID that uses MD5 hashing; otherwise false.</returns>
         public static bool IsVersion3Variant(this Guid guid) => guid.IsValidVersion(3);
 
         /// <summary>
-        /// Checks if this GUID is a valid randomly or pseudo-randomly generated GUID as defined in RFC 4122
+        /// Checks if this GUID is a valid randomly or pseudo-randomly generated GUID as defined in RFC 9562
         /// </summary>
         /// <param name="guid">The GUID, whose version is verified.</param>
         /// <returns>true if it is a randomly or pseudo-randomly generated GUID; otherwise false.</returns>
         public static bool IsVersion4Variant(this Guid guid) => guid.IsValidVersion(4);
 
         /// <summary>
-        /// Checks if this GUID is a valid name-based GUID that uses SHA1 hashing, as defined in RFC 4122
+        /// Checks if this GUID is a valid name-based GUID that uses SHA1 hashing, as defined in RFC 9562
         /// </summary>
         /// <param name="guid">The GUID, whose version is verified.</param>
         /// <returns>true if it is a name-based GUID that uses SHA1 hashing; otherwise false.</returns>
         public static bool IsVersion5Variant(this Guid guid) => guid.IsValidVersion(5);
 
         /// <summary>
-        /// Checks if this GUID is an invalid GUID as defined in RFC 4122.
+        /// Checks if this GUID is an invalid GUID as defined in RFC 9562.
         /// </summary>
         /// <param name="guid">The GUID, whose version is verified.</param>
-        /// <returns>true if its version cannot be associated to any version variant defined in RFC 4122; otherwise false.</returns>
+        /// <returns>true if its version cannot be associated to any version variant defined in RFC 9562; otherwise false.</returns>
         public static bool IsUnknownVariant(this Guid guid)
         {
             var version = guid.GetVersion();

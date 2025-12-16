@@ -1,5 +1,4 @@
 using reexmonkey.xmisc.backbone.identifiers.contracts.extensions;
-using reexmonkey.xmisc.core.cryptography.extensions;
 using System;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
@@ -8,11 +7,11 @@ using System.Security.Cryptography;
 namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
 {
     /// <summary>
-    /// Represents a time-based (version 1) globally unique identifier (GUID) as defined in RFC 4122 (https://tools.ietf.org/html/rfc4122)
+    /// Represents a time-based (version 1) globally unique identifier (GUID) as defined in RFC 9562 (https://www.rfc-editor.org/rfc/rfc9562)
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     [Serializable]
-    public struct SequentialGuid : IEquatable<SequentialGuid>, IComparable, IComparable<SequentialGuid>, IFormattable
+    public record struct SequentialGuid : IComparable, IComparable<SequentialGuid>, IFormattable
     {
         /// <summary>
         ///  A read-only instance of the  <see cref="SequentialGuid"/> structure whose all 128 bits are set to zeros.
@@ -20,9 +19,9 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         public static readonly SequentialGuid Empty;
 
         private readonly Guid guid;
-        private static readonly object mutex = new object();
+        private static readonly object mutex = new();
         private static ulong last;
-        private static ushort sequence = RandomNumberGenerator.Create().GenerateUInt16();
+        private static ushort sequence;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SequentialGuid"/> structure by using the specified unsigned integers and bytes.
@@ -53,8 +52,8 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// <param name="n">The spatially unique node identifier of the <see cref="SequentialGuid"/> that is constructed from a name.</param>
         public SequentialGuid(uint low, ushort mid, ushort hi, byte[] cs, byte[] n)
         {
-            if (cs == null) throw new ArgumentNullException(nameof(cs));
-            if (n == null) throw new ArgumentNullException(nameof(n));
+            ArgumentNullException.ThrowIfNull(cs);
+            ArgumentNullException.ThrowIfNull(n);
 
             if (cs.Length != 2) throw new ArgumentException("Length of clock sequence array must be 2");
             if (n.Length != 6) throw new ArgumentException("Length of node array must be 6");
@@ -70,7 +69,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SequentialGuid"/> structure by using the specified <see cref="Guid"/>.
-        /// <para /> Note the specified <paramref name="guid"/> should be compliant to a version 5 GUID as defined in RFC 4122.
+        /// <para /> Note the specified <paramref name="guid"/> should be compliant to a version 5 GUID as defined in RFC 9562.
         /// </summary>
         /// <param name="guid">The globally unique identifier (GUID) to initialize this instance.</param>
         public SequentialGuid(Guid guid) => this.guid = guid;
@@ -156,8 +155,11 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
             var timestamp = (ulong)(DateTime.UtcNow - new DateTime(1582, 10, 15).ToUniversalTime()).Ticks;
             lock (mutex)
             {
-                if (last == timestamp) sequence++;
-                last = timestamp;
+                if (last != timestamp)
+                {
+                    last = timestamp;
+                    sequence = 0; // Should reset when timestamp changes
+                }
             }
             return timestamp;
         }
@@ -167,7 +169,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
             var guid = new byte[16];
 
             //Assign time - low: 0-3
-            var tlow = timestamp & 0xFFFFFFFF;
+            var tlow = (uint)(timestamp & 0xFFFFFFFF);
             guid[0] = (byte)tlow;
             guid[1] = (byte)(tlow >> 8);
             guid[2] = (byte)(tlow >> 16);
@@ -183,8 +185,9 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
             guid[6] = (byte)thi;
             guid[7] = (byte)(thi >> 8);
 
-            //Assign clock sequence - low: 8
-            guid[8] = (byte)(((clocksequence & 0x3F00) >> 8) | 0x80);
+            // Assign clock-seq-hi-and-reserved: 8 (variant bits: 10xxxxxx)
+            // Take upper 6 bits of clock sequence and set variant to 10b
+            guid[8] = (byte)(((clocksequence >> 8) & 0x3F) | 0x80);
 
             //clock sequence hi and reserved: 9
             guid[9] = (byte)(clocksequence & 0xFF);
@@ -204,11 +207,14 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// <returns>A new <see cref="SequentialGuid"/> object</returns>
         public static SequentialGuid NewGuid()
         {
-            var node = RandomNumberGenerator.Create().Generate(6);
+            using var rng = RandomNumberGenerator.Create();
+            sequence = rng.GenerateUInt16();
+            var node = rng.Populate(6);
             node[0] |= 1; //multicast bit set to one, in order to avoid conflict with IEEE 802 network cards
-            return Create(GetTimestamp(), sequence, node[0], node[1], node[2], node[3], node[4], node[5]);
-        }
 
+            ushort clockseq = GetClockSequence();
+            return Create(GetTimestamp(), clockseq, node[0], node[1], node[2], node[3], node[4], node[5]);
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="SequentialGuid"/> structure
         /// using the IEEE 802 MAC address assigned to the specified network interface controller (NIC).
@@ -217,50 +223,46 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// <returns>A new <see cref="SequentialGuid"/> object</returns>
         public static SequentialGuid NewGuid(NetworkInterface nic)
         {
-            if (nic == null) throw new ArgumentNullException(nameof(nic));
+            ArgumentNullException.ThrowIfNull(nic);
 
+            using var rng = RandomNumberGenerator.Create();
+            sequence = rng.GenerateUInt16();
             var node = nic.GetPhysicalAddress().GetAddressBytes();
+
+            ushort clockseq = GetClockSequence();
             return Create(GetTimestamp(), sequence, node[0], node[1], node[2], node[3], node[4], node[5]);
+        }
+
+        private static ushort GetClockSequence()
+        {
+            ushort clockseq;
+            ulong timestamp;
+            lock (mutex)
+            {
+                timestamp = GetTimestamp();
+                clockseq = sequence++;
+            }
+
+            return clockseq;
         }
 
         /// <summary>
         /// Returns a 16-element byte array that contains the value of this instance.
         /// </summary>
         /// <returns></returns>
-        public byte[] ToByteArray() => guid.ToByteArray();
+        public readonly byte[] ToByteArray() => guid.ToByteArray();
 
         /// <summary>
         /// Converts this <see cref="SequentialGuid"/> instance to the equiavlent <see cref="Guid"/> structure.
         /// </summary>
         /// <returns>A <see cref="Guid"/> structure that contains the value that was converted.</returns>
-        public Guid AsGuid() => guid;
-
-        /// <summary>
-        /// Returns a value indicating whether this instance and a specified <see cref="SequentialGuid"/> object represent the same value.
-        /// </summary>
-        /// <param name="other"> An object to compare to this instance.</param>
-        /// <returns>true if <paramref name="other"/> is equal to this instance; otherwise, false.</returns>
-        public bool Equals(SequentialGuid other)
-        {
-            return guid.Equals(other.guid);
-        }
-
-        /// <summary>
-        /// Returns a value that indicates whether this instance is equal to a specified object.
-        /// </summary>
-        /// <param name="o">The object to compare with this instance.</param>
-        /// <returns>true if o is a <see cref="SequentialGuid"/> that has the same value as this instance; otherwise, false.</returns>
-        public override bool Equals(object o)
-        {
-            if (ReferenceEquals(null, o)) return false;
-            return o is SequentialGuid && Equals((SequentialGuid)o);
-        }
+        public readonly Guid AsGuid() => guid;
 
         /// <summary>
         /// Returns the hash code for this instance.
         /// </summary>
         /// <returns>The hash code for this instance.</returns>
-        public override int GetHashCode() => guid.GetHashCode();
+        public override readonly int GetHashCode() => guid.GetHashCode();
 
         /// <summary>
         /// Returns a string representation of the value of this instance in registry format.
@@ -274,7 +276,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// <para/>To convert the hexadecimal digits from a through f to uppercase, call the <see cref="string.ToUpper()"/>
         /// method on the returned string.
         /// </returns>
-        public override string ToString() => AsGuid().ToString();
+        public override readonly string ToString() => AsGuid().ToString();
 
         /// <summary>
         /// Returns a string representation of the value of this instance in registry format.
@@ -283,7 +285,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// <para/> The format parameter can be "N", "D", "B", "P", or "X". If format is null or an empty string (""), "D" is used.
         /// </param>
         /// <returns>The value of this <see cref="SequentialGuid"/> , represented as a series of lowercase hexadecimal digits in the specified format.</returns>
-        public string ToString(string format) => guid.ToString(format);
+        public readonly string ToString(string format) => guid.ToString(format);
 
         /// <summary>
         /// Returns a string representation of the value of this instance in registry format.
@@ -294,7 +296,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// <param name="formatProvider">Provides a mechanism to control the formatting of the GUID.
         /// Currently, it is ignored. Please see "https://referencesource.microsoft.com/#mscorlib/system/guid.cs,a6547a472def7796" </param>
         /// <returns>The value of this <see cref="SequentialGuid"/> , represented as a series of lowercase hexadecimal digits in the specified format.</returns>
-        public string ToString(string format, IFormatProvider formatProvider) => guid.ToString(format);
+        public readonly string ToString(string format, IFormatProvider formatProvider) => guid.ToString(format);
 
         /// <summary>
         /// Compares this instance to a specified <see cref="SequentialGuid"/>  object and returns an indication of their relative values.
@@ -307,7 +309,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// <para/> Zero: This instance is equal to <paramref name="o"/>.
         /// <para/> A positive integer: This instance is greater than <paramref name="o"/>.
         /// </returns>
-        public int CompareTo(object o)
+        public readonly int CompareTo(object o)
         {
             if (ReferenceEquals(o, null)) return 1;
             if (!(o is SequentialGuid)) throw new ArgumentException("Argument must be SequentialGuid");
@@ -325,23 +327,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// <para/> Zero: This instance is equal to <paramref name="other"/>.
         /// <para/> A positive integer: This instance is greater than <paramref name="other"/>.
         /// </returns>
-        public int CompareTo(SequentialGuid other) => guid.CompareTo(other.guid);
-
-        /// <summary>
-        /// Indicates whether the values of two specified <see cref="SequentialGuid"/> objects are equal.
-        /// </summary>
-        /// <param name="left">The first object to compare.</param>
-        /// <param name="right">The second object to compare.</param>
-        /// <returns> true if <paramref name="left"/> and <paramref name="right"/> are equal; otherwise, false.</returns>
-        public static bool operator ==(SequentialGuid left, SequentialGuid right) => left.Equals(right);
-
-        /// <summary>
-        /// Indicates whether the values of two specified <see cref="SequentialGuid"/> objects are not equal.
-        /// </summary>
-        /// <param name="left">The first object to compare.</param>
-        /// <param name="right">The second object to compare.</param>
-        /// <returns>true if <paramref name="left"/> and <paramref name="right"/> are not equal; otherwise, false.</returns>
-        public static bool operator !=(SequentialGuid left, SequentialGuid right) => !left.Equals(right);
+        public readonly int CompareTo(SequentialGuid other) => guid.CompareTo(other.guid);
 
         /// <summary>
         /// Indicates whether the value of this instance is less than the value of the specified <see cref="SequentialGuid"/> instance.
@@ -385,6 +371,6 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// Converts a <see cref="Guid"/> structure to an equivalent <see cref="SequentialGuid"/> structure.
         /// </summary>
         /// <param name="guid">The <see cref="Guid"/> instance to convert.</param>
-        public static implicit operator SequentialGuid(Guid guid) => new SequentialGuid(guid);
+        public static implicit operator SequentialGuid(Guid guid) => new(guid);
     }
 }

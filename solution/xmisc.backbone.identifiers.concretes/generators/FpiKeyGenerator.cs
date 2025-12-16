@@ -1,7 +1,8 @@
+using reexmonkey.xmisc.backbone.identifiers.concretes.models;
 using reexmonkey.xmisc.backbone.identifiers.contracts.generators;
 using System;
 
-namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
+namespace reexmonkey.xmisc.backbone.identifiers.concretes.generators
 {
     /// <summary>
     /// Represents a provider that produces Formal Public Identifiers (FPIs).

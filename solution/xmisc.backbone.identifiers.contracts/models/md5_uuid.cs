@@ -1,5 +1,5 @@
 using reexmonkey.xmisc.backbone.identifiers.contracts.extensions;
-using reexmonkey.xmisc.core.cryptography.extensions;
+using reexmonkey.xmisc.backbone.identifiers.contracts.helpers;
 using System;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -8,36 +8,36 @@ using System.Text;
 namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
 {
     /// <summary>
-    /// Represents a name-based (version 3) globally unique identifier (GUID) that uses <see cref="MD5"/> hashing as defined in RFC 4122 (https://tools.ietf.org/html/rfc4122)
+    /// Represents a name-based (version 3) globally unique identifier (GUID) that uses <see cref="MD5"/> hashing as defined in RFC 9562 (https://tools.ietf.org/html/rfc4122)
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     [Serializable]
-    public readonly struct Md5Guid : IEquatable<Md5Guid>, IComparable, IComparable<Md5Guid>, IFormattable
+    public readonly record struct Md5Guid : IComparable, IComparable<Md5Guid>, IFormattable
     {
         /// <summary>
         ///  A read-only instance of the  <see cref="Md5Guid"/> structure whose all 128 bits are set to zeros.
         /// </summary>
-        public static readonly Md5Guid Empty = new Md5Guid();
+        public static readonly Md5Guid Empty = new();
 
         /// <summary>
-        /// Gets the default fully-qualified Distinguished Name (DNs) namespace ID  as defined in RFC 4122.
+        /// Gets the default fully-qualified Distinguished Name (DNs) namespace ID  as defined in RFC 9562.
         /// </summary>
-        public static readonly Guid DnsNamespaceId = new Guid("6ba7b810-9dad-11d1-80b4-00c04fd430c8");
+        public static readonly Guid DnsNamespaceId = new("6ba7b810-9dad-11d1-80b4-00c04fd430c8");
 
         /// <summary>
-        /// Gets the default uniform resource locator (URL) namespace ID  as defined in RFC 4122.
+        /// Gets the default uniform resource locator (URL) namespace ID  as defined in RFC 9562.
         /// </summary>
-        public static readonly Guid UrlNamespaceId = new Guid("6ba7b811-9dad-11d1-80b4-00c04fd430c8");
+        public static readonly Guid UrlNamespaceId = new("6ba7b811-9dad-11d1-80b4-00c04fd430c8");
 
         /// <summary>
-        /// Gets the default ISO OID namepace ID as defined in RFC 4122.
+        /// Gets the default ISO OID namepace ID as defined in RFC 9562.
         /// </summary>
-        public static readonly Guid IsoOidNamespaceId = new Guid("6ba7b812-9dad-11d1-80b4-00c04fd430c8");
+        public static readonly Guid OidNamespaceId = new("6ba7b812-9dad-11d1-80b4-00c04fd430c8");
 
         /// <summary>
-        /// Gets the default X500 namepace ID as defined in RFC 4122.
+        /// Gets the default X500 namepace ID as defined in RFC 9562.
         /// </summary>
-        public static readonly Guid X500NamespaceId = new Guid("6ba7b814-9dad-11d1-80b4-00c04fd430c8");
+        public static readonly Guid X500NamespaceId = new("6ba7b814-9dad-11d1-80b4-00c04fd430c8");
 
         private readonly Guid guid;
 
@@ -87,7 +87,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Md5Guid"/> structure by using the specified <see cref="Guid"/>.
-        /// <para /> Note the specified <paramref name="guid"/> should be compliant to a version 5 GUID as defined in RFC 4122.
+        /// <para /> Note the specified <paramref name="guid"/> should be compliant to a version 5 GUID as defined in RFC 9562.
         /// </summary>
         /// <param name="guid">The globally unique identifier (GUID) to initialize this instance.</param>
         public Md5Guid(Guid guid) => this.guid = guid;
@@ -170,40 +170,21 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
 
         private static Md5Guid Create(byte[] hash)
         {
+            int version = 3;
             var guid = new byte[16];
 
-            //Assign time - low: 0-3
-            guid[0] = hash[0];
-            guid[1] = hash[1];
-            guid[2] = hash[2];
-            guid[3] = hash[3];
+            //copy the first 16 bytes
+            Array.Copy(hash, 0, guid, 0, 16);
 
-            //Assign times - mid: 4-5
-            guid[4] = hash[4];
-            guid[5] = hash[5];
-
-            //Assign time - hi and version: 6-7
-            guid[6] = hash[6];
-            guid[7] = hash[7];
-
-            // convert bytes to time_hi and version
-            var hiver = (ushort)((guid[7] << 8 | guid[6]) & 0X0FFF | (3 << 12));
-            guid[6] = (byte)hiver;
-            guid[7] = (byte)(hiver >> 8);
+            // set version to 5:
+            guid[6] = (byte)((guid[6] & 0x0F) | (version << 4));
 
             //clock sequence hi and reserved: 8
-            guid[8] = (byte)(((hash[8] & 0x3F00) >> 8) | 0x80);
+            guid[8] = (byte)((guid[8] & 0x3F) | 0x80);
 
-            //clock sequence - low: 9
-            guid[9] = hash[9];
-
-            guid[10] = hash[10];
-            guid[11] = hash[11];
-            guid[12] = hash[12];
-            guid[13] = hash[13];
-            guid[14] = hash[14];
-            guid[15] = hash[15];
-            return new Md5Guid(guid);
+            //reverse copy to match network byte order
+            var swapped = guid.SwapByteOrder();
+            return new Md5Guid(swapped);
         }
 
         /// <summary>
@@ -232,10 +213,8 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// <returns>A new <see cref="Md5Guid"/> object</returns>
         public static Md5Guid NewGuid(byte[] namespaceId, byte[] name)
         {
-            var combined = new byte[namespaceId.Length + name.Length];
-            Buffer.BlockCopy(namespaceId, 0, combined, 0, namespaceId.Length);
-            Buffer.BlockCopy(name, 0, combined, namespaceId.Length, name.Length);
-            var hash = combined.GetHash(MD5.Create());
+            var swapped = namespaceId.SwapByteOrder();
+            var hash = MD5.HashData([.. swapped, .. name]);
             return Create(hash);
         }
 
@@ -250,33 +229,6 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// </summary>
         /// <returns>A <see cref="Guid"/> structure that contains the value that was converted.</returns>
         public Guid AsGuid() => guid;
-
-        /// <summary>
-        /// Returns a value indicating whether this instance and a specified <see cref="Md5Guid"/> object represent the same value.
-        /// </summary>
-        /// <param name="other"> An object to compare to this instance.</param>
-        /// <returns>true if <paramref name="other"/> is equal to this instance; otherwise, false.</returns>
-        public bool Equals(Md5Guid other)
-        {
-            return guid.Equals(other.guid);
-        }
-
-        /// <summary>
-        /// Returns a value that indicates whether this instance is equal to a specified object.
-        /// </summary>
-        /// <param name="o">The object to compare with this instance.</param>
-        /// <returns>true if o is a <see cref="Md5Guid"/> that has the same value as this instance; otherwise, false.</returns>
-        public override bool Equals(object o)
-        {
-            if (ReferenceEquals(null, o)) return false;
-            return o is Md5Guid && Equals((Md5Guid)o);
-        }
-
-        /// <summary>
-        /// Returns the hash code for this instance.
-        /// </summary>
-        /// <returns>The hash code for this instance.</returns>
-        public override int GetHashCode() => guid.GetHashCode();
 
         /// <summary>
         /// Returns a string representation of the value of this instance in registry format.
@@ -315,7 +267,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         public int CompareTo(object o)
         {
             if (ReferenceEquals(o, null)) return 1;
-            if (!(o is Md5Guid)) throw new ArgumentException("Argument must be of type "+ nameof(Md5Guid));
+            if (!(o is Md5Guid)) throw new ArgumentException("Argument must be of type " + nameof(Md5Guid));
             return CompareTo((Md5Guid)o);
         }
 
@@ -342,22 +294,6 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// Currently, it is ignored. Please see "https://referencesource.microsoft.com/#mscorlib/system/guid.cs,a6547a472def7796" </param>
         /// <returns>The value of this <see cref="SequentialGuid"/> , represented as a series of lowercase hexadecimal digits in the specified format.</returns>
         public string ToString(string format, IFormatProvider formatProvider) => guid.ToString(format);
-
-        /// <summary>
-        /// Indicates whether the values of two specified <see cref="Md5Guid"/> objects are equal.
-        /// </summary>
-        /// <param name="left">The first object to compare.</param>
-        /// <param name="right">The second object to compare.</param>
-        /// <returns> true if <paramref name="left"/> and <paramref name="right"/> are equal; otherwise, false.</returns>
-        public static bool operator ==(Md5Guid left, Md5Guid right) => left.Equals(right);
-
-        /// <summary>
-        /// Indicates whether the values of two specified <see cref="Md5Guid"/> objects are not equal.
-        /// </summary>
-        /// <param name="left">The first object to compare.</param>
-        /// <param name="right">The second object to compare.</param>
-        /// <returns>true if <paramref name="left"/> and <paramref name="right"/> are not equal; otherwise, false.</returns>
-        public static bool operator !=(Md5Guid left, Md5Guid right) => !left.Equals(right);
 
         /// <summary>
         /// Indicates whether the value of this instance is less than the value of the specified <see cref="Md5Guid"/> instance.
@@ -401,6 +337,6 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.models
         /// Converts a <see cref="Guid"/> structure to an equivalent <see cref="Md5Guid"/> structure.
         /// </summary>
         /// <param name="guid">The <see cref="Guid"/> instance to convert.</param>
-        public static implicit operator Md5Guid(Guid guid) => new Md5Guid(guid);
+        public static implicit operator Md5Guid(Guid guid) => new(guid);
     }
 }

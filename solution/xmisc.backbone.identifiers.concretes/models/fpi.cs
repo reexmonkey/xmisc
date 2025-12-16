@@ -14,7 +14,7 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
         /// Gets the default Fpi.
         /// </summary>
         /// <returns>The default unique identifier.</returns>
-        public static readonly Fpi Empty = new Fpi(ApprovalStatus.None, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+        public static readonly Fpi Empty = new(ApprovalStatus.None, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Fpi"/> class with details.

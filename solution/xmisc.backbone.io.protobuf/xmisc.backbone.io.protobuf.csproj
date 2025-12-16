@@ -5,7 +5,7 @@
   </PropertyGroup>	 
   </Target>
   <PropertyGroup>
-	<TargetFramework>net6.0</TargetFramework>
+	<TargetFramework>net10.0</TargetFramework>
     <RootNamespace>reexmonkey.xmisc.backbone.io.protobuf</RootNamespace>
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
@@ -15,12 +15,6 @@
 	<AssemblyName>xmisc.backbone.io.protobuf</AssemblyName>
 	<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>bin\Debug\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>bin\Release\</OutputPath>
-  </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\LICENSE.md" Link="LICENSE.md">
       <PackagePath>$(PackageLicenseFile)</PackagePath>
@@ -28,11 +22,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="3.3.4">
+    <PackageReference Include="GitInfo" Version="3.6.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="protobuf-net" Version="3.2.30" />
-    <PackageReference Include="xmisc.core.io" Version="9.0.6" />
+    <PackageReference Include="protobuf-net" Version="3.2.56" />
+    <PackageReference Include="xmisc.core.io" Version="10.0.0" />
   </ItemGroup>
 </Project>

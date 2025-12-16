@@ -1,12 +1,10 @@
-using reexmonkey.xmisc.backbone.identifiers.contracts.extensions;
 using reexmonkey.xmisc.backbone.identifiers.contracts.generators;
-using reexmonkey.xmisc.backbone.identifiers.contracts.models;
 using System;
 
 namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
 {
     /// <summary>
-    /// Represents a provider that produces pseudo-random (version 4) universal unique identifiers as defined in RFC 4122.
+    /// Represents a provider that produces pseudo-random (version 4) universal unique identifiers as defined in RFC 9562.
     /// </summary>
     public class RandomGuidKeyGenerator : IKeyGenerator<Guid>
     {

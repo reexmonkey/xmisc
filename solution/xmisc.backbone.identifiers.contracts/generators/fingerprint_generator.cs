@@ -1,3 +1,5 @@
+using System;
+
 namespace reexmonkey.xmisc.backbone.identifiers.contracts.generators
 {
     /// <summary>
@@ -15,9 +17,10 @@ namespace reexmonkey.xmisc.backbone.identifiers.contracts.generators
         /// <summary>
         /// Produces a fingerprint that uniquely or pesudo-uniquely identifies the specified object.
         /// </summary>
-        /// <typeparam name="TModel">The type of obhect, whose fingerprint is produced.</typeparam>
+        /// <typeparam name="TModel">The type of object, whose fingerprint shall be produced.</typeparam>
         /// <param name="model">The object, whose fingerprint shall be produced.</param>
+        /// <param name="serializeFunc">The function to serialize the object into a byte array.</param>
         /// <returns>The fingerprint that uniquely identifies or pseudo-identifies the specified <paramref name="model"/>.</returns>
-        TFingerprint GetFingerprint<TModel>(TModel model);
+        TFingerprint GetFingerprint<TModel>(TModel model, Func<TModel, byte[]> serializeFunc);
     }
 }

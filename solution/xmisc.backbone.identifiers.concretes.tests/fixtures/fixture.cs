@@ -1,9 +1,8 @@
 ﻿using reexmonkey.xmisc.backbone.identifiers.concretes.helpers;
 using reexmonkey.xmisc.backbone.identifiers.contracts.models;
-using System.Collections.Generic;
 using System.Text;
 
-namespace reexmonkey.xmisc.backbone.identifiers.tests.fixtures
+namespace reexmonkey.xmisc.backbone.identifiers.concretes.tests.fixtures
 {
     public class Fixture
     {

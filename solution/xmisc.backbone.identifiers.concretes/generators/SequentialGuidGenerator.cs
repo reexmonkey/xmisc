@@ -1,10 +1,10 @@
 using reexmonkey.xmisc.backbone.identifiers.contracts.generators;
 using reexmonkey.xmisc.backbone.identifiers.contracts.models;
 
-namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
+namespace reexmonkey.xmisc.backbone.identifiers.concretes.generators
 {
     /// <summary>
-    /// Represents a provider that produces time-based (version 1) universal unique identifiers as defined in RFC 4122.
+    /// Represents a provider that produces time-based (version 1) universal unique identifiers as defined in RFC 9562.
     /// </summary>
     public class SequentialGuidKeyGenerator : IKeyGenerator<SequentialGuid>
     {

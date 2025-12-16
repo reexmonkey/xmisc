@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace reexmonkey.xmisc.backbone.repositories.contracts
+﻿namespace reexmonkey.xmisc.backbone.repositories.contracts
 {
     /// <summary>
     /// Specifies whether a data model can marked for deletion or not.

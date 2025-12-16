@@ -3,19 +3,14 @@ using reexmonkey.xmisc.backbone.identifiers.contracts.models;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace xmisc.backbone.identity.tests.guids
+namespace reexmonkey.xmisc.backbone.identifiers.tests.guids
 {
-    public class SequentialGuidTests
+    public class SequentialGuidTests(ITestOutputHelper console)
     {
-        private readonly ITestOutputHelper console;
-
-        public SequentialGuidTests(ITestOutputHelper console)
-        {
-            this.console = console;
-        }
+        private readonly ITestOutputHelper console = console;
 
         [Fact]
-        public void TestUniqueness()
+        public void ShouldBeUnique()
         {
             //Act
             var first = SequentialGuid.NewGuid();
@@ -29,7 +24,7 @@ namespace xmisc.backbone.identity.tests.guids
         }
 
         [Fact]
-        public void TestLexicalOrder()
+        public void ShouldBeOrdered()
         {
             //Act
             var first = SequentialGuid.NewGuid();
@@ -45,7 +40,7 @@ namespace xmisc.backbone.identity.tests.guids
         }
 
         [Fact]
-        public void TestVersionNumber()
+        public void VersionNumberShouldMatch1()
         {
             //arrange
             var comb = SequentialGuid.NewGuid();
@@ -55,6 +50,33 @@ namespace xmisc.backbone.identity.tests.guids
 
             //Assert
             Assert.Equal(1, version);
+        }
+
+        [Fact]
+        public void BigEndianSequentialGuidShouldBeUnique()
+        {
+            //Act
+            var first = SequentialGuid.NewGuid().ToNetworkOrder();
+            var second = SequentialGuid.NewGuid().ToNetworkOrder();
+
+            //Assert
+            Assert.NotEqual(first, second);
+        }
+
+        [Fact]
+        public void BigEndianSequentialShouldBeOrdered()
+        {
+            //Act
+            var first = SequentialGuid.NewGuid().ToNetworkOrder();
+            var second = SequentialGuid.NewGuid().ToNetworkOrder();
+            var third = SequentialGuid.NewGuid().ToNetworkOrder();
+
+            //Assert
+            Assert.True(first > second || second > third);
+
+            console.WriteLine("first: {0}", first);
+            console.WriteLine("second: {0}", second);
+            console.WriteLine("third: {0}", third);
         }
     }
 }

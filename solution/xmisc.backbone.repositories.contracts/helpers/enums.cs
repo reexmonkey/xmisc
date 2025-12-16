@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace reexmonkey.xmisc.backbone.repositories.contracts.helpers
+﻿namespace reexmonkey.xmisc.backbone.repositories.contracts.helpers
 {
     /// <summary>
     /// Represents the type of action to undertake when the parent data model of a related data model is deleted or updated.
