@@ -64,8 +64,6 @@ namespace reexmonkey.xmisc.backbone.identifiers.concretes.models
         /// <summary>
         /// Initializes an instance of the <see cref="UrlSha1GuidKeyGenerator"/> class.
         /// </summary>
-        /// <param name="encoding">The type of character encoding to encode the ISO OID value.</param>
-        ///
         public OidSha1GuidKeyGenerator() : base(Sha1Guid.OidNamespaceId)
         {
         }
