@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace xmisc.core.text.tests.fixtures
+namespace reexmonkey.xmisc.core.text.tests.fixtures
 {
     public static class FixtureExtensions
     {

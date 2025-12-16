@@ -1,9 +1,9 @@
 ﻿using reexmonkey.xmisc.core.text.extensions;
+using reexmonkey.xmisc.core.text.tests.fixtures;
 using System.Text;
-using xmisc.core.text.tests.fixtures;
 using Xunit;
 
-namespace xmisc.core.text.tests.units
+namespace reexmonkey.xmisc.core.text.tests.units
 {
     public class StringExtensionTests
     {
