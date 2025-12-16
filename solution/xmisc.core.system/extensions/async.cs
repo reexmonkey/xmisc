@@ -9,7 +9,7 @@ namespace reexmonkey.xmisc.core.system.extensions
     /// </summary>
     public static class AsyncExtensions
     {
-        private static readonly TaskFactory factory = new TaskFactory(
+        private static readonly TaskFactory factory = new(
             CancellationToken.None,
             TaskCreationOptions.None,
             TaskContinuationOptions.None,

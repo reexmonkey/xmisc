@@ -18,16 +18,14 @@ namespace reexmonkey.xmisc.core.system.xmltools.extensions
 
         public static XElement Serialize<T>(this XmlSerializer serializer, T value, Encoding encoding)
         {
-            using (var stream = new MemoryStream())
-            {
-                serializer.Serialize(stream, value);
-                return XElement.Parse(encoding.GetString(stream.ToArray()));
-            }
+            using var stream = new MemoryStream();
+            serializer.Serialize(stream, value);
+            return XElement.Parse(encoding.GetString(stream.ToArray()));
         }
 
         public static IEnumerable<XElement> Serialize<T>(this XmlSerializer serializer, IEnumerable<T> values, Encoding encoding)
         {
-            List<XElement> elements = new List<XElement>();
+            List<XElement> elements = new();
             foreach (var value in values)
             {
                 var element = serializer.Serialize(value, encoding);

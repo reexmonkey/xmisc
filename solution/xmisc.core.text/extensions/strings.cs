@@ -11,7 +11,7 @@ namespace reexmonkey.xmisc.core.text.extensions
     /// </summary>
     public static class StringExtensions
     {
-        private static readonly char[] base64Padding = { '=' };
+        private static readonly char[] base64Padding = ['='];
 
         /// <summary>
         /// Extracts hexadecimal digits from a string
@@ -113,37 +113,34 @@ namespace reexmonkey.xmisc.core.text.extensions
         /// <returns>The string, whose lines are folded</returns>
         public static string FoldLines(this string text, int max, Encoding encoding, string newline = "\r\n", string whitespace = " ")
         {
-            var lines = text.Split(new[] { newline }, StringSplitOptions.RemoveEmptyEntries);
-            using (var stream = new MemoryStream(text.Length))
+            var lines = text.Split([newline], StringSplitOptions.RemoveEmptyEntries);
+            using var stream = new MemoryStream(text.Length);
+            var crlf = encoding.GetBytes(newline); //CRLF
+            var crlfs = encoding.GetBytes($"{newline}" + whitespace); //CRLF and (SPACE or HTAB)
+            for (var index = 0; index < lines.Length; index++)
             {
-                var crlf = encoding.GetBytes(newline); //CRLF
-                var crlfs = encoding.GetBytes($"{newline}" + whitespace); //CRLF and (SPACE or HTAB)
-                for (var index = 0; index < lines.Length; index++)
+                var line = lines[index];
+                var bytes = encoding.GetBytes(line);
+                if (bytes.Length <= max)
                 {
-                    var line = lines[index];
-                    var bytes = encoding.GetBytes(line);
-                    if (bytes.Length <= max)
-                    {
-                        stream.Write(bytes, 0, bytes.Length);
-                        stream.Write(crlf, 0, crlf.Length);
-                    }
-                    else
-                    {
-                        var blocks = bytes.Length / max; //calculate block length
-                        var remainder = bytes.Length % max; //calculate remaining length
-                        var b = 0;
-                        while (b < blocks)
-                        {
-                            stream.Write(bytes, (b++) * max, max);
-                            stream.Write(crlfs, 0, crlfs.Length);
-                        }
-
-                        if (remainder > 0) stream.Write(bytes, blocks * max, remainder);
-                    }
+                    stream.Write(bytes, 0, bytes.Length);
+                    stream.Write(crlf, 0, crlf.Length);
                 }
+                else
+                {
+                    var blocks = bytes.Length / max; //calculate block length
+                    var remainder = bytes.Length % max; //calculate remaining length
+                    var b = 0;
+                    while (b < blocks)
+                    {
+                        stream.Write(bytes, (b++) * max, max);
+                        stream.Write(crlfs, 0, crlfs.Length);
+                    }
 
-                return encoding.GetString(stream.ToArray());
+                    if (remainder > 0) stream.Write(bytes, blocks * max, remainder);
+                }
             }
+            return encoding.GetString(stream.ToArray());
         }
 
         /// <summary>
@@ -219,7 +216,7 @@ namespace reexmonkey.xmisc.core.text.extensions
         {
             foreach (var target in targets)
             {
-                text = text.Replace(new string(new[] { target }), new string(new[] { escapeChar, target }));
+                text = text.Replace(new string([target]), new string([escapeChar, target]));
             }
             return text;
         }
@@ -232,46 +229,6 @@ namespace reexmonkey.xmisc.core.text.extensions
         /// <returns>The encoded text equivalent.</returns>
         public static string AsEncoded(this string text, Encoding encoding)
             => encoding.GetString(encoding.GetBytes(text));
-
-        /// <summary>
-        /// Converts text to another string format using the UTF-7 character encoding.
-        /// </summary>
-        /// <param name="text">The string to convert.</param>
-        /// <returns>The UTF-7 text equivalent.</returns>
-        public static string AsUtf7(this string text)
-            => text.AsEncoded(Encoding.UTF7);
-
-        /// <summary>
-        /// Converts text to another string format using the UTF-8 character encoding.
-        /// </summary>
-        /// <param name="text">The string to convert.</param>
-        /// <returns>The UTF-8 text equivalent.</returns>
-        public static string AsUtf8(this string text)
-            => text.AsEncoded(Encoding.UTF8);
-
-        /// <summary>
-        /// Converts text to another string format using the UTF-32 character encoding.
-        /// </summary>
-        /// <param name="text">The string to convert.</param>
-        /// <returns>The UTF-32 text equivalent.</returns>
-        public static string AsUtf32(this string text)
-            => text.AsEncoded(Encoding.UTF32);
-
-        /// <summary>
-        /// Converts text to another string format using the ASCII character encoding.
-        /// </summary>
-        /// <param name="text">The string to convert.</param>
-        /// <returns>The ASCII text equivalent.</returns>
-        public static string AsAscii(this string text)
-            => text.AsEncoded(Encoding.ASCII);
-
-        /// <summary>
-        /// Converts text to another string using the UTF-16 with little endian byte order character encoding.
-        /// </summary>
-        /// <param name="text">The string to convert.</param>
-        /// <returns>The Unicode(UTF-16 using the little byte order endian byte order) text equivalent.</returns>
-        public static string AsUnicode(this string text)
-            => text.AsEncoded(Encoding.Unicode);
 
         /// <summary>
         /// Converts text to another string using the UTF-16 with big endian byte order character encoding.
@@ -345,21 +302,19 @@ namespace reexmonkey.xmisc.core.text.extensions
         /// <returns>The string representation with the line breaks</returns>
         public static string InsertLineBreaks(this string text, int num)
         {
-            using (var sw = new StringWriter())
+            using var sw = new StringWriter();
+            var chars = text.ToCharArray();
+            var blocks = chars.Length / num;
+            var remainder = chars.Length % num;
+            var rounds = remainder > 0 ? blocks + 1 : blocks;
+            var counter = 0;
+            for (var i = 0; i < chars.Length; i += num)  // output as Base64 with lines chopped at line break
             {
-                var chars = text.ToCharArray();
-                var blocks = chars.Length / num;
-                var remainder = chars.Length % num;
-                var rounds = remainder > 0 ? blocks + 1 : blocks;
-                var counter = 0;
-                for (var i = 0; i < chars.Length; i += num)  // output as Base64 with lines chopped at line break
-                {
-                    var limit = Math.Min(num, chars.Length - i);
-                    sw.Write(chars, i, limit);
-                    if (++counter < rounds) sw.Write("\n");
-                }
-                return sw.ToString();
+                var limit = Math.Min(num, chars.Length - i);
+                sw.Write(chars, i, limit);
+                if (++counter < rounds) sw.Write("\n");
             }
+            return sw.ToString();
         }
     }
 }

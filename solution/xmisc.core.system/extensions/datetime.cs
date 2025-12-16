@@ -18,22 +18,22 @@ namespace reexmonkey.xmisc.core.system.extensions
         /// <returns>The number of days in the month of a given year</returns>
         public static uint CountDaysInMonth(uint month, uint year)
         {
-            switch (month)
+            return month switch
             {
-                case 1: return 31u;
-                case 2: return IsLeapYear(year) ? 29u : 28u;
-                case 3: return 31u;
-                case 4: return 30u;
-                case 5: return 31u;
-                case 6: return 30u;
-                case 7: return 31u;
-                case 8: return 31u;
-                case 9: return 30u;
-                case 10: return 31u;
-                case 11: return 30u;
-                case 12: return 31u;
-                default: return 28u;
-            }
+                1 => 31u,
+                2 => IsLeapYear(year) ? 29u : 28u,
+                3 => 31u,
+                4 => 30u,
+                5 => 31u,
+                6 => 30u,
+                7 => 31u,
+                8 => 31u,
+                9 => 30u,
+                10 => 31u,
+                11 => 30u,
+                12 => 31u,
+                _ => 28u,
+            };
         }
 
         /// <summary>
@@ -104,17 +104,17 @@ namespace reexmonkey.xmisc.core.system.extensions
         /// <returns>The ordinal position (1-7) of the day in the week </returns>
         public static int OrdinalWeekDay(this DayOfWeek day)
         {
-            switch (day)
+            return day switch
             {
-                case DayOfWeek.Monday: return 1;
-                case DayOfWeek.Tuesday: return 2;
-                case DayOfWeek.Wednesday: return 3;
-                case DayOfWeek.Thursday: return 4;
-                case DayOfWeek.Friday: return 5;
-                case DayOfWeek.Saturday: return 6;
-                case DayOfWeek.Sunday: return 7;
-                default: return 0;
-            }
+                DayOfWeek.Monday => 1,
+                DayOfWeek.Tuesday => 2,
+                DayOfWeek.Wednesday => 3,
+                DayOfWeek.Thursday => 4,
+                DayOfWeek.Friday => 5,
+                DayOfWeek.Saturday => 6,
+                DayOfWeek.Sunday => 7,
+                _ => 0,
+            };
         }
 
         /// <summary>
@@ -124,18 +124,17 @@ namespace reexmonkey.xmisc.core.system.extensions
         /// <returns>The determined <see cref = "DayOfWeek"/> instance </returns>
         public static DayOfWeek ToDayofWeeek(this int ordweekday)
         {
-            switch (ordweekday)
+            return ordweekday switch
             {
-                case 1: return DayOfWeek.Monday;
-                case 2: return DayOfWeek.Tuesday;
-                case 3: return DayOfWeek.Wednesday;
-                case 4: return DayOfWeek.Thursday;
-                case 5: return DayOfWeek.Friday;
-                case 6: return DayOfWeek.Saturday;
-                case 7: return DayOfWeek.Sunday;
-                default:
-                    throw new ArgumentException("Ordinal day of week must range from 1 through 7");
-            }
+                1 => DayOfWeek.Monday,
+                2 => DayOfWeek.Tuesday,
+                3 => DayOfWeek.Wednesday,
+                4 => DayOfWeek.Thursday,
+                5 => DayOfWeek.Friday,
+                6 => DayOfWeek.Saturday,
+                7 => DayOfWeek.Sunday,
+                _ => throw new ArgumentException("Ordinal day of week must range from 1 through 7"),
+            };
         }
 
         /// <summary>
@@ -146,69 +145,43 @@ namespace reexmonkey.xmisc.core.system.extensions
         /// <see>http://en.wikipedia.org/wiki/ISO_8601</see>
         public static int ISO8601DayOfYear(this DateTime value)
         {
-            int Lookup(DateTime x)
+            static int Lookup(DateTime x)
             {
                 if (DateTime.IsLeapYear(x.Year))
                 {
-                    switch (x.Month)
+                    return x.Month switch
                     {
-                        case 1:
-                            return 0;
-                        case 2:
-                            return 31;
-                        case 3:
-                            return 60;
-                        case 4:
-                            return 91;
-                        case 5:
-                            return 121;
-                        case 6:
-                            return 152;
-                        case 7:
-                            return 182;
-                        case 8:
-                            return 213;
-                        case 9:
-                            return 224;
-                        case 10:
-                            return 274;
-                        case 11:
-                            return 305;
-                        case 12:
-                            return 335;
-                        default:
-                            throw new ArgumentException("Invalid Month");
-                    }
+                        1 => 0,
+                        2 => 31,
+                        3 => 60,
+                        4 => 91,
+                        5 => 121,
+                        6 => 152,
+                        7 => 182,
+                        8 => 213,
+                        9 => 224,
+                        10 => 274,
+                        11 => 305,
+                        12 => 335,
+                        _ => throw new ArgumentException("Invalid Month"),
+                    };
                 }
-                switch (x.Month)
+                return x.Month switch
                 {
-                    case 1:
-                        return 0;
-                    case 2:
-                        return 30;
-                    case 3:
-                        return 59;
-                    case 4:
-                        return 90;
-                    case 5:
-                        return 120;
-                    case 6:
-                        return 151;
-                    case 7:
-                        return 181;
-                    case 8:
-                        return 212;
-                    case 9:
-                        return 223;
-                    case 10:
-                        return 273;
-                    case 11:
-                        return 304;
-                    case 12:
-                        return 334;
-                    default:
-                        throw new ArgumentException("Invalid Month");
-                }
+                    1 => 0,
+                    2 => 30,
+                    3 => 59,
+                    4 => 90,
+                    5 => 120,
+                    6 => 151,
+                    7 => 181,
+                    8 => 212,
+                    9 => 223,
+                    10 => 273,
+                    11 => 304,
+                    12 => 334,
+                    _ => throw new ArgumentException("Invalid Month"),
+                };
             }
 
             return value.Day + Lookup(value);

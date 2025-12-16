@@ -5,22 +5,14 @@
     </PropertyGroup>
   </Target>
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>reexmonkey.xmisc.core.reflection</RootNamespace>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>Reflektiv</Company>
     <Authors>reexmonkey</Authors>
     <Description>Reflection utilities and extensions.</Description>
-    <Copyright>Copyright (c) 2015 - 2022, Reflektiv</Copyright>
+    <Copyright>Copyright (c) 2015 - 2025, Reflektiv</Copyright>
     <PackageProjectUrl>https://github.com/reexmonkey/xmisc</PackageProjectUrl>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>xmisc.core.reflection.xml</DocumentationFile>
-    <OutputPath>bin\Debug\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile></DocumentationFile>
-    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\LICENSE.md" Link="LICENSE.md">
@@ -30,11 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitInfo" Version="3.3.4">
+    <PackageReference Include="GitInfo" Version="3.6.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
-    <PackageReference Include="xmisc.core.linq" Version="9.0.6" />
   </ItemGroup>
 </Project>

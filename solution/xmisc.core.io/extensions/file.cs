@@ -17,7 +17,7 @@ namespace reexmonkey.xmisc.core.io.extensions
         /// </summary>
         /// <param name="uri">The URI to the file.</param>
         /// <returns>The file information if the URI is valid and the file exists; otherwise a null value.</returns>
-        public static FileInfo GetFileInfo(this Uri uri) => new FileInfo(uri.AbsolutePath);
+        public static FileInfo GetFileInfo(this Uri uri) => new(uri.AbsolutePath);
 
         /// <summary>
         /// Gets the directory information from a directoy specified by the given <paramref name="uri"/>.
@@ -87,11 +87,9 @@ namespace reexmonkey.xmisc.core.io.extensions
             var builder = new StringBuilder();
             using (var fstream = File.Open(fi.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                using (var reader = new StreamReader(fstream, encoding))
-                {
-                    string line;
-                    while ((line = reader.ReadLine()) != null) builder.AppendLine(line);
-                }
+                using var reader = new StreamReader(fstream, encoding);
+                string line;
+                while ((line = reader.ReadLine()) != null) builder.AppendLine(line);
             }
             return builder.ToString();
         }
@@ -119,12 +117,10 @@ namespace reexmonkey.xmisc.core.io.extensions
         /// <remarks>Credits: http://stackoverflow.com/a/2030971</remarks>
         public static void WriteToStream(this FileInfo fi, Stream destination, int buffersize = 4096)
         {
-            using (var fstream = File.Open(fi.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                var buffer = new byte[buffersize];
-                int read;
-                while ((read = fstream.Read(buffer, 0, buffer.Length)) > 0) destination.Write(buffer, 0, read);
-            }
+            using var fstream = File.Open(fi.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            var buffer = new byte[buffersize];
+            int read;
+            while ((read = fstream.Read(buffer, 0, buffer.Length)) > 0) destination.Write(buffer, 0, read);
         }
 
         /// <summary>
@@ -147,11 +143,9 @@ namespace reexmonkey.xmisc.core.io.extensions
             var builder = new StringBuilder();
             using (var fstream = File.Open(fi.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                using (var reader = new StreamReader(fstream, encoding))
-                {
-                    string line;
-                    while ((line = await reader.ReadLineAsync()) != null) builder.AppendLine(line);
-                }
+                using var reader = new StreamReader(fstream, encoding);
+                string line;
+                while ((line = await reader.ReadLineAsync()) != null) builder.AppendLine(line);
             }
             return builder.ToString();
         }
@@ -179,13 +173,11 @@ namespace reexmonkey.xmisc.core.io.extensions
         /// <remarks>Credits: http://stackoverflow.com/a/2030971</remarks>
         public static async Task WriteToStreamAsync(this FileInfo fi, Stream destination, int buffersize = 4096)
         {
-            using (var fstream = File.Open(fi.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                var buffer = new byte[buffersize];
-                int read;
-                while ((read = await fstream.ReadAsync(buffer, 0, buffer.Length)) > 0)
-                    await destination.WriteAsync(buffer, 0, read);
-            }
+            using var fstream = File.Open(fi.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            var buffer = new byte[buffersize];
+            int read;
+            while ((read = await fstream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                await destination.WriteAsync(buffer, 0, read);
         }
     }
 }
